@@ -2,9 +2,10 @@
   "name": "rwlautograding",
   "version": "1.0.0",
   "description": "Auto-grader for the class Reading With Logic at CSUMB",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-	"start": "node index.js",
+	"start": "node server.js",
+	"heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
