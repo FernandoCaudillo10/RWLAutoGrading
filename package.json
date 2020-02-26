@@ -4,8 +4,8 @@
   "description": "Auto-grader for the class Reading With Logic at CSUMB",
   "main": "server.js",
   "scripts": {
-	"start": "node server.js",
-	"heroku-postbuild": "cd client && npm install && npm run build",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/FernandoCaudillo10/RWLAutoGrading#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^7.18.2",
+    "request": "^2.88.2"
   }
 }
