@@ -1,0 +1,56 @@
+.Register{
+    text-align: center;
+}
+
+.RegisterHeader{
+    width:100%;
+    height: 75px;
+    background-color: #A9A9A9;
+    margin-bottom: 5px;
+   
+   }
+.RegisterFields{
+    width: 30%;
+    height: 25px;
+    margin-top: 5%;
+    /* border: 1px solid black; */
+    font-size: 1em;
+}
+
+.RegisterButton{
+    margin-top: 5%;
+    height: 25px;
+    width: 5%;
+    color: white;
+    background-color: #808080;
+    border-radius: 50px;
+}
+
+.RegisterAlternate{
+    display: inline-block;
+    height: 45px;
+    width: 100px;
+    border: none;
+    color: white;
+    background-color: #808080;
+    margin-top: 5%;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.RegisterAlternate1{
+    display: inline-block;
+    height: 45px;
+    width: 100px;
+    border: none;
+    color: black;
+    background-color: white;
+    margin-top: 5%;
+    border-radius: 0px 15px 15px 0px;
+    
+}
+
+.RadioButtonCSS{
+    margin: 3%;
+    font-size: 1.1em;
+}
+

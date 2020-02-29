@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom';
 
 import HomePage from './home/HomePage';
+import Login from './login/Login'; 
+import Register from './register/Register'; 
 
 import './App.scss';
 
@@ -109,16 +111,18 @@ class App extends React.Component {
 	  return (
 		<Router>
 			<div>
-				<div className="header">
+				 <div className="header">
 					<div className={this.state.isMenuHidden?"headerContent-hidden":"headerContent"}>
 						{
 							this.state.isMenuHidden ? this.menuHidden() : this.menu()
 						}
 						<h1> Juan Dow </h1>
 					</div>
-				</div>
+				</div> 
 
 				<Switch>
+					<Route exact path ="/" component={Login} />
+					<Route exact path ="/register" component={Register} />
 					<Route exact path="/professor/classes" component={HomePage} />
 					<Route exact path="/professor/settings" component={HomePage} />
 					<Route exact path="/student/grades" component={HomePage} />
