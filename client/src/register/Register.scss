@@ -1,0 +1,53 @@
+.Register{
+    text-align: center;
+}
+
+
+.RegisterFields{
+    width: 30%;
+    height: 1.5em;
+    margin-top: 5%;
+    border: .1em solid black; 
+    font-size: 1em;
+}
+
+.RegisterButton{
+    margin-top: 5%;
+    height: 3em;
+    width: 5%;
+    color: white;
+    background-color: #808080;
+    border-radius: 2em;
+}
+
+
+// Might implement later this is for the "fancy buttons" i made radio boxes since they'll be easier for testing/implementing backend
+
+// .RegisterAlternate{
+//     display: inline-block;
+//     height: 45px;
+//     width: 100px;
+//     border: none;
+//     color: white;
+//     background-color: #808080;
+//     margin-top: 5%;
+//     border-radius: 15px 0px 0px 15px;
+// }
+
+// .RegisterAlternate1{
+//     display: inline-block;
+//     height: 45px;
+//     width: 100px;
+//     border: none;
+//     color: black;
+//     background-color: white;
+//     margin-top: 5%;
+//     border-radius: 0px 15px 15px 0px;
+    
+// }
+
+.RadioButtonCSS{
+    margin: 3%;
+    font-size: 1.1em;
+}
+
