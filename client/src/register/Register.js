@@ -1,13 +1,14 @@
-import React from 'react';
+import React  from 'react'; 
 import './Register.scss'
 
 
-const Register = () =>{
+class Register extends React.Component{
+
+render(){
 
     return (
         <div className='Register'>
-            {/* <div className='LoginHeader'>
-            </div> */}
+         
 
             <h1>Register</h1>
 
@@ -25,16 +26,18 @@ const Register = () =>{
                 <input className="RegisterFields" type='password' placeholder='Confirm Password' id="RegisterPasswordConfirm"></input>
             </div>
             <div>
-                <input type='button' value='Student' className="RegisterAlternate"></input>
+                {/* Might implement later */}
+                {/* <input type='button' value='Student' className="RegisterAlternate"></input>
                 <input type='button' value='Teacher' className="RegisterAlternate1"></input>
-                
+                 */}
                     <div className="RadioButtonCSS">
-                        {/* <input type='radio'  id="StudentRegister" name='SelectTypeRegister' value='Student'></input>
+                        
+                        <input type='radio'  id="StudentRegister" name='SelectTypeRegister' value='Student'></input>
                         <label for='Student'>Student</label>
                        
                         
                         <input type='radio' id="TeacherRegister" name='SelectTypeRegister' value='Teacher'></input>
-                        <label for='Teacher'>Teacher</label> */}
+                        <label for='Teacher'>Teacher</label>
                     </div>
                     
    
@@ -51,6 +54,7 @@ const Register = () =>{
 
 
 
+}
 }
 
 
