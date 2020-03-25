@@ -1,7 +1,9 @@
 const {Pool} = require('pg')
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
+
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: true,
+	connectionString: connString,
+	ssl:true,
 })
 
 const getUsers = (request, response) => {
