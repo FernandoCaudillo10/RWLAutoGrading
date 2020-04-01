@@ -54,6 +54,26 @@ function addProfessor(name, email, password){
 	});
 }
 
+
+function updateProfessor(name, email, password){
+	if(password){
+		return new Promise( (onSuccess, onFail) => {
+			bcrypt.genSalt(10, (err, salt) => {
+				bcrypt.hash(password, salt, (err, hash) => {
+					if(err) onFail(err);
+					pool.query(`UPDATE professor SET name='${name}', password='${hash}' WHERE email='${email}'`)
+						.then(result => onSuccess(result))
+						.catch((error) => { onFail(error)} );
+				});
+			});
+		});
+	}
+	return new Promise( (onSuccess, onFail) => {
+		pool.query(`UPDATE professor SET name='${name}' WHERE email='${email}'`)
+			.then(result => onSuccess(result))
+			.catch((error) => { onFail(error)} );
+	});
+}
 function updateStudent(name, email, password){
 	if(password){
 		return new Promise( (onSuccess, onFail) => {
@@ -105,7 +125,6 @@ class DatabaseHandler{
 			async (email, password, done) => {
 				 await getUserByEmail(email)
 						.then((result) => {
-							console.log("getting user");
 							if(result.rowCount === 0){
 								return done(null, false,{ message: 'No account under this email' });
 							}
@@ -124,7 +143,7 @@ class DatabaseHandler{
 						})
 						.catch(err => {
 							console.log(`passport error-> ${err}`);
-							return done(err);
+							return done("Server error");
 						});
 			},
 		  ),
@@ -142,11 +161,10 @@ class DatabaseHandler{
 				 await getUserByEmail(email)
 						.then((result) => {
 							if(result.rowCount > 0){
-								return done(new Error("Bad Credentials"), false,{ message: 'Email already taken' });
+								return done(new Error("Email already exists"), false);
 							}
 							addStudent("", email, password)
 								.then( (result) => {
-									console.log(result);
 									return done(null, result.rows[0]);
 								})
 								.catch( (error) => {
@@ -156,7 +174,7 @@ class DatabaseHandler{
 						})
 						.catch(err => {
 							console.log(`passport error-> ${err}`);
-							return done(err);
+							return done(new Error("Server error"));
 						});
 			},
 		  ),
@@ -193,7 +211,7 @@ class DatabaseHandler{
 						})
 						.catch(err => {
 							console.log(`passport error-> ${err}`);
-							return done(err);
+							return done("Server error");
 						});
 			},
 		  ),
@@ -211,21 +229,20 @@ class DatabaseHandler{
 				 await getProfByEmail(email)
 						.then((result) => {
 							if(result.rowCount > 0){
-								return done(null, false,{ message: 'Email already taken' });
+								return done(new Error("Email already exists"), false);
 							}
-							addStudent(request.body.name, request.body.email, request.body.password)
+							addProfessor("", email, password)
 								.then( (result) => {
-									console.log(result);
-									return done(null, result.row[0]);
+									return done(null, result.rows[0]);
 								})
 								.catch( (error) => {
-									console.log("Error: Add Professor");
+									console.log("Error: Add Student");
 									console.log(`-----> ${error}`);
 								});
 						})
 						.catch(err => {
 							console.log(`passport error-> ${err}`);
-							return done(err);
+							return done(new Error("Server error"));
 						});
 			},
 		  ),
@@ -264,30 +281,23 @@ class DatabaseHandler{
 	}
 
 	professorRegister(request, response) {
-		const {errors, isValid} = validateRegisterInput(request.body);
-		if (!isValid) {
-			  return response.status(400).json(errors);
-		}
+		passport.authenticate('professorRegister', (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
 
-		getProfByEmail(request.body.email)
-			.then((result) => {
-				if(result.rowCount !== 0){
-					throw new Error("Email already exists");
-				}
-				addProfessor(request.body.name, request.body.email, request.body.password)
-					.then( (result) => {
-						response.status(200).send();
-					})
-					.catch( (error) => {
-						console.log("Error: Add Professor");
-						console.log(`-----> ${error}`);
+			if (info != undefined) {
+				console.log(info.message);
+				return response.send(info.message);
+			}
+
+			request.logIn(pUser, err => {
+				updateProfessor(request.body.name, pUser.email)
+				.then(() => response.status(200).send({message: 'user created successfully'}))
+				.catch(err => {
+					console.log(`Erro: LogIn\n----> ${err}`);
+					response.status(400).json(`${err}`);
 					});
-			})
-			.catch((err) => { 
-				console.log("Error: Professor Register");
-				console.log(`-----> ${err}`);
-				return response.status(400).json(`${err}`);
 			});
+		})(request, response);
 	}
 
 	studentLogin(request, response){
@@ -331,7 +341,6 @@ class DatabaseHandler{
 			}
 
 			request.logIn(pUser, err => {
-				console.log(request.body.name, pUser.email);
 				updateStudent(request.body.name, pUser.email)
 				.then(() => response.status(200).send({message: 'user created successfully'}))
 				.catch(err => {
