@@ -10,6 +10,7 @@ import {
 import HomePage from './home/HomePage';
 import Login from './login/Login'; 
 import Register from './register/Register'; 
+import ProfessorHomePage from './ProfessorHomePage/PHomePage';
 
 import './App.scss';
 
@@ -118,12 +119,13 @@ class App extends React.Component {
 						}
 						<h1> Juan Dow </h1>
 					</div>
+					
 				</div> 
 
 				<Switch>
 					<Route exact path ="/" component={Login} />
 					<Route exact path ="/register" component={Register} />
-					<Route exact path="/professor/classes" component={HomePage} />
+					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={HomePage} />
 					<Route exact path="/student/grades" component={HomePage} />
 					<Route exact path="/student/settings" component={HomePage} />
