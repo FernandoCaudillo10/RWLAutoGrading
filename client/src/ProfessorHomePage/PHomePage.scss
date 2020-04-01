@@ -1,0 +1,54 @@
+.professorContainer{
+    background-color: white;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    border: .01em solid black; 
+    margin-bottom: 5%;
+    
+}   
+
+
+hr{
+
+    margin-left: 5%;
+    margin-right: 5%;
+    
+}
+
+h1{
+    margin-left: 7%;
+    font-weight: normal;
+}
+
+p{
+    margin-left: 7%;
+    text-indent: 5em;
+    font-weight: lighter;
+}
+
+.buttonFloat{
+   float: right;
+   margin-left: 60%;
+   margin-top: 1.2%;
+   margin-bottom: 0%;
+//    background-color: green;
+    // margin-right: 5%;
+}
+.sectionButton{
+    // background-color: red;
+    display: flex;
+
+}
+
+input[type="submit"]{
+    background-color:#696969;
+    color: white;
+    border-radius: 2em;
+
+}
+
+h2{
+    margin-left: 7%;
+    font-weight: lighter;
+}
