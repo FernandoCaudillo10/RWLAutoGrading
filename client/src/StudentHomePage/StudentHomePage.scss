@@ -1,0 +1,26 @@
+.Home{
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+th, td {
+    padding: 25px;
+}
+td{
+    background-color:white;
+    border-top:solid 2px; border-bottom:solid 2px;
+}
+th{
+    font-size: x-large;
+}
+table{
+    border-collapse: collapse;
+    width: 100%;
+    overflow-x:auto;
+}
+#body tr:hover {
+    background-color:white; 
+    color:#80bece;
+} 
