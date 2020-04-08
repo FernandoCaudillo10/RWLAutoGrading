@@ -27,13 +27,14 @@ class RoutesHandler{
 			// Create JWT Payload
 			const payload = {
 			  email: pUser.email,
+			  type: "prof"
 			};
 			// Sign token
 			jwt.sign(
 			  payload,
 			  keys.secretOrKey,
 			  {
-				expiresIn: 31556926 // 1 year in seconds
+				expiresIn: 604800 * 4 // 4 week in seconds
 			  },
 			  (err, token) => {
 				if(err) throw err;
@@ -78,13 +79,14 @@ class RoutesHandler{
 			// Create JWT Payload
 			const payload = {
 			  email: pUser.email,
+			  type: "stud",
 			};
 			// Sign token
 			jwt.sign(
 			  payload,
 			  keys.secretOrKey,
 			  {
-				expiresIn: 31556926 // 1 year in seconds
+				expiresIn: 604800 * 4 // 4 week in seconds
 			  },
 			  (err, token) => {
 				if(err) throw err;
@@ -117,18 +119,21 @@ class RoutesHandler{
 		})(request, response);
 	}
 	professorUpdate(request, response, next){
-		passport.authenticate('jwtStudent', {session: false},
+		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
 
 			if(!pUser){
+				if(info) return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
+
 			let rUser = request.body;
+
 			if(rUser){
 				let r;
 				if(rUser.password && rUser.name){
-					await qry.updateProfessor(rUser.name, rUser.email, rUser.password)
+					await qry.updateProfessor(rUser.name, pUser.email, rUser.password)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Erro: Update professor\n----> ${err}`);
@@ -136,7 +141,7 @@ class RoutesHandler{
 					});
 				}
 				else if(rUser.name){
-					await qry.updateProfessor(rUser.name, rUser.email)
+					await qry.updateProfessor(rUser.name, pUser.email)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Error: Professor Update\n----> ${err}`);
@@ -144,14 +149,14 @@ class RoutesHandler{
 					});
 				}
 				else if(rUser.password){
-					await qry.updateProfessor(null, rUser.email, rUser.password)
+					await qry.updateProfessor(null, pUser.email, rUser.password)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Error: Professor Update\n----> ${err}`);
 						r = response.status(400).json(`${err}`);
 					});
 				}
-				else return response.status(400).json({error: "server error"});
+				else return response.status(400).json({error: "Missing password or name to update"});
 
 				return r;
 			}
@@ -165,13 +170,15 @@ class RoutesHandler{
 			if(pError) return response.status(400).json(`${pError}`);
 
 			if(!pUser){
+				if(info) return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
+
 			let rUser = request.body;
 			if(rUser){
 				let r;
 				if(rUser.password && rUser.name){
-					await qry.updateStudent(rUser.name, rUser.email, rUser.password)
+					await qry.updateStudent(rUser.name, pUser.email, rUser.password)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Erro: Update student\n----> ${err}`);
@@ -179,7 +186,7 @@ class RoutesHandler{
 					});
 				}
 				else if(rUser.name){
-					await qry.updateStudent(rUser.name, rUser.email)
+					await qry.updateStudent(rUser.name, pUser.email)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Error: Student Update\n----> ${err}`);
@@ -187,14 +194,14 @@ class RoutesHandler{
 					});
 				}
 				else if(rUser.password){
-					await qry.updateStudent(null, rUser.email, rUser.password)
+					await qry.updateStudent(null, pUser.email, rUser.password)
 					.then(() => r = response.status(200).send({message: 'user updated successfully'}))
 					.catch(err => {
 						console.log(`Error: Student Update\n----> ${err}`);
 						r = response.status(400).json(`${err}`);
 					});
 				}
-				else return response.status(400).json({error: "server error"});
+				else return response.status(400).json({error: "Missing password or name to update"});
 
 				return r;
 			}

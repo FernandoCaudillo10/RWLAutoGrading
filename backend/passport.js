@@ -15,7 +15,8 @@ function useJWT(passport){
 	passport.use('jwtStudent',
 		new JwtStrategy(opts, 
 			async (jwt_payload, done) => {
-				console.log("in jwt")
+				if(jwt_payload.type != "stud") return done(null, false,{ message: 'Does not have access' });
+
 				try{
 					 await qry.getStudByEmail(jwt_payload.email)
 							.then((result) => {
@@ -29,11 +30,11 @@ function useJWT(passport){
 								return done(null, user);
 							})
 							.catch(err => {
-								console.log(`passport error-> ${err}`);
+								console.log(`passport jwtStudent-> ${err}`);
 								return done("Server error");
 							});
 				} catch (err) {
-					console.log(err);
+					console.log(`passport jwtStudent-> ${err}`);
 					done(new Error("server error"));
 				}
 			})
@@ -41,6 +42,8 @@ function useJWT(passport){
 	passport.use('jwtProfessor',
 		new JwtStrategy(opts, 
 			async (jwt_payload, done) => {
+				if(jwt_payload.type != "prof") return done(null, false,{ message: 'Does not have access' });
+
 				try{
 					 await qry.getProfByEmail(jwt_payload.email)
 							.then((result) => {
@@ -54,12 +57,12 @@ function useJWT(passport){
 								return done(null, user);
 							})
 							.catch(err => {
-								console.log(`passport error-> ${err}`);
-								return done("Server error");
+								console.log(`passport jwtProfessor-> ${err}`);
+								return done(new Error("server error"));
 							});
 				} catch (err) {
-					console.log(err);
-					done(new Error("server error"));
+					console.log(`passport jwtProfessor-> ${err}`);
+					return done(new Error("server error"));
 				}
 			})
 		);
