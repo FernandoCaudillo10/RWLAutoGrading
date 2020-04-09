@@ -12,6 +12,7 @@ import Login from './login/Login';
 import Register from './register/Register'; 
 import ProfessorHomePage from './ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './ProfessorAssignment/ProfessorAssignments';
+import PAssignmentView from './ProfessorAssignmentView/PAssignmentView'
 
 import './App.scss';
 
@@ -131,7 +132,8 @@ class App extends React.Component {
 					<Route exact path="/student/grades" component={HomePage} />
 					<Route exact path="/student/settings" component={HomePage} />
 					<Route exact path="/student" component={HomePage} />
-					<Route exact path="/professor/assignments" component={ProfessorAssignments} />
+					<Route exact path="/professor/createassignments" component={ProfessorAssignments} />
+					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
 				</Switch>
 			</div>
 		</Router>
