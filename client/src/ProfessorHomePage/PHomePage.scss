@@ -16,29 +16,18 @@ hr{
     
 }
 
-h1{
+.h1class{
     margin-left: 7%;
     font-weight: normal;
 }
 
-p{
-    margin-left: 7%;
-    text-indent: 5em;
-    font-weight: lighter;
-}
+
 
 .buttonFloat{
-   float: right;
    margin-left: 60%;
-   margin-top: 1.2%;
+   margin-top: 0%;
    margin-bottom: 0%;
-//    background-color: green;
-    // margin-right: 5%;
-}
-.sectionButton{
-    // background-color: red;
-    display: flex;
-
+   
 }
 
 input[type="submit"]{
@@ -47,8 +36,9 @@ input[type="submit"]{
     border-radius: 2em;
 
 }
-
-h2{
+.h2class{
     margin-left: 7%;
+    margin-bottom: 0%;
+    margin-right: 0%;
     font-weight: lighter;
 }
