@@ -7,16 +7,16 @@ const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
 const passport = require('passport');
 const bcrypt = require("bcryptjs");
+const cors = require('cors')
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
+app.use(passport.initialize()); // Passport middleware for login/regist/jwt
+app.use(cors()); // Cors middleware to allow all Cross-origin access
 
-
-// Passport middleware
-app.use(passport.initialize());
 
 // Passport config
 localPassport.useJWT(passport);
