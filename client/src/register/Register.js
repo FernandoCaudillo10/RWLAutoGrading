@@ -1,7 +1,7 @@
 import React  from 'react'; 
 import './Register.scss'
-
-
+import axios from 'axios';
+import qs from 'qs';
 class Register extends React.Component{
 
     constructor(props){
@@ -12,7 +12,8 @@ class Register extends React.Component{
             password: '',
             emailConfirm: '',
             passwordConfirm: '',
-            typeOfUser: ''
+            typeOfUser: '',
+            nameofuser: ''
             
         };
 
@@ -32,7 +33,62 @@ class Register extends React.Component{
     
       handleSubmit(event) {
         //   This will handle once you Register
+
         event.preventDefault(); 
+        if(this.state.typeOfUser === "Student"){
+            axios({
+                method: 'post',
+                url: 'https://rwlautograder.herokuapp.com/api/stud/cred/register',
+                data: qs.stringify({
+                  name: this.state.nameofuser,
+                  email: this.state.email,
+                  password: this.state.password
+                }),
+                headers: {
+                  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                }
+                
+              }).then ( res =>{
+                console.log(res);
+              }).catch((error) =>{
+                  if(error.response){
+                    console.log(error.response.data);
+                  } else if (error.request){
+                      console.log(error.request); 
+                  }else {
+                      console.log(error.message);
+                  }
+              })
+
+        }else if(this.state.typeOfUser === "Teacher"){
+            axios({
+                method: 'post',
+                url: 'https://rwlautograder.herokuapp.com/api/prof/cred/register',
+                data: qs.stringify({
+                  name: this.state.nameofuser,
+                  email: this.state.email,
+                  password: this.state.password
+                }),
+                headers: {
+                  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                }
+                
+              }).then ( res =>{
+                console.log(res);
+              }).catch((error) =>{
+                  if(error.response){
+                    console.log(error.response.data);
+                  } else if (error.request){
+                      console.log(error.request); 
+                  }else {
+                      console.log(error.message);
+                  }
+              })
+
+        }else {
+            document.getElementById("testing").append('Please select the type');
+        }   
+
       }
 
       handleSelectOption(event){
@@ -52,6 +108,9 @@ render(){
 
 
             <form onSubmit={this.handleSubmit}>
+            <div >
+                    <input className="RegisterFields" type='text' placeholder='Name' name="nameofuser" onChange={this.handleFormChange}></input>
+                </div>
 
                 <div>
                     <input className="RegisterFields" type='text' placeholder='Email' name="email" onChange={this.handleFormChange}></input>
@@ -74,6 +133,10 @@ render(){
                             <option value="Student" name ="typeOfUser">Student</option>
                             <option value="Teacher" name ="typeOfUser">Teacher</option>
                         </select>
+                    </div>
+                    <div id="testing">
+                        
+
                     </div>
                     
    
