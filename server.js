@@ -32,9 +32,10 @@ app.post('/api/prof/cred/login', Routes.professorLogin);
 app.put('/api/stud/cred/update', Routes.studentUpdate);
 app.put('/api/prof/cred/update', Routes.professorUpdate);
 app.get('/api/prof/class/:classId/assignments', Routes.classAssignments);
+app.post('/api/prof/class/:classId/section/create', Routes.createSection);
+app.post('/api/prof/class/:classId/assignment/create', Routes. createAssignment); 
 app.post('/api/prof/class/create', Routes.createClass);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
-app.post('/api/prof/class/:classId/section/create', Routes.createSection);
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

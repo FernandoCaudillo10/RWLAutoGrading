@@ -15,7 +15,59 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
-	classAssignments(request, response, next){
+	createAssignment(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+
+			let assigned_date = Math.floor(Date.now() / 1000);
+			let due_date = Math.floor(Date.now() / 1000);
+			let final_due_date = Math.floor(Date.now() / 1000);
+
+			let assignment = JSON.parse(request.body.assignment);
+			if(!assignment.prompts) return response.status(400).json({error: "No prompts in assignment"});
+			
+			let validPrompt = true;
+			let validQuest = true;
+			await assignment.prompts.forEach((prompt) => {
+					if(!prompt.questions || !prompt.prompt) validPrompt = false;
+					else{
+						prompt.questions.forEach((q) => {
+							if(!q.question || !q.min_char) validQuest = false;
+						});
+					}
+				});
+			if(!validPrompt) return response.status(400).json({error: "Missing questions or prompt in Prompts"});
+			if(!validQuest) return response.status(400).json({error: "Missing question or min_char in Questions"});
+
+			let resultRubric = await qry.createRubric(assigned_date, due_date, final_due_date, assignment)
+
+			let resultSections = await qry.getClassSections(cId)
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+			if(resultRubric.rowCount === 0) return response.status(400).json({error: "Server Error"});
+			if(resultSections.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+			
+			let rub_id = resultRubric.rows[0].rubric_id;
+			resultSections.rows.forEach((row) => {
+				qry.connectSectionRubric(row.section_id, rub_id);
+			});
+			return response.status(200).json(resultRubric.rows[0]);
+
+		})(request, response);
+	}
+
+	classAssignments(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -46,7 +98,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	createClass(request, response, next){
+	createClass(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -76,7 +128,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	getClassSections(request, response, next){
+	getClassSections(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -100,7 +152,7 @@ class RoutesHandler{
 
 		})(request, response);
 	}
-	createSection(request, response, next){
+	createSection(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);

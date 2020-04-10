@@ -30,9 +30,9 @@ CREATE TABLE "takes" (
 
 CREATE TABLE "rubric" (
   "rubric_id" SERIAL PRIMARY KEY,
-  "assigned_date" date,
-  "due_date" date,
-  "final_due_date" date
+  "assigned_date" timestamptz,
+  "due_date" timestamptz,
+  "final_due_date" timestamptz
 );
 
 CREATE TABLE "section_rubric" (
