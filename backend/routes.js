@@ -16,6 +16,29 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
+	getAssignment(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+			//TODO: Verify professor can access this class
+
+			let rId = request.params.rubId;
+			
+			qry.getAssignment(rId)
+				.then((result) => {
+					return response.status(200).json(result.rows);
+				});
+
+		})(request, response);
+	}
+
 	deleteAssignment(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {

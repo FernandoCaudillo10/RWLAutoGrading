@@ -35,6 +35,7 @@ app.get('/api/prof/class/:classId/assignments', Routes.classAssignments);
 app.post('/api/prof/class/:classId/section/create', Routes.createSection);
 app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment); 
 app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAssignment); 
+app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
 app.post('/api/prof/class/create', Routes.createClass);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));

@@ -8,7 +8,9 @@ const pool = new Pool({
 	connectionString: connString,
 	ssl:true,
 })
-
+function getAssignment(rub_id){
+	return pool.query(`SELECT DISTINCT p.*, q.* FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id WHERE r.rubric_id='${rub_id}'`);
+}
 function deleteRubric(rub_id){
 	return pool.query(`DELETE FROM rubric WHERE rubric_id='${rub_id}'`);
 }
@@ -161,4 +163,5 @@ module.exports = {
 	createRubric,
 	connectSectionRubric,
 	deleteRubric,
+	getAssignment,
 }
