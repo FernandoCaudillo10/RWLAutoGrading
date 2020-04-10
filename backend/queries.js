@@ -13,6 +13,26 @@ function getStudByEmail(email){
 	return pool.query(`SELECT * FROM student WHERE student.email='${email}'`);
 }
 
+function takesCheck(email, sectionID) {
+	return pool.query(`SELECT email FROM takes WHERE email='${email}' AND section_id='sectionID'`);
+}
+
+function getAssignRubric(sectionID){
+	return pool.query(`SELECT rubric_id FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
+}
+
+function getAssignment(rubricID){
+	return pool.query(`SELECT prompt.prompt_id, prompt_text, question_text, min_char FROM prompt INNER JOIN question ON prompt.rubric_id='${rubricID}' AND prompt.prompt_id=question.prompt_id`);
+}
+
+function gradeAssignment(email){
+	return pool.query(`SELECT response_value, question_text, prompt_text FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+}
+
+function submitAssignment(){
+	return pool.query(``);
+}
+
 function addStudent(name, email, password){
 	return new Promise( (onSuccess, onFail) => {
 		bcrypt.genSalt(10, (err, salt) => {
