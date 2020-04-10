@@ -33,7 +33,7 @@ class RoutesHandler{
 					let cl = result.rows[0];
 					if(pUser.email != cl.professor_email) return response.status(400).json({error: "Professor unathorized"});
 
-					qry.getAllClassAssignmnents(cl.class_id)
+					qry.getAllClassAssignments(cl.class_id)
 					.then(result => {
 						return response.status(200).json(result.rows);
 					});
