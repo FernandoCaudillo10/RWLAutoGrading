@@ -4,6 +4,7 @@ const keys = require("./configs/keys");
 const bcrypt = require("bcryptjs");
 const qry = require('./queries');
 
+//TODO: Fix error messages
 class RoutesHandler{
 	
 	constructor(app){
@@ -13,6 +14,30 @@ class RoutesHandler{
 		this.studentLogin = this.studentLogin.bind(this);
 		this.professorRegister = this.professorRegister.bind(this);
 		this.professorLogin = this.professorLogin.bind(this);
+	}
+
+	deleteAssignment(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+			
+			let cId = request.params.classId;
+			//TODO: Verify professor can access this class
+
+			let rId = request.params.rubId;
+			qry.deleteRubric(rId)
+				.then(() => {return response.status(200).json({error: "Rubric successfully deleted"})})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
 	}
 
 	createAssignment(request, response){
@@ -26,11 +51,13 @@ class RoutesHandler{
 			}
 
 			let cId = request.params.classId;
+			//TODO: Verify professor can access this class
 
 			let assigned_date = Math.floor(Date.now() / 1000);
 			let due_date = Math.floor(Date.now() / 1000);
 			let final_due_date = Math.floor(Date.now() / 1000);
-
+			
+			if(!request.body.assignment) return response.status(400).json({error: "Assignment is missing"});
 			let assignment = JSON.parse(request.body.assignment);
 			if(!assignment.prompts) return response.status(400).json({error: "No prompts in assignment"});
 			
@@ -117,7 +144,8 @@ class RoutesHandler{
 
 					qry.createSection(cl.class_id)
 						.then(result => {
-							return response.status(200).json(result.rows);
+							cl.section_id = result.rows[0].section_id;
+							return response.status(200).json(cl);
 						});
 				})
 				.catch(err => {

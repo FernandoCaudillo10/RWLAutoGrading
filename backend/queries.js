@@ -9,6 +9,10 @@ const pool = new Pool({
 	ssl:true,
 })
 
+function deleteRubric(rub_id){
+	return pool.query(`DELETE FROM rubric WHERE rubric_id='${rub_id}'`);
+}
+
 async function createRubric(assigned_date, due_date, final_due_date, assignment){
 	
 	let result;
@@ -156,4 +160,5 @@ module.exports = {
 	createSection,
 	createRubric,
 	connectSectionRubric,
+	deleteRubric,
 }

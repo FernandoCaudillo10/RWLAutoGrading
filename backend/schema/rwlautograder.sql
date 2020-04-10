@@ -7,13 +7,13 @@ CREATE TABLE "professor" (
 
 CREATE TABLE "class" (
   "class_id" SERIAL PRIMARY KEY,
-  "professor_email" varchar NOT NULL REFERENCES "professor" ("email"),
+  "professor_email" varchar NOT NULL REFERENCES "professor" ("email") ON DELETE CASCADE,
   "name" varchar
 );
 
 CREATE TABLE "section" (
   "section_id" SERIAL PRIMARY KEY,
-  "class_id" int NOT NULL REFERENCES "class" ("class_id")
+  "class_id" int NOT NULL REFERENCES "class" ("class_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "student" (
@@ -24,8 +24,8 @@ CREATE TABLE "student" (
 );
 
 CREATE TABLE "takes" (
-  "student_id" varchar NOT NULL REFERENCES "student" ("email"),
-  "section_id" int NOT NULL REFERENCES "section" ("section_id")
+  "student_id" varchar NOT NULL REFERENCES "student" ("email") ON DELETE CASCADE,
+  "section_id" int NOT NULL REFERENCES "section" ("section_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "rubric" (
@@ -36,41 +36,41 @@ CREATE TABLE "rubric" (
 );
 
 CREATE TABLE "section_rubric" (
-  "section_id" int NOT NULL REFERENCES "section" ("section_id"),
-  "rubric_id" int NOT NULL REFERENCES "rubric" ("rubric_id")
+  "section_id" int NOT NULL REFERENCES "section" ("section_id") ON DELETE CASCADE,
+  "rubric_id" int NOT NULL REFERENCES "rubric" ("rubric_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "prompt" (
 	"prompt_id" SERIAL PRIMARY KEY,
-	"rubric_id" int NOT NULL REFERENCES "rubric" ("rubric_id"),
+	"rubric_id" int NOT NULL REFERENCES "rubric" ("rubric_id") ON DELETE CASCADE,
 	"prompt_text" text
 );
 
 CREATE TABLE "question" (
   "question_id" SERIAL PRIMARY KEY,
-  "prompt_id" int NOT NULL REFERENCES "prompt" ("prompt_id"),
+  "prompt_id" int NOT NULL REFERENCES "prompt" ("prompt_id") ON DELETE CASCADE,
   "question_text" text,
   "min_char" int
 );
 
 CREATE TABLE "response" (
   "response_id" SERIAL PRIMARY KEY,
-  "student_email" varchar NOT NULL REFERENCES "student" ("email"),
+  "student_email" varchar NOT NULL REFERENCES "student" ("email") ON DELETE CASCADE,
   "response_value" text,
-  "question_id" int NOT NULL REFERENCES "question" ("question_id")
+  "question_id" int NOT NULL REFERENCES "question" ("question_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "prof_evals" (
   "eval_id" SERIAL PRIMARY KEY,
-  "professor_email" varchar NOT NULL REFERENCES "professor" ("email"),
-  "response_id" int NOT NULL REFERENCES "response" ("response_id"),
+  "professor_email" varchar NOT NULL REFERENCES "professor" ("email") ON DELETE CASCADE,
+  "response_id" int NOT NULL REFERENCES "response" ("response_id") ON DELETE CASCADE,
   "response_grade" varchar
 );
 
 CREATE TABLE "evaluation" (
   "eval_id" SERIAL PRIMARY KEY,
-  "student_email" varchar NOT NULL REFERENCES "student" ("email"),
-  "response_id" int NOT NULL REFERENCES "response" ("response_id"),
+  "student_email" varchar NOT NULL REFERENCES "student" ("email") ON DELETE CASCADE,
+  "response_id" int NOT NULL REFERENCES "response" ("response_id") ON DELETE CASCADE,
   "response_grade" int,
   "evaluation_grade" int
 );
