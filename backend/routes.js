@@ -15,6 +15,121 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
+	classAssignments(request, response, next){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+			qry.getClass(cId)
+				.then((result) => {
+					if(result.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+					
+					let cl = result.rows[0];
+					if(pUser.email != cl.professor_email) return response.status(400).json({error: "Professor unathorized"});
+
+					qry.getAllClassAssignmnents(cl.class_id)
+					.then(result => {
+						return response.status(200).json(result.rows);
+					});
+				})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
+	}
+	
+	createClass(request, response, next){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cName = request.body.name;
+			qry.createClass(pUser.email, cName)
+				.then((result) => {
+					if(result.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+					
+					let cl = result.rows[0];
+
+					qry.createSection(cl.class_id)
+						.then(result => {
+							return response.status(200).json(result.rows);
+						});
+				})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
+	}
+
+	getClassSections(request, response, next){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+			qry.getClassSections(cId)
+				.then((result) => {
+					if(result.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+
+					return response.status(200).json(result.rows);
+				})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
+	}
+	createSection(request, response, next){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+			qry.getClass(cId)
+				.then((result) => {
+					if(result.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+					
+					let cl = result.rows[0];
+					if(pUser.email != cl.professor_email) return response.status(400).json({error: "Professor unathorized"});
+
+					qry.createSection(cl.class_id)
+					.then(result => {
+							return response.status(200).json(result.rows);
+					});
+				})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
+	}
 	professorLogin(request, response){
 		passport.authenticate('professorLogin', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${err}`);

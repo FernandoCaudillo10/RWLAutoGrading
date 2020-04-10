@@ -32,8 +32,12 @@ CREATE TABLE "rubric" (
   "rubric_id" SERIAL PRIMARY KEY,
   "assigned_date" date,
   "due_date" date,
-  "final_due_date" date,
-  "section_id" int NOT NULL REFERENCES "section" ("section_id")
+  "final_due_date" date
+);
+
+CREATE TABLE "section_rubric" (
+  "section_id" int NOT NULL REFERENCES "section" ("section_id"),
+  "rubric_id" int NOT NULL REFERENCES "rubric" ("rubric_id")
 );
 
 CREATE TABLE "prompt" (

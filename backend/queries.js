@@ -8,6 +8,21 @@ const pool = new Pool({
 	connectionString: connString,
 	ssl:true,
 })
+function getClassSections(class_id){
+	return pool.query(`SELECT * FROM class c JOIN section s ON c.class_id=s.class_id WHERE c.class_id='${class_id}'`);
+}
+function getClass(class_id){
+	return pool.query(`SELECT * FROM class WHERE class.class_id='${class_id}'`);
+}
+function getAllClassAssignments(class_id){
+	return pool.query(`SELECT * FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
+}
+function createClass(email, name){
+	return pool.query(`INSERT INTO class(professor_email, name) VALUES ('${email}','${name}') RETURNING *`);
+}
+function createSection(class_id){
+	return pool.query(`INSERT INTO section(class_id) VALUES ('${class_id}') RETURNING *`);
+}
 
 function getStudByEmail(email){
 	return pool.query(`SELECT * FROM student WHERE student.email='${email}'`);
@@ -108,4 +123,9 @@ module.exports = {
 	addProfessor,
 	updateProfessor,
 	updateStudent,
+	getClassSections,
+	getClass,
+	getAllClassAssignments,
+	createClass,
+	createSection,
 }
