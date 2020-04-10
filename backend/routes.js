@@ -73,12 +73,13 @@ class RoutesHandler{
 				return response.status(400).json({error: "No user under this email"});
 			}
 
-			let cId = request.params.classId;
 			//TODO: Verify professor can access this class
-
-			let assigned_date = Math.floor(Date.now() / 1000);
-			let due_date = Math.floor(Date.now() / 1000);
-			let final_due_date = Math.floor(Date.now() / 1000);
+			let cId = request.params.classId;
+			
+			//TODO: Add checking for if dates are before today and all dates are after eachother
+			let assigned_date = request.body.assigned_date;
+			let due_date = request.body.due_date;
+			let final_due_date = request.body.final_due_date;
 			
 			if(!request.body.assignment) return response.status(400).json({error: "Assignment is missing"});
 			let assignment = JSON.parse(request.body.assignment);
