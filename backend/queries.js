@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -14,7 +14,7 @@ function getStudByEmail(email){
 }
 
 function takesCheck(email, sectionID) {
-	return pool.query(`SELECT email FROM takes WHERE email='${email}' AND section_id='sectionID'`);
+	return pool.query(`SELECT student_id FROM takes WHERE student_id='${email}' AND section_id='sectionID'`);
 }
 
 function getAssignRubric(sectionID){
@@ -29,8 +29,8 @@ function gradeAssignment(email){
 	return pool.query(`SELECT response_value, question_text, prompt_text FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
 }
 
-function submitAssignment(){
-	return pool.query(``);
+function submitAssignment(email, questionID, value){
+	return pool.query(`INSERT INTO reponse (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${value}', '${questionID}')`);
 }
 
 function addStudent(name, email, password){
@@ -122,6 +122,11 @@ function updateStudent(name, email, password){
 }
 
 module.exports = {
+	takesCheck,
+	gradeAssignment,
+	submitAssignment,
+	getAssignRubric,
+	getAssignment,
 	getStudByEmail,
 	addStudent,
 	getProfByEmail,
