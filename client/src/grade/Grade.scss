@@ -1,0 +1,41 @@
+.Grade{
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    
+
+    th, td {
+        padding: 2.5%;
+    }
+    td{
+        background-color:white;
+        border-top:solid .1em; border-bottom:solid .1em;
+    }
+    table{
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x:auto;
+    }
+    .title{ 
+        font-size: 2em;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider{
+        margin-left: .5em;
+        -webkit-appearance: none;
+        width: 15%;
+        height: .5em;
+        border-radius: 3em;  
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+}

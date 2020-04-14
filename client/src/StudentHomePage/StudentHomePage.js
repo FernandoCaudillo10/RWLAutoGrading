@@ -32,7 +32,7 @@ class StudentHomePage extends React.Component{
     render(){
         return (
             <div className="Home">
-                <table id="body">
+                <table id="StudentTable">
                     <th>To-Do</th>
                     <th>Class</th>
                     <th>Due Date</th>

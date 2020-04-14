@@ -11,6 +11,9 @@ import HomePage from './home/HomePage';
 import Login from './login/Login'; 
 import Register from './register/Register'; 
 import StudentHomePage from './StudentHomePage/StudentHomePage';
+import Grade from './grade/Grade'; 
+import Submit from './submit/Submit'; 
+
 
 import './App.scss';
 
@@ -128,6 +131,8 @@ class App extends React.Component {
 					<Route exact path="/professor/settings" component={HomePage} />
 					<Route exact path="/student/grades" component={HomePage} />
 					<Route exact path="/student/settings" component={HomePage} />
+					<Route exact path="/student/grade" component={Grade} />
+					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
