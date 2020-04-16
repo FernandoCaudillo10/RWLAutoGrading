@@ -22,12 +22,17 @@ class PAssignmentView extends React.Component{
 ProfessorAssignmnets(){
     return(
     this.items = this.state.assignments.map((item, key) =>
-                <tr key={item.assignment_name}>
+            // <div key={item.class_id}>
+                <tr key={item.class_id}>
                     <td>{item.assignment_name}</td>
                     <td>{item.due_date}</td>
                     <td>{item.ClassName}</td>
                     <td><input type="submit" value="Edit"></input></td>
                 </tr>
+            
+            // </div>
+                
+            
         )
     )
     
@@ -42,7 +47,6 @@ render(){
             <h2 className="h2class">Professor Assignment View</h2>
             <div className="AssignmenViewTable">
             <table>
-                <tbody>
                 <tr>
                     <td>Assignment Name</td>
                     <td>Due Date</td>
@@ -50,7 +54,6 @@ render(){
                     <td></td>
                 </tr>
                  {this.ProfessorAssignmnets()} 
-                 </tbody>
             </table>
             </div>
            
