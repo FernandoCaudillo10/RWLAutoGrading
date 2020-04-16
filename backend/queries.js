@@ -9,6 +9,11 @@ const pool = new Pool({
 	ssl:true,
 })
 
+function getStudentGrade(email){
+	return pool.query(`SELECT SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}'`);
+
+}
+
 function getStudentResponse(rId){
 	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
 }
@@ -65,6 +70,35 @@ function createSection(class_id){
 
 function getStudByEmail(email){
 	return pool.query(`SELECT * FROM student WHERE student.email='${email}'`);
+}
+
+function takesCheck(email, sectionID){
+	return pool.query(`SELECT student_id FROM takes WHERE student_id='${email}' AND section_id='${sectionID}'`);
+}
+
+function getAssignRubric(sectionID){
+	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
+}
+
+function getAssignment(rubricID){		
+	return pool.query(`SELECT prompt.prompt_id, prompt_text, question_text, min_char FROM prompt INNER JOIN question ON prompt.rubric_id='${rubricID}' AND prompt.prompt_id=question.prompt_id`);
+}
+
+function getEvalAssignment(email){
+	return pool.query(`SELECT prompt_text, question_text, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+}
+
+async function submitAssignment(email, assignment){
+	var data = [];
+
+	let result = await assignment.responses.forEach(async (res) => {
+		return await pool.query(`INSERT INTO response (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${res.response}', '${res.qsID}') RETURNING *`)
+		.then(() => {
+			console.log(result);
+			data.push(result)
+		});
+	});
+	return data;
 }
 
 function addStudent(name, email, password){
@@ -156,7 +190,13 @@ function updateStudent(name, email, password){
 }
 
 module.exports = {
+	takesCheck,
+	getEvalAssignment,
+	submitAssignment,
+	getAssignRubric,
+	getAssignment,
 	getStudByEmail,
+	getStudentGrade,
 	addStudent,
 	getProfByEmail,
 	addProfessor,
