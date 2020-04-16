@@ -43,6 +43,7 @@ app.get('/api/stud/class/:rubricID/assignment', Routes.studentGetAssignment);
 app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
 app.get('api/stud/class/assignment/grade', Routes.studentGetGrade);
+app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
 
 app.get('/api/prof/class/:classId/assignments', Routes.classAssignments);
 app.post('/api/prof/class/:classId/section/create', Routes.createSection);

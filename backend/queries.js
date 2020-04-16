@@ -85,7 +85,7 @@ function getAssignment(rubricID){
 }
 
 function getEvalAssignment(email){
-	return pool.query(`SELECT prompt_text, question_text, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+	return pool.query(`SELECT evaluation_id, prompt_text, question_id, question_text, response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
 }
 
 async function submitAssignment(email, assignment){
@@ -99,6 +99,13 @@ async function submitAssignment(email, assignment){
 		});
 	});
 	return data;
+}
+
+async function submitEvalGrade(assignment){
+	let result = await assignment.evaluation.forEach((eval) => {
+		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluationID}' RETURNING *`);
+	});
+	return result;
 }
 
 function addStudent(name, email, password){
@@ -191,6 +198,7 @@ function updateStudent(name, email, password){
 
 module.exports = {
 	takesCheck,
+	submitEvalGrade,
 	getEvalAssignment,
 	submitAssignment,
 	getAssignRubric,
