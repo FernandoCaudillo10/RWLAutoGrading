@@ -37,6 +37,8 @@ app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignmen
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
 app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
 app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
+app.post('/api/stud/class/register/:sectionID', Routes.studentRegisterClass);
+app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass);
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
