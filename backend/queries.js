@@ -8,6 +8,13 @@ const pool = new Pool({
 	connectionString: connString,
 	ssl:true,
 })
+
+function getStudentResponse(rId){
+	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
+}
+function createProfEval(email, resId, grade) {
+	return pool.query(`INSERT INTO prof_eval(professor_email, response_id, response_grade) VALUES ('${email}','${resId}', '${grade}') RETURNING *`);
+}
 function getAssignment(rub_id){
 	return pool.query(`SELECT DISTINCT p.*, q.* FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id WHERE r.rubric_id='${rub_id}'`);
 }
@@ -164,4 +171,6 @@ module.exports = {
 	connectSectionRubric,
 	deleteRubric,
 	getAssignment,
+	getStudentResponse,
+	createProfEval,
 }

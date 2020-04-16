@@ -15,6 +15,39 @@ class RoutesHandler{
 		this.professorRegister = this.professorRegister.bind(this);
 		this.professorLogin = this.professorLogin.bind(this);
 	}
+	
+	submitProfEval(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let cId = request.params.classId;
+			
+			let resultClass = await qry.getClass(cId); 
+			if(resultClass.rowCount === 0) return response.status(400).json({error: "No class under this id"});
+			//TODO: Verify professor can access this class
+
+			let rId = request.params.resId;
+			
+			let resultResponse = await qry.getStudentResponse(rId); 
+			if(resultResponse.rowCount === 0) return response.status(400).json({error: "No student response under this id"});
+			
+			if(!request.body.grade) return response.status(400).json({error: "No grade in body"});
+			let grade = request.body.grade;
+			
+			
+			let profEval = await qry.createProfEval(pUser.email, rId, grade);
+			if(profEval.rowCount === 0) return response.status(400).json({error: "Server erro"});
+
+			return response.status(400).json(profEval.rows);
+
+		})(request, response);
+	}
 
 	getAssignment(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
