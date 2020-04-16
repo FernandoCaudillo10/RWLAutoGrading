@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -90,7 +90,7 @@ function getEvalAssignment(email){
 
 async function submitAssignment(email, assignment){
 	let result = await assignment.responses.forEach((res) => {
-		return await pool.query(`INSERT INTO response (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${res.response}', '${res.qsID}') RETURNING *`);
+		return pool.query(`INSERT INTO response (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${res.response}', '${res.qsID}') RETURNING *`);
 	});
 	return result;
 }
@@ -100,6 +100,14 @@ async function submitEvalGrade(assignment){
 		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluationID}' RETURNING *`);
 	});
 	return result;
+}
+
+function studRegClass(email, sectionID){
+	return pool.query(`INSERT INTO takes (student_id, section_id) VALUES ('${email}','${sectionID}') RETURNING *`);
+}
+
+function studRemoveClass(email, sectionID){
+	return pool.query(`DELETE FROM takes WHERE student_id='${email}' AND section_id='${sectionID}' RETURNING *`);
 }
 
 function addStudent(name, email, password){
@@ -156,6 +164,7 @@ function updateProfessor(name, email, password){
 			.catch((error) => { onFail(error)} );
 	});
 }
+
 function updateStudent(name, email, password){
 	if(!email) return new Error("Server Error");
 
@@ -192,6 +201,8 @@ function updateStudent(name, email, password){
 
 module.exports = {
 	takesCheck,
+	studRegClass,
+	studRemoveClass,
 	submitEvalGrade,
 	getEvalAssignment,
 	submitAssignment,

@@ -20,6 +20,54 @@ class RoutesHandler{
 		this.studentSubmitAssignment = this.studentSubmitAssignment.bind(this);
 		this.studentAssignmentRubric = this.studentAssignmentRubric.bind(this);
 		this.studentSubmitGrade = this.studentSubmitGrade.bind(this);
+		this.studentRegisterClass = this.studentRegisterClass.bind(this);
+		this.studentUnregisterClass = this.studentUnregisterClass.bind(this);
+	}
+
+	studentUnregisterClass(request,response) {
+		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
+			if(pError) 
+				return response.status(400).json(`${pError}`);	
+			
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let secID = request.params.sectionID;
+			qry.studRemoveClass(pUser.email, secID)
+				.then(() => {
+					return response.status(200).json("Sucess");
+				})
+				.catch(err => {
+					console.log(`Student Register Class -> ${err}`);
+					return response.status(400).json({error: "Server error"});	
+				});
+		})(request, response);
+	}
+
+	studentRegisterClass(request,response) {
+		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
+			if(pError) 
+				return response.status(400).json(`${pError}`);	
+			
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			let secID = request.params.sectionID;
+			qry.studRegClass(pUser.email, secID)
+				.then(() => {
+					return response.status(200).json("Sucess");
+				})
+				.catch(err => {
+					console.log(`Student Register Class -> ${err}`);
+					return response.status(400).json({error: "Server error"});	
+				});
+		})(request, response);
 	}
 
 	studentGetGrade(request,response) {
