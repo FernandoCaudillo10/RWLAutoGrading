@@ -8,6 +8,7 @@ const localPassport = require("./backend/passport");
 const passport = require('passport');
 const bcrypt = require("bcryptjs");
 const cors = require('cors')
+const cron = require('node-cron');
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -37,6 +38,7 @@ app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment);
 app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAssignment); 
 app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
 app.post('/api/prof/class/create', Routes.createClass);
+app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));
 // The "catchall" handler: for any request that doesn't
