@@ -16,6 +16,8 @@ class RoutesHandler{
 		this.studentEvaluateAssignment = this.studentEvaluateAssignment.bind(this);
 		this.studentGetAssignment = this.studentGetAssignment.bind(this);
 		this.studentGetGrade = this.studentGetGrade.bind(this);
+		this.studentSubmitAssignment = this.studentSubmitAssignment.bind(this);
+		this.studentAssignmentRubric = this.studentAssignmentRubric.bind(this);
 	}
 
 	studentGetGrade(request,response) {
@@ -29,12 +31,12 @@ class RoutesHandler{
 				return response.status(400).json({error: "No user under this email"});
 			}
 
-			qry.getStudentGrade(p.email)
-				.then((result) =>
+			qry.getStudentGrade(pUser.email)
+				.then((result) => {
 					if(result.rowCount === 0)
 						return response.status(400).json({error: "Student email does not have any grades"});
 					return response.status(200).json(result.rows);
-				)
+				})
 				.catch(err => {
 					console.log(`Student Grade -> ${err}`);
 					return response.status(400).json({error: "Server error"});	
@@ -119,7 +121,6 @@ class RoutesHandler{
 
 		qry.submitAssignment(pUser.email, assignment)
 			.then((result) => {
-				console.log("Function"+ result);
 				return response.status(200).json(result);		
 			})
 			.catch(err => {
@@ -139,7 +140,7 @@ class RoutesHandler{
 					return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-
+			
 			let secID = request.params.sectionID;
 			qry.takesCheck(pUser.email, secID)
 				.then((result) => {	
@@ -151,6 +152,10 @@ class RoutesHandler{
 								return response.status(400).json({error: "No section under this ID"});
 							return response.status(200).json(result.rows);	
 						})
+						.catch(err => {
+							console.log(`Student Takes Check -> ${err}`);	
+							return response.status(400).json({error: "Server error"});
+						});
 				})
 				.catch(err => {
 					console.log(`Student Takes Check -> ${err}`);	

@@ -22,7 +22,7 @@ function takesCheck(email, sectionID){
 }
 
 function getAssignRubric(sectionID){
-	return pool.query(`SELECT rubric_id FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
+	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
 }
 
 function getAssignment(rubricID){		
