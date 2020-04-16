@@ -1,0 +1,53 @@
+.Submit{
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+    th, td {
+        padding: 2.5%;
+    }
+    td{
+        background-color:white;
+        border-top:solid .1em; border-bottom:solid .1em;
+    }
+    th{
+        font-size: x-large;
+    }
+    table{
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x:auto;
+    }
+    textarea{
+        height: 5em;
+        width: 100%;
+    }
+    .title{ 
+        font-size: 2em;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.SubmitField{
+    width: 30%;
+    height: 1.5em;
+    margin-top: 5%;
+    border: .1em solid black; 
+    font-size: 1em;
+}
+
+.SubmitButton{
+    margin-top: 5%;
+    margin-left: 50%;
+    height: 3em;
+    width: 5%;
+    color: white;
+    background-color: #808080;
+    border-radius: 2em;
+}
+
