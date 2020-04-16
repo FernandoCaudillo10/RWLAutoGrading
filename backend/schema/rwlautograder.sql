@@ -60,7 +60,7 @@ CREATE TABLE "response" (
   "question_id" int NOT NULL REFERENCES "question" ("question_id") ON DELETE CASCADE
 );
 
-CREATE TABLE "prof_evals" (
+CREATE TABLE "prof_eval" (
   "eval_id" SERIAL PRIMARY KEY,
   "professor_email" varchar NOT NULL REFERENCES "professor" ("email") ON DELETE CASCADE,
   "response_id" int NOT NULL REFERENCES "response" ("response_id") ON DELETE CASCADE,
