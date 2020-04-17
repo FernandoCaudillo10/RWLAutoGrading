@@ -9,6 +9,30 @@ const pool = new Pool({
 	ssl:true,
 })
 
+function getStudentsRespondedToRubric(rubric_id){
+	return pool.query(`SELECT DISTINCT(rs.student_email) FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id WHERE r.rubric_id='${rubric_id}';`); 
+}
+
+function getResponsesByStudent(stud_email, rubric_id){
+	return pool.query(`SELECT rs.response_id FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id WHERE r.rubric_id='${rubric_id}' AND rs.student_email='${stud_email}';`); 
+}
+
+function getResponsesToRubric(rubric_id){
+	return pool.query(`SELECT rs.response_id, rs.student_email FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id WHERE r.rubric_id='${rubric_id}';`); 
+}
+
+function getAllProfResponseGrades(rubric_id){
+	return pool.query(`SELECT rs.student_email, e.response_grade FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id JOIN prof_eval e ON rs.response_id=e.response_id WHERE r.rubric_id='${rubric_id}';`); 
+}
+
+function createEvaluation(rubric_id, student_email){
+	return pool.query(`INSERT INTO evaluation(student_email, response_id) VALUES('${student_email}', '${rubric_id}') RETURNING *;`);
+}
+
+function getAllRubricsBeforeNow(){
+	return pool.query(`SELECT * FROM rubric WHERE CURRENT_TIMESTAMP <= rubric.due_date;`);
+}
+
 function getStudentGrade(email){
 	return pool.query(`SELECT SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}'`);
 
