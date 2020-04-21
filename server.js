@@ -7,6 +7,7 @@ const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
 const passport = require('passport');
 const bcrypt = require("bcryptjs");
+const cors = require('cors');
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -15,8 +16,10 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
 
 
-// Passport middleware
-app.use(passport.initialize());
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
+app.use(passport.initialize()); // Passport middleware for login/regist/jwt
+app.use(cors()); // Cors middleware to allow all Cross-origin access
 
 // Passport config
 localPassport.useJWT(passport);
@@ -31,6 +34,14 @@ app.post('/api/prof/cred/register', Routes.professorRegister);
 app.post('/api/prof/cred/login', Routes.professorLogin);
 app.put('/api/stud/cred/update', Routes.studentUpdate);
 app.put('/api/prof/cred/update', Routes.professorUpdate);
+app.get('/api/stud/class/:sectionID/rubric', Routes.studentAssignmentRubric);
+app.get('/api/stud/class/:rubricID/assignment', Routes.studentGetAssignment);
+app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
+app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
+app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
+app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
+app.post('/api/stud/class/register/:sectionID', Routes.studentRegisterClass);
+app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass);
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
