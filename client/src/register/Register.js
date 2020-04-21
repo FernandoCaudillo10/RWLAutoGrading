@@ -27,7 +27,6 @@ class Register extends React.Component{
     handleFormChange(event) {
        
         this.setState({ [event.target.name]: event.target.value });
-        console.log(event.target.value);
       }
 
     
@@ -93,8 +92,6 @@ class Register extends React.Component{
 
       handleSelectOption(event){
           this.setState({typeOfUser: event.target.value});
-          console.log(event.target.value);
-
       }
   
 
