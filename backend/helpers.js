@@ -155,7 +155,8 @@ async function calibrateGrades(rubricId){
 	
 	let sortedByGrade = quickSort(studentAvgGrade.entries(), 0, studentAvgGrade.length - 1);
 	
-	// Linear Regression
+	// smoothing spline
+	// peerwise linear
 
 }
 
