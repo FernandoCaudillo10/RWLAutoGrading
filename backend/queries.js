@@ -89,10 +89,16 @@ function getEvalAssignment(email){
 }
 
 async function submitAssignment(email, assignment){
-	let result = await assignment.responses.forEach((res) => {
-		return pool.query(`INSERT INTO response (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${res.response}', '${res.qsID}') RETURNING *`);
+	var data = [];
+
+	let result = await assignment.responses.forEach(async (res) => {
+		return await pool.query(`INSERT INTO response (response_id, student_email, response_value, question_id) VALUES (DEFAULT, '${email}', '${res.response}', '${res.qsID}') RETURNING *`)
+		.then(() => {
+			console.log(result);
+			data.push(result)
+		});
 	});
-	return result;
+	return data;
 }
 
 async function submitEvalGrade(assignment){
