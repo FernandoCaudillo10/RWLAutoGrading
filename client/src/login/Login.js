@@ -14,7 +14,6 @@ class Login extends React.Component {
             
         };
         
-
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -29,14 +28,7 @@ class Login extends React.Component {
     
       handleSubmit(event) {
         event.preventDefault();
-        // const user = {
-        //     email: this.state.email,
-        //     password: this.state.password
-        // }
-        // axios.post('https://rwlautograder.herokuapp.com/api/stud/cred/login', {user}).then( res =>{
-        //     console.log(res); 
-        //     console.log(res.data);
-        // })
+
         axios({
             method: 'post',
             url: 'https://rwlautograder.herokuapp.com/api/stud/cred/login',
