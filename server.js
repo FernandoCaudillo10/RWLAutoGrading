@@ -47,6 +47,9 @@ app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment);
 app.post('/api/prof/class/create', Routes.createClass);
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
+app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
+app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);
+app.post('/api/prof/rubric/:rubId/calibrate', Routes.calibrateGrades);
 
 app.get('/api/*', (request,response) => response.status(404).json({Error: "Endpoint does not exist"}));
 // The "catchall" handler: for any request that doesn't
