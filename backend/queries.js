@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -109,7 +109,7 @@ function getAssignment(rubricID){
 }
 
 function getEvalAssignment(email){
-	return pool.query(`SELECT prompt_text, question_text, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+	return pool.query(`SELECT evaluation_id, prompt_text, question_id, question_text, response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
 }
 
 async function submitAssignment(email, assignment){
@@ -123,6 +123,21 @@ async function submitAssignment(email, assignment){
 		});
 	});
 	return data;
+}
+
+async function submitEvalGrade(assignment){
+	let result = await assignment.evaluation.forEach((eval) => {
+		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluationID}' RETURNING *`);
+	});
+	return result;
+}
+
+function studRegClass(email, sectionID){
+	return pool.query(`INSERT INTO takes (student_id, section_id) VALUES ('${email}','${sectionID}') RETURNING *`);
+}
+
+function studRemoveClass(email, sectionID){
+	return pool.query(`DELETE FROM takes WHERE student_id='${email}' AND section_id='${sectionID}' RETURNING *`);
 }
 
 function addStudent(name, email, password){
@@ -179,6 +194,7 @@ function updateProfessor(name, email, password){
 			.catch((error) => { onFail(error)} );
 	});
 }
+
 function updateStudent(name, email, password){
 	if(!email) return new Error("Server Error");
 
@@ -215,6 +231,9 @@ function updateStudent(name, email, password){
 
 module.exports = {
 	takesCheck,
+	studRegClass,
+	studRemoveClass,
+	submitEvalGrade,
 	getEvalAssignment,
 	submitAssignment,
 	getAssignRubric,
