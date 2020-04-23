@@ -15,14 +15,6 @@ class RoutesHandler{
 		this.studentLogin = this.studentLogin.bind(this);
 		this.professorRegister = this.professorRegister.bind(this);
 		this.professorLogin = this.professorLogin.bind(this);
-		this.studentEvaluateAssignment = this.studentEvaluateAssignment.bind(this);
-		this.studentGetAssignment = this.studentGetAssignment.bind(this);
-		this.studentGetGrade = this.studentGetGrade.bind(this);
-		this.studentSubmitAssignment = this.studentSubmitAssignment.bind(this);
-		this.studentAssignmentRubric = this.studentAssignmentRubric.bind(this);
-		this.studentSubmitGrade = this.studentSubmitGrade.bind(this);
-		this.studentRegisterClass = this.studentRegisterClass.bind(this);
-		this.studentUnregisterClass = this.studentUnregisterClass.bind(this);
 	}
 
 	studentUnregisterClass(request,response) {
@@ -252,12 +244,13 @@ class RoutesHandler{
 				return response.status(400).json({error: "No user under this email"});
 			}
 			
-			let secID = request.params.sectionID;
-			qry.takesCheck(pUser.email, secID)
+			let cID = request.params.classID;
+			qry.takesCheck(pUser.email, cID)
 				.then((result) => {	
 					if(result.rowCount === 0) 
-						return response.status(400).json({error: "Student is not enrolled in section"});		
-					qry.getAssignRubric(secID)
+						return response.status(400).json({error: "Student is not enrolled in class"});		
+					let secID = Object.values(result.rows[0]);
+					qry.getAssignRubric(secID[1])
 						.then((result) => {
 							if(result.rowCount === 0) 
 								return response.status(400).json({error: "No section under this ID"});

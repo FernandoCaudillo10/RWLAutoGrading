@@ -41,7 +41,6 @@ function getStudentGrade(email){
 	return pool.query(`SELECT SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}'`);
 
 }
-
 function getStudentResponse(rId){
 	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
 }
@@ -95,27 +94,18 @@ function createClass(email, name){
 function createSection(class_id){
 	return pool.query(`INSERT INTO section(class_id) VALUES ('${class_id}') RETURNING *`);
 }
-
 function getStudByEmail(email){
 	return pool.query(`SELECT * FROM student WHERE student.email='${email}'`);
 }
-
-function takesCheck(email, sectionID){
-	return pool.query(`SELECT student_id FROM takes WHERE student_id='${email}' AND section_id='${sectionID}'`);
+function takesCheck(email, classID){
+	return pool.query(`SELECT * FROM takes JOIN section ON section.section_id=takes.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}' AND class.class_id='${classID}'`);
 }
-
 function getAssignRubric(sectionID){
 	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
 }
-
-function getAssignment(rubricID){		
-	return pool.query(`SELECT prompt.prompt_id, prompt_text, question_text, min_char FROM prompt INNER JOIN question ON prompt.rubric_id='${rubricID}' AND prompt.prompt_id=question.prompt_id`);
-}
-
 function getEvalAssignment(email){
-	return pool.query(`SELECT evaluation_id, prompt_text, question_id, question_text, response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+	return pool.query(`SELECT eval_id, prompt_text, question.question_id, question_text, response.response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
 }
-
 async function submitAssignment(email, assignment){
 	var data = [];
 
@@ -128,22 +118,18 @@ async function submitAssignment(email, assignment){
 	});
 	return data;
 }
-
 async function submitEvalGrade(assignment){
 	let result = await assignment.evaluation.forEach((eval) => {
 		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluationID}' RETURNING *`);
 	});
 	return result;
 }
-
 function studRegClass(email, sectionID){
 	return pool.query(`INSERT INTO takes (student_id, section_id) VALUES ('${email}','${sectionID}') RETURNING *`);
 }
-
 function studRemoveClass(email, sectionID){
 	return pool.query(`DELETE FROM takes WHERE student_id='${email}' AND section_id='${sectionID}' RETURNING *`);
 }
-
 function addStudent(name, email, password){
 	return new Promise( (onSuccess, onFail) => {
 		bcrypt.genSalt(10, (err, salt) => {
@@ -158,11 +144,9 @@ function addStudent(name, email, password){
 		});
 	});
 }
-
 function getProfByEmail(email){
 	return pool.query(`SELECT * FROM professor WHERE professor.email='${email}'`);
 }
-
 function addProfessor(name, email, password){
 	return new Promise( (onSuccess, onFail) => {
 		bcrypt.genSalt(10, (err, salt) => {
@@ -177,8 +161,6 @@ function addProfessor(name, email, password){
 		});
 	});
 }
-
-
 function updateProfessor(name, email, password){
 	if(password){
 		return new Promise( (onSuccess, onFail) => {
@@ -198,7 +180,6 @@ function updateProfessor(name, email, password){
 			.catch((error) => { onFail(error)} );
 	});
 }
-
 function updateStudent(name, email, password){
 	if(!email) return new Error("Server Error");
 
