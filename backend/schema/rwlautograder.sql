@@ -64,13 +64,13 @@ CREATE TABLE "prof_eval" (
   "eval_id" SERIAL PRIMARY KEY,
   "professor_email" varchar NOT NULL REFERENCES "professor" ("email") ON DELETE CASCADE,
   "response_id" int NOT NULL REFERENCES "response" ("response_id") ON DELETE CASCADE,
-  "response_grade" varchar
+  "response_grade" real
 );
 
 CREATE TABLE "evaluation" (
   "eval_id" SERIAL PRIMARY KEY,
   "student_email" varchar NOT NULL REFERENCES "student" ("email") ON DELETE CASCADE,
   "response_id" int NOT NULL REFERENCES "response" ("response_id") ON DELETE CASCADE,
-  "response_grade" int,
-  "evaluation_grade" int
+  "response_grade" real,
+  "evaluation_grade" real
 );

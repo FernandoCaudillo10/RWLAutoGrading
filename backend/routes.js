@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const keys = require("./configs/keys");
 const bcrypt = require("bcryptjs");
 const qry = require('./queries');
+const hlp = require('./helpers');
 
 //TODO: Fix error messages
 class RoutesHandler{
@@ -61,6 +62,27 @@ class RoutesHandler{
 				});
 		})(request, response);
 	}
+
+	distributeToStudents(request,response) {
+		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
+			hlp.distributeRubricStudents(request.body.dist_amount, request.params.rubId);
+			return response.status(200).send();
+		})(request, response);
+	}
+
+	distributeToProfessor(request,response) {
+		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
+			hlp.distributeRubricProfessor(pUser.email, request.params.rubId, request.body.studAmntToGrade);
+			return response.status(200).send();
+		})(request, response);
+	}
+
+	calibrateGrades(request,response) {
+		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
+			return response.status(200).json(await hlp.calibrateGrades(request.params.rubId));
+		})(request, response);
+	}
+
 
 	studentGetGrade(request,response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
