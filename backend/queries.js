@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -19,6 +19,10 @@ function getResponsesByStudent(stud_email, rubric_id){
 
 function getResponsesToRubric(rubric_id){
 	return pool.query(`SELECT rs.response_id, rs.student_email FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id WHERE r.rubric_id='${rubric_id}';`); 
+}
+
+function getAllStudResponseGrades(rubric_id){
+	return pool.query(`SELECT rs.student_email, e.response_grade FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id JOIN evaluation e ON rs.response_id=e.response_id WHERE r.rubric_id='${rubric_id}';`); 
 }
 
 function getAllProfResponseGrades(rubric_id){
@@ -256,4 +260,10 @@ module.exports = {
 	getAssignment,
 	getStudentResponse,
 	createProfEval,
+	getStudentsRespondedToRubric,
+	getResponsesByStudent,
+	getResponsesToRubric,
+	getAllProfResponseGrades,
+	createEvaluation,
+	getAllStudResponseGrades,
 }

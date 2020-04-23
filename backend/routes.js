@@ -73,21 +73,21 @@ class RoutesHandler{
 
 	distributeToStudents(request,response) {
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
-			hlp.distributeRubricStudents(request.body.distAmount, request.params.rubricId);
-			return response.status(200);
+			hlp.distributeRubricStudents(request.body.dist_amount, request.params.rubId);
+			return response.status(200).send();
 		})(request, response);
 	}
 
 	distributeToProfessor(request,response) {
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
-			hlp.distributeRubricProfessor(pUser.email, request.params.rubricId);
-			return response.status(200);
+			hlp.distributeRubricProfessor(pUser.email, request.params.rubId, request.body.studAmntToGrade);
+			return response.status(200).send();
 		})(request, response);
 	}
 
 	calibrateGrades(request,response) {
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
-			return response.status(200).json(hlp.calibrateGrades(request.params.rubricId));
+			return response.status(200).json(await hlp.calibrateGrades(request.params.rubId));
 		})(request, response);
 	}
 

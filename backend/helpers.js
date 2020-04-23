@@ -5,6 +5,7 @@ function shuffleArray(array) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
+	return array;
 }
 
 function swap(items, leftIndex, rightIndex){
@@ -52,7 +53,8 @@ async function distributeRubricStudents(studentsToGrade, rubricId){
 	
 	// {stud_email: [response]}
 	let studentToResponses = {};
-
+	
+	console.log(resultResponses.rows);
 	resultResponses.rows.forEach((response) => {
 		if(response.student_email in studentToResponses){
 			studentToResponses[response.student_email].push(response.response_id);
@@ -61,18 +63,18 @@ async function distributeRubricStudents(studentsToGrade, rubricId){
 			studentToResponses[response.student_email] = [response.response_id];
 		}
 	});
-	
-	let students = shuffleArray(studentToResponses.keys());
-	
+	console.log(studentToResponses);
+	let students = await shuffleArray(Object.keys(studentToResponses));
+	console.log(students);
 	for(let i = 0; i < students.length; i++){
 		for(let j = 1; j <= studentsToGrade; j++){
-			studentToResponses[students[(i + j) % students.length]].forEach((response) =>{qry.createEvaluation(response.response_id, students[i])});
+			studentToResponses[students[(i + j) % students.length]].forEach((response) =>{qry.createEvaluation(response, students[i])});
 		}
 	}
 }
 
-async function distributeRubricProfessor(prof_email, rubricId){
-	let resultResponseGrade = await qry.getAllResponseGrades(rubricId);
+async function distributeRubricProfessor(prof_email, rubricId, studentAmount){
+	let resultResponseGrade = await qry.getAllStudResponseGrades(rubricId);
 	
 	// {stud_email: [res_grade]}
 	let studentToGrade = {};
@@ -82,7 +84,7 @@ async function distributeRubricProfessor(prof_email, rubricId){
 			studentToGrade[response.student_email].push(response.response_grade);
 		}
 		else{
-			studentToResponses[response.student_email] = [response.response_grade];
+			studentToGrade[response.student_email] = [response.response_grade];
 		}
 	});
 	
@@ -93,22 +95,24 @@ async function distributeRubricProfessor(prof_email, rubricId){
 		studentToGrade[student].forEach((grade) => {
 			sum += grade;
 		});
-		studentAvgGrade[student] = sum / studentToGrade[student].length;
+		studentAvgGrade[student] = { value: sum / studentToGrade[student].length };
 	}
 	
-	let sortedByGrade = quickSort(studentAvgGrade.entries(), 0, studentAvgGrade.length - 1);
-	
-	let studentAmount = Math.ceil(sortedByGrade.length * 0.1)
+	let entries = Object.entries(studentAvgGrade);
+	let sortedByGrade = quickSort(entries, 0, entries.length - 1);
 	
 	let bucketSize = Math.floor(sortedByGrade.length / studentAmount);
 	
+	console.log(bucketSize);
 	let studentsBeingGraded = [];
 	for(let i=0; i < sortedByGrade.length; i += bucketSize){
 		studentsBeingGraded.push(sortedByGrade[i][0]);
 	}
-	if(sortedByGrade.length % bucketSize != 0){
-		studentsBeingGraded.push(sortedByGrade[i][0]);
+	if(sortedByGrade.length - 1 % bucketSize != 0){
+		studentsBeingGraded[studentsBeingGraded.length - 1] = sortedByGrade[sortedByGrade.length - 1][0];
 	}
+	console.log(sortedByGrade);
+	console.log(studentsBeingGraded);
 	
 	studentsBeingGraded.forEach((stud_email) => {
 		qry.getResponsesByStudent(stud_email, rubricId)
@@ -122,14 +126,14 @@ async function distributeRubricProfessor(prof_email, rubricId){
 
 function findProfGrade(array){
 	let result = [];
-	array.forEach((e) => {
-		result.push(e);
-	});
+	for(let i=0; i<array.length; i++){
+		if(array[i][1].type === 'prof') result.push(i);
+	}
 	return result;
 }
 
 async function calibrateGrades(rubricId){
-	let resultResponseGrade = await qry.getAllResponseGrades(rubricId);
+	let resultResponseGrade = await qry.getAllStudResponseGrades(rubricId);
 	
 	// {stud_email: [res_grade]}
 	let studentToGrade = {};
@@ -139,16 +143,16 @@ async function calibrateGrades(rubricId){
 			studentToGrade[response.student_email].push(response.response_grade);
 		}
 		else{
-			studentToResponses[response.student_email] = [response.response_grade];
+			studentToGrade[response.student_email] = [response.response_grade];
 		}
 	});
 	
 
-	let resultProfEval = await getAllProfResponseGrades(rubricId);
+	let resultProfEval = await qry.getAllProfResponseGrades(rubricId);
 	
 	let studentToProfGrade = {};
-	resultProfEval.rows.forEach((studGrade) => {
-		studentToResponses[response.student_email] = response.response_grade;
+	resultProfEval.rows.forEach((profEval) => {
+		studentToProfGrade[profEval.student_email] = +(profEval.response_grade);
 	});
 
 	let studentAvgGrade = {};
@@ -164,28 +168,31 @@ async function calibrateGrades(rubricId){
 			studentAvgGrade[student] = { type: "stud", value: sum / studentToGrade[student].length };
 		}
 	}
-	
-	let sortedByGrade = quickSort(studentAvgGrade.entries(), 0, studentAvgGrade.length - 1);
+
+	let entries = Object.entries(studentAvgGrade);
+	let sortedByGrade = quickSort(entries, 0, entries.length - 1);
 	
 	let indexHasProfGrade = findProfGrade(sortedByGrade);
-
+	
+	console.log(sortedByGrade);
+	console.log(indexHasProfGrade);
 	for(let i=0; i<indexHasProfGrade.length -1; i++){
 		let first = indexHasProfGrade[i];
 		let second = indexHasProfGrade[i+1];
 		
-		let A = [first, sortedByGrade[first].value];
-		let B = [second, sortedByGrade[second].value];
+		let A = [first, sortedByGrade[first][1].value];
+		let B = [second, sortedByGrade[second][1].value];
 		
-		let m = (A[1] - B[1]) / (A[0] - B[0] * 0.0);
+		let m = (A[1] - B[1]) / +(A[0] - B[0]);
 		let b = A[1] - (m * A[0]);
 		
 		for(let x=first; x<=second; x++){
 			let y = (m * x) + b;
-			
-			sortedByGrade[x].value = y;
+			console.log(m,x,b)
+			sortedByGrade[x][1].value = y;
 		}
 	}
-	
+	console.log(sortedByGrade);
 	return sortedByGrade;
 }
 
