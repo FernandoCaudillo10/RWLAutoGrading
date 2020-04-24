@@ -82,6 +82,10 @@ function connectSectionRubric(sec_id, rub_id){
 function getClassSections(class_id){
 	return pool.query(`SELECT * FROM class c JOIN section s ON c.class_id=s.class_id WHERE c.class_id='${class_id}'`);
 }
+function getAllClasses(email){
+	return pool.query(`SELECT * FROM class WHERE class.professor_email='${email}'`);
+}
+
 function getClass(class_id){
 	return pool.query(`SELECT * FROM class WHERE class.class_id='${class_id}'`);
 }
@@ -251,4 +255,5 @@ module.exports = {
 	getAllProfResponseGrades,
 	createEvaluation,
 	getAllStudResponseGrades,
+	getAllClasses,
 }

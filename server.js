@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
-const port = process.env.PORT || 8082;
+const port = process.env.PORT || 8080;
 const db = require('./backend/queries')
 const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
@@ -56,6 +56,7 @@ app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment);
 app.post('/api/prof/class/create', Routes.createClass);
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
+app.get('/api/prof/classes', Routes.getClasses);
 app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
 app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);
 app.post('/api/prof/rubric/:rubId/calibrate', Routes.calibrateGrades);

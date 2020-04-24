@@ -10,12 +10,13 @@ class Login extends React.Component {
        
         this.state = {
             email: '',
-            password: ''
-            
+            password: '',
+            typeOfUser: '',
         };
         
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelectOption = this.handleSelectOption.bind(this); 
 
     }
     
@@ -24,32 +25,59 @@ class Login extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
       }
 
+      handleSelectOption(event){
+          this.setState({typeOfUser: event.target.value});
+      }
     
       handleSubmit(event) {
         event.preventDefault();
-
-        axios({
-            method: 'post',
-            url: 'https://rwlautograder.herokuapp.com/api/stud/cred/login',
-            data: qs.stringify({
-              name: this.state.nameofuser,
-              email: this.state.email,
-              password: this.state.password
-            }),
-            headers: {
-              'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-            }
-          }).then ( res =>{
-            console.log(res)
-          }).catch((error) =>{
-              if(error.response){
-                console.log(error.response.data);
-              } else if (error.request){
-                  console.log(error.request); 
-              }else {
-                  console.log(error.message);
-              }
-          })
+		
+        if(this.state.typeOfUser === "Student"){
+			axios({
+				method: 'post',
+				url: 'https://rwlautograder.herokuapp.com/api/stud/cred/login',
+				data: qs.stringify({
+				  email: this.state.email,
+				  password: this.state.password
+				}),
+				headers: {
+				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+				}
+			  }).then ( res =>{
+				console.log(res)
+			  }).catch((error) =>{
+				  if(error.response){
+					console.log(error.response.data);
+				  } else if (error.request){
+					  console.log(error.request); 
+				  }else {
+					  console.log(error.message);
+				  }
+			  })
+		}
+        else if(this.state.typeOfUser === "Teacher"){
+			axios({
+				method: 'post',
+				url: 'https://rwlautograder.herokuapp.com/api/prof/cred/login',
+				data: qs.stringify({
+				  email: this.state.email,
+				  password: this.state.password
+				}),
+				headers: {
+				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+				}
+			  }).then ( res =>{
+				console.log(res)
+			  }).catch((error) =>{
+				  if(error.response){
+					console.log(error.response.data);
+				  } else if (error.request){
+					  console.log(error.request); 
+				  }else {
+					  console.log(error.message);
+				  }
+			  })
+		}
         
         
       }
@@ -66,6 +94,12 @@ render(){
                     <input className="LoginFields" type='password' placeholder='Password' name="password"   onChange={this.handleFormChange}></input>
                 </div>
            
+				<select value={this.state.typeOfUser} onChange={this.handleSelectOption}>
+					<option value="" name ="typeOfUser"></option>
+					<option value="Student" name ="typeOfUser">Student</option>
+					<option value="Teacher" name ="typeOfUser">Teacher</option>
+				</select>
+
                 <input type='submit' value='Log In' className="LoginButton" ></input>
             </form>
 
