@@ -93,7 +93,7 @@ function getAllClassAssignments(class_id){
 	return pool.query(`SELECT DISTINCT r.* FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
 }
 function getStudClasses(email){
- return pool.query(`SELECT class.* FROM takes JOIN section ON takes.section_id=section.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}'`);
+ return pool.query(`SELECT class.*, section.section_id FROM takes JOIN section ON takes.section_id=section.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}'`);
 }
 function createClass(email, name){
 	return pool.query(`INSERT INTO class(professor_email, name) VALUES ('${email}','${name}') RETURNING *`);
