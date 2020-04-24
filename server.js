@@ -38,6 +38,7 @@ app.post('/api/prof/cred/login', Routes.professorLogin);
 app.put('/api/stud/cred/update', Routes.studentUpdate);
 app.put('/api/prof/cred/update', Routes.professorUpdate);
 
+app.get('/api/stud/registered/class/info', Routes.studentGetClassID);
 app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRubric);
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
 app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
