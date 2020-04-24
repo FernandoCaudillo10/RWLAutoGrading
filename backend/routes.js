@@ -17,7 +17,32 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
-	studentUnregisterClass(request,response) {
+	studentGetClassID(request, response) {
+		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
+			if(pError) 
+				return response.status(400).json(`${pError}`);	
+			
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			qry.getStudClasses(pUser.email)
+				.then((result) => {
+					if(result.rowCount === 0)
+						return response.status(400).json({error: "Student not registered for any classes"});
+					return response.status(200).json(result.rows);
+				})
+				.catch(err => {
+					console.log(`Student Get Class -> ${err}`);
+					return response.status(400).json({error: "Server error"});	
+				});
+
+		})(request, response);
+	}
+
+	studentUnregisterClass(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
