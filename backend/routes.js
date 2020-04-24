@@ -464,6 +464,27 @@ class RoutesHandler{
 
 		})(request, response);
 	}
+	getClasses(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+
+			qry.getAllClasses(pUser.email)
+				.then((result) => {
+					return response.status(200).json(result.rows);
+				})
+				.catch(err => {
+					console.log(`Class Assignments -> ${err}`);
+					return response.status(400).json({error: "Server error"});
+				});
+
+		})(request, response);
+	}
 
 	getClassSections(request, response){
 		passport.authenticate('jwtProfessor', {session: false},

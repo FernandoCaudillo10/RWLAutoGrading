@@ -14,6 +14,7 @@ import ProfessorHomePage from './ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './ProfessorAssignment/ProfessorAssignments';
 import PAssignmentView from './ProfessorAssignmentView/PAssignmentView'
 import StudentHomePage from './StudentHomePage/StudentHomePage';
+import PSettings from './ProfessorSettings/PSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
 
@@ -131,9 +132,9 @@ class App extends React.Component {
 					<Route exact path ="/" component={Login} />
 					<Route exact path ="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
-					<Route exact path="/professor/settings" component={HomePage} />
+					<Route exact path="/professor/settings" component={PSettings} />
 					<Route exact path="/student/grades" component={HomePage} />
-					<Route exact path="/student/settings" component={HomePage} />
+					<Route exact path="/student/settings" component={PSettings} />
 					<Route exact path="/student/grade" component={Grade} />
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
