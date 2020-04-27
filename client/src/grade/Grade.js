@@ -1,4 +1,5 @@
 import React  from 'react';
+import axios from 'axios';
 import './Grade.scss'
 
 
@@ -48,6 +49,8 @@ class Grade extends React.Component{
         this.handleSliderChange(event);
         document.getElementById(event.target.id).innerHTML=event.target.value;
         this.setState({ [event.target.name]: event.target.value });
+        console.log({ [event.target.name]: event.target.value })
+        console.log(this.rubric.q_num)
     }
 
     tableBody(){
