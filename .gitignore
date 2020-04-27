@@ -1,4 +1,5 @@
 node_modules
-*.*.swp
+.*.*.swp
 .Rhistory
 client/src/.Rhistory
+.DS_Store
