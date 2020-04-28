@@ -17,7 +17,7 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
-	studentGetClassID(request, response) {
+	studentGetClassInfo(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
