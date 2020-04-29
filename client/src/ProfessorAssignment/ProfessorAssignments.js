@@ -7,12 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
 
-const override = css`
-		display: block;
-		margin: 0 auto;
-		border-color: red;
-	`;
-
 class ProfessorAssignments extends React.Component{
 
     constructor(props){
@@ -194,7 +188,7 @@ render(){
 			{this.AssignmentView()}
 
 			{ this.state.loading ?
-				<div className="sweet-loading">
+				<div className="loadingContainer">
 					<h4> Sending Information </h4>
 					<BeatLoader
 					  loading={this.state.loading}
