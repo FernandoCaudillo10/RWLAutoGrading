@@ -395,6 +395,7 @@ class RoutesHandler{
 			try{
 				let assignment = JSON.parse(request.body.assignment); // assignment = {prompts: [{questions: [{question: "", min_char: 0}] , prompt: "" }] }
 			}catch(e){
+				console.log(request.body.assignment);
 				console.log(e);
 				return;
 			}
