@@ -5,34 +5,40 @@
     margin-top: 5%;
     border: .01em solid black; 
     margin-bottom: 5%;
+	display: flex;
+	padding: 1%;
+	flex-direction: column;
     
 }  
-h3{
-    margin-left: 5%;
-    // margin-top: 0%;
-} 
-
-#AddQuestion{
-    margin-left: 89%;
-    margin-bottom: 2%;
+input[type="button"]{
+    background-color:#696969;
+    color: white;
+    border-radius: 2em;
+	margin: 1em;
 }
-
-.AddPrompt{
-    margin-left: 5%;
-    margin-bottom: 20%;
+.questionDiv{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 0 5%;
+	width: 95%;
 }
- .CreateandCancel{
-     margin-left: 89%;
-     margin-bottom: 2%;
-     display: flex;
- }
-
-
+.promptDiv{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 0 5%;
+}
+.CreateandCancel{
+	display: flex;
+	justify-content: flex-end;
+}
 .TextBox{
-    margin-left: 5%;
     border: .1em black solid;
-    margin-bottom: 0%;
-    height:200px;
-    width: 90%;
+    width: 100%;
     font-size: 14px;
+}
+.datePickerContainer{
+	display: flex;
+	justify-content: space-between;
 }
