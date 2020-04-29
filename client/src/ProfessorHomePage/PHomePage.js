@@ -1,6 +1,7 @@
 import React  from 'react'; 
 import axios from 'axios';
 import './PHomePage.scss'
+import { Link } from 'react-router-dom';
 
 
 class ProfessorHomePage extends React.Component{
@@ -54,7 +55,7 @@ class ProfessorHomePage extends React.Component{
     CreateAssignmentHandler(event){
         //Handler for when you want to create an assignment for a class event.target.name gives you the name of the class
        event.preventDefault(); 
-
+		
     }
 
     ProfessorClasses(){
@@ -68,7 +69,7 @@ class ProfessorHomePage extends React.Component{
                         <input type="submit" value="View/Edit Assignments" ></input>
                     </form>
                     <form onSubmit={this.CreateAssignmentHandler} name={item.name}>
-                        <input type="submit" value="Create Assignment" ></input>
+                        <Link to={`/professor/class/${item.class_id}/assignment/create`}> <input type="submit" value="Create Assignment" ></input> </Link>
                     </form>
                 </div>
                 <hr></hr>

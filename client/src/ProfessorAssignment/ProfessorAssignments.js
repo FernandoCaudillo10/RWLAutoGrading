@@ -4,20 +4,29 @@ import qs from 'qs';
 import './ProfessorAssignments.scss';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { css } from "@emotion/core";
+import BeatLoader from "react-spinners/BeatLoader";
+
+const override = css`
+		display: block;
+		margin: 0 auto;
+		border-color: red;
+	`;
 
 class ProfessorAssignments extends React.Component{
 
     constructor(props){
         super(props);
-
+		
         this.state = {
 			prompts : {},
 			psz: 0,
 			assigned_date: Date.now(),
 			due_date: Date.now(),
 			final_due_date: Date.now(),
+			loading: false,
         };
-		console.log(this.state);
+
         this.handleAddQuestion = this.handleAddQuestion.bind(this);
         this.handleAddPrompt = this.handleAddPrompt.bind(this);
         this.handleSubmitCreate = this.handleSubmitCreate.bind(this);
@@ -66,11 +75,11 @@ class ProfessorAssignments extends React.Component{
 
     handleSubmitCreate(event){
         event.preventDefault();
+		this.setState({loading:true});
 		let assignment = {prompts: this.convertToAssignment()};
-		console.log(assignment);
 		axios({
 			method: 'post',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/class/:classId/assignment/create',
+			url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignment/create`,
 			data: qs.stringify({
 				assignment: assignment,
 				due_date: this.state.due_date,
@@ -82,8 +91,10 @@ class ProfessorAssignments extends React.Component{
 			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
 			}
 		  }).then ( res =>{
-			console.log(res)
+			  this.setState({loading: false});
+			  this.props.history.push('/professor/classes');
 		  }).catch((error) =>{
+			  this.setState({loading: false});
 			  if(error.response){
 				console.log(error.response.data);
 			  } else if (error.request){
@@ -182,17 +193,20 @@ render(){
 
 			{this.AssignmentView()}
 
-            <div className="CreateandCancel" >
-                <form onSubmit={this.handleSubmitCreate}>
-                    <input type="submit" value="Create" name="create"/>
-                    
-                </form>
-
-                <form onSubmit={this.handleSubmitCancel}>
-                    <input type="submit" value="Cancel" name="cancel"/>
-                </form>
-                
-            </div>
+			{ this.state.loading ?
+				<div className="sweet-loading">
+					<h4> Sending Information </h4>
+					<BeatLoader
+					  loading={this.state.loading}
+					/>
+				</div>
+				:
+				<div className="CreateandCancel" >
+					<form onSubmit={this.handleSubmitCreate}>
+						<input type="submit" value="Create" name="create"/>
+					</form>
+				</div>
+			}
 
         </div>  
     )
