@@ -22,6 +22,28 @@ class ProfessorHomePage extends React.Component{
         this.ProfessorClasses = this.ProfessorClasses.bind(this);
         this.ViewandEditHandler = this.ViewandEditHandler.bind(this);
         this.CreateAssignmentHandler = this.CreateAssignmentHandler.bind(this); 
+		
+		axios({
+			method: 'get',
+			url: 'https://rwlautograder.herokuapp.com/api/prof/classes',
+			headers: {
+			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
+			}
+		  }).then ( res =>{
+			console.log(res)
+			
+          	this.setState({information: res.data});
+		  }).catch((error) =>{
+			  console.log(error);
+			  if(error.response){
+				console.log(error.response.data);
+			  } else if (error.request){
+				  console.log(error.request); 
+			  }else {
+				  console.log(error.message);
+			  }
+		  })
     }
 
     ViewandEditHandler(event){
@@ -59,29 +81,6 @@ class ProfessorHomePage extends React.Component{
     }
  
 	render(){
-			//url: 'https://rwlautograder.herokuapp.com/api/stud/cred/login',
-
-		axios({
-			method: 'get',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/classes',
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
-			}
-		  }).then ( res =>{
-			console.log(res)
-			
-          	this.setState({information: res.data});
-		  }).catch((error) =>{
-			  console.log(error);
-			  if(error.response){
-				console.log(error.response.data);
-			  } else if (error.request){
-				  console.log(error.request); 
-			  }else {
-				  console.log(error.message);
-			  }
-		  })
 
 		return (
 			<div className="professorContainer">

@@ -392,7 +392,12 @@ class RoutesHandler{
 			let final_due_date = request.body.final_due_date;
 			
 			if(!request.body.assignment) return response.status(400).json({error: "Assignment is missing"});
-			let assignment = JSON.parse(request.body.assignment);
+			try{
+				let assignment = JSON.parse(request.body.assignment); // assignment = {prompts: [{questions: [{question: "", min_char: 0}] , prompt: "" }] }
+			}catch(e){
+				console.log(e);
+				return;
+			}
 			if(!assignment.prompts) return response.status(400).json({error: "No prompts in assignment"});
 			
 			let validPrompt = true;
