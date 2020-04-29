@@ -129,8 +129,8 @@ class App extends React.Component {
 				</div> 
 
 				<Switch>
-					<Route exact path ="/" component={Login} />
-					<Route exact path ="/register" component={Register} />
+					<Route exact path="/" component={Login} />
+					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
 					<Route exact path="/student/grades" component={HomePage} />
@@ -138,7 +138,7 @@ class App extends React.Component {
 					<Route exact path="/student/grade" component={Grade} />
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
-					<Route exact path="/professor/createassignments" component={ProfessorAssignments} />
+					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
 					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
