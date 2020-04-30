@@ -9,9 +9,7 @@ class Grade extends React.Component{
         super(props);
        
         this.state = {
-
             evaluation: [], 
-            esz: 0,
             evalInfo:  [{
                     eval_id: 1,
                     prompt_text: "LETS judge a book by the cover People take a look at the world and discover That beauty is the word that I think of when I see the different colors of skin And Ill rejoice and sing for them",
@@ -36,41 +34,11 @@ class Grade extends React.Component{
                     response_id: 8,
                     response_value: "In New York, the epicenter of the COVID-19 outbreak in the U.S., Gov"
                     }],
-            loading: true
         }
        
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSliderChange = this.handleSliderChange.bind(this);
-        this.makeEvals = this.makeEvals.bind(this);
-        this.handleAddE = this.handleAddE.bind(this);
-        this.filler = this.filler.bind(this);
-        window.onload = this.makeEvals
-    }
-
-    handleSliderChange (event) {
-        this.setState({value: event.target.value});
-    }
-
-    makeEvals(event){
-        var x = this.state.evalInfo.length
-        for(var i = 0; i < x; i++){
-            this.handleAddE()
-        }
-        this.state.loading = false
-    }
-
-    handleAddE(event){
-        let e = this.state.evaluation
-        let esz = this.state.esz
-        e[this.state.esz] = {evaluationID:  "", grade: 0}
-        this.setState({esz: ++esz, evaluation: e})
-    }
-
-    handleFormChange(q_ID, e_ID, event) {
-        let p = this.state.evaluation[q_ID - 1]
-        p.evaluationID = e_ID
-        p.grade = Number(event.target.value)
-        this.setState({p})
+        this.updateSlider = this.updateSlider.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
     }
 
     handleSubmit(event) {
@@ -100,7 +68,11 @@ class Grade extends React.Component{
     componentDidMount(){
     	axios({
             method: 'get',
-            url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation'
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': 'Bearer ela1kd'
+            }
         }).then(res => {
     		//const evalInfo = res.data;
     		this.setState({ evalInfo : res.data});
@@ -117,17 +89,16 @@ class Grade extends React.Component{
           })         
     }
 
-    updateSlider = (event) => {
-        this.handleSliderChange(event);
-        document.getElementById(event.target.id).innerHTML=event.target.value
+    updateSlider(event){
+        let gr = event.target.name.replace("slider", "grade")
+        this.setState({[gr]: +event.target.value})
     }
 
-    filler(i){
-        if(!this.state.loading){
-            return this.state.evaluation[i].grade
-        } else {
-            return i+1
-        }
+    handleFormChange(i, event) {
+        this.updateSlider(event)
+        let e = this.state.evaluation
+        e[i] = {evaluationID: event.target.name, grade: +event.target.value}
+        this.setState({e})
     }
 
     tableBody(){
@@ -141,11 +112,10 @@ class Grade extends React.Component{
                         {data.response_value}<br/><br/>
                         <table className="gradeTable">
                             <tr>
-                                    Grade: <t id={(i+1)}>{this.filler(i)}</t>
-                                    <input type="range" min="1" max="100" value="5" className="slider" 
-                                        id={(i+1)} 
-                                        value={this.value} 
-                                        onChange={this.updateSlider, this.handleFormChange.bind(this, (i+1), data.eval_id)}/>
+                                    Grade: <t name={'grade' + data.eval_id} >{this.state['grade' + data.eval_id]}</t>
+                                    <input name={'slider' + data.eval_id} type="range" min="1" max="100" value="5" className="slider" 
+                                            value={this.state['slider' + data.eval_id]}
+                                            onChange={this.updateSlider, this.handleFormChange.bind(this, i)}/>
                             </tr>
                         </table>
                     </td>

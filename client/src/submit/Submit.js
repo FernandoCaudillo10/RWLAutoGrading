@@ -9,10 +9,7 @@ class Submit extends React.Component{
         super(props);
        
         this.state = {
-        
-            todo: "",
             responses: [],
-            rsz: 0,
             questions: [{
                         prompt_id: 2,
                         rubric_id: 2,
@@ -40,9 +37,6 @@ class Submit extends React.Component{
         }
         
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleAddQ = this.handleAddQ.bind(this);
-        this.makeResponses = this.makeResponses.bind(this);
-        window.onload = this.makeResponses
     }
 
     countChars(q_ID, minChar, event){
@@ -56,32 +50,21 @@ class Submit extends React.Component{
             }        
     }
 
-    makeResponses(event){
-        var x = this.state.questions.length
-        for(var i = 0; i < x; i++){
-            this.handleAddQ()
-        }
-    }
-
-    handleAddQ(event){
-            let r = this.state.responses
-            let rsz = this.state.rsz
-            r[this.state.rsz] = {response: "", qsID: ""}
-            this.setState({rsz: ++rsz, responses: r})
-    }
-
-    handleFormChange(q_ID, event) {
+    handleFormChange(i, event) {
         event.preventDefault() 
-            let p = this.state.responses[q_ID - 1]
-            p.response = event.target.value
-            p.qsID = event.target.name
-            this.setState({p})
+            let r = this.state.responses
+            r[i] = {response: event.target.value, qsID: event.target.name}
+            this.setState({r})
     }
 
     componentDidMount(){
     	axios({
             method: 'get',
-            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments'
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': 'Bearer ela1kd'
+            }
         }).then(res => {
     		const questions = res.data;
             this.setState({ questions });
@@ -96,8 +79,8 @@ class Submit extends React.Component{
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
                 data:(this.state.responses),
                 headers: {
-                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': 'Bearer ela1kd'
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    'Authorization': 'Bearer ela1kd'
                 }
             }).then ( res =>{
                 console.log(res)
@@ -120,9 +103,9 @@ class Submit extends React.Component{
                         <b>{(i+1)}) </b>
                         <b1>{data.prompt_text}</b1><br/><br/>
                         <b1>{data.question_text}</b1><br/><br/>
-                        <b1>Char Remaining: <b id={"charNum" + (i+1)}>{data.min_char}</b><br/><br/></b1> 
-                        <textarea input type='text' name={data.question_id} placeholder='Respond Here' 
-                        onKeyUp={this.countChars.bind(this, (i+1), data.min_char)} onChange={this.handleFormChange.bind(this, (i+1))}/>
+                        <b1>Char Remaining: <b id={"charNum" + (i)}>{data.min_char}</b><br/><br/></b1> 
+                        <textarea input type='text' name={'response' + data.question_id} placeholder='Respond Here' 
+                        onKeyUp={this.countChars.bind(this, (i), data.min_char)} onChange={this.handleFormChange.bind(this, i)}/>
                     </td>
                 </tr>
             )

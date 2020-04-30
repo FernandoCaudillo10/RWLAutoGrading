@@ -24,16 +24,16 @@ class StudentHomePage extends React.Component{
             assignments: [
                 {
                     rubric_id: 100,
-                    assigned_date: "2020-04-21T07:00:00.000Z ",
+                    assigned_date: "2020-04-21T07:00:00.000Z",
                     due_date: "2020-04-28T07:00:00.000Z",
-                    final_due_date: "2020-05-01T07:00:00.000Z ",
+                    final_due_date: "2020-05-01T07:00:00.000Z",
                     section_id: 1 
                 },
                 {
                     rubric_id: 200,
-                    assigned_date: "2020-04-21T07:00:00.000Z ",
+                    assigned_date: "2020-04-21T07:00:00.000Z",
                     due_date: "2020-04-28T07:00:00.000Z",
-                    final_due_date: "2020-05-01T07:00:00.000Z ",
+                    final_due_date: "2020-05-01T07:00:00.000Z",
                     section_id: 1 
                 }
             ],
@@ -41,6 +41,7 @@ class StudentHomePage extends React.Component{
         }
         
         this.toggleHover = this.toggleHover.bind(this);
+        this.prettyDate = this.prettyDate.bind(this);
     }
 
     toggleHover(){
@@ -51,7 +52,11 @@ class StudentHomePage extends React.Component{
     componentDidMount(){
     	axios({
             method: 'get',
-            url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info'
+            url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': 'Bearer ela1kd'
+            }
         }).then(res => {
     		const studentInfo = res.data;
             this.setState({ studentInfo });
@@ -68,7 +73,11 @@ class StudentHomePage extends React.Component{
 
         axios({
             method: 'get',
-            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.state.studentInfo[0].class_id + '/assignment/dates'
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.state.studentInfo[0].class_id + '/assignment/dates',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': 'Bearer ela1kd'
+            }
         }).then(res => {
             this.setState({ assignments : res.data});
             console.log(this.state.assignments)
@@ -83,13 +92,19 @@ class StudentHomePage extends React.Component{
         })
     }
 
+    prettyDate(date){
+        var dateFormat = require('dateformat');
+        return dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+    }
+
+
     tableBody(){
         return (
             this.table = this.state.assignments.map((data, i) => 
                 <tr>
-                      <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{data.assigned_date}</i> }</div></td>
-                      <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{data.due_date}</Link></td>
-                      <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{data.final_due_date}</Link></td>
+                      <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{this.prettyDate(data.assigned_date)}</i> }</div></td>
+                      <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.prettyDate(data.due_date)}</Link></td>
+                      <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.prettyDate(data.final_due_date)}</Link></td>
                 </tr>
             )
             
