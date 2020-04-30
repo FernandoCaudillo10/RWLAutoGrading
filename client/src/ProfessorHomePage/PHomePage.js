@@ -10,12 +10,6 @@ class ProfessorHomePage extends React.Component{
         super(props);
         this.state = {
             information: [
-                {class_id: 1, name: "CST-399"},
-                {class_id: 2, name: "CST-400"},
-                {class_id: 3, name: "CST-499"},
-                {class_id: 4, name: "CST-599"},
-                {class_id: 5, name: "CST-199"}
-
             ]
         }
         
@@ -32,8 +26,6 @@ class ProfessorHomePage extends React.Component{
 			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
 			}
 		  }).then ( res =>{
-			console.log(res)
-			
           	this.setState({information: res.data});
 		  }).catch((error) =>{
 			  console.log(error);

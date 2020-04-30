@@ -17,6 +17,24 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
+	tokenVerify(request, response){
+		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
+			if(!pUser){
+				passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
+					if(!pUser){
+						return response.status(400).json({error: true, message: "token invalid"});
+					}
+					let {password, ...user} = pUser;
+					return response.status(200).json({error: false, message: "success", user: {...user, type: "professor"}});
+				})(request, response);
+			}
+			else{
+				let {password, ...user} = pUser;
+				return response.status(200).json({error: false, message: "success", user: {...user, type: "student"}});
+			}
+		})(request, response);
+	}
+	
 	studentGetClassInfo(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
