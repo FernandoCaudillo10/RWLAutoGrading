@@ -38,7 +38,7 @@ function getAllRubricsBeforeNow(){
 }
 
 function getStudentGrade(email){
-	return pool.query(`SELECT SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}'`);
+	return pool.query(`SELECT rubric.rubric_id, SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}' GROUP BY rubric.rubric_id`);
 
 }
 function getStudentResponse(rId){
@@ -91,6 +91,9 @@ function getClass(class_id){
 }
 function getAllClassAssignments(class_id){
 	return pool.query(`SELECT DISTINCT r.* FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
+}
+function getStudClasses(email){
+	return pool.query(`SELECT class.*, section.section_id FROM takes JOIN section ON takes.section_id=section.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}'`);
 }
 function createClass(email, name){
 	return pool.query(`INSERT INTO class(professor_email, name) VALUES ('${email}','${name}') RETURNING *`);
@@ -224,6 +227,7 @@ module.exports = {
 	studRemoveClass,
 	submitEvalGrade,
 	getEvalAssignment,
+	getStudClasses,
 	submitAssignment,
 	getAssignRubric,
 	getAssignment,
