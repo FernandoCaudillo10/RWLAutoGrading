@@ -10,11 +10,8 @@ class Grade extends React.Component{
        
         this.state = {
 
-            evaluation: [ 
-                        {evaluationID:  9, grade: 80 },
-                        {evaluationID:  10, grade: 99},
-                        {evaluationID: 11, grade: 69}
-            ],    
+            evaluation: [], 
+            esz: 0,
             evalInfo:  [{
                     eval_id: 1,
                     prompt_text: "LETS judge a book by the cover People take a look at the world and discover That beauty is the word that I think of when I see the different colors of skin And Ill rejoice and sing for them",
@@ -38,17 +35,37 @@ class Grade extends React.Component{
                     question_text: "There is this one man who killed his mother. He was born before his father, and married over 100 women without divorcing any one. Yet, he was considered normal by all of his acquaintances. Why?",
                     response_id: 8,
                     response_value: "In New York, the epicenter of the COVID-19 outbreak in the U.S., Gov"
-                    }]
+                    }],
+            loading: true
         }
        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSliderChange = this.handleSliderChange.bind(this);
-
+        this.makeEvals = this.makeEvals.bind(this);
+        this.handleAddE = this.handleAddE.bind(this);
+        this.filler = this.filler.bind(this);
+        window.onload = this.makeEvals
     }
+
     handleSliderChange (event) {
         this.setState({value: event.target.value});
     }
-    
+
+    makeEvals(event){
+        var x = this.state.evalInfo.length
+        for(var i = 0; i < x; i++){
+            this.handleAddE()
+        }
+        this.state.loading = false
+    }
+
+    handleAddE(event){
+        let e = this.state.evaluation
+        let esz = this.state.esz
+        e[this.state.esz] = {evaluationID:  "", grade: 0}
+        this.setState({esz: ++esz, evaluation: e})
+    }
+
     handleFormChange(q_ID, e_ID, event) {
         let p = this.state.evaluation[q_ID - 1]
         p.evaluationID = e_ID
@@ -85,8 +102,8 @@ class Grade extends React.Component{
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation'
         }).then(res => {
-    		const evalInfo = res.data;
-    		this.setState({ evalInfo });
+    		//const evalInfo = res.data;
+    		this.setState({ evalInfo : res.data});
     	}).then ( res =>{
             console.log(res)
           }).catch((error) =>{
@@ -105,6 +122,14 @@ class Grade extends React.Component{
         document.getElementById(event.target.id).innerHTML=event.target.value
     }
 
+    filler(i){
+        if(!this.state.loading){
+            return this.state.evaluation[i].grade
+        } else {
+            return i+1
+        }
+    }
+
     tableBody(){
         return (
             this.table = this.state.evalInfo.map((data, i) => 
@@ -116,7 +141,7 @@ class Grade extends React.Component{
                         {data.response_value}<br/><br/>
                         <table className="gradeTable">
                             <tr>
-                                Grade: <t id={(i+1)}>{this.state.evaluation[i].grade}</t>
+                                    Grade: <t id={(i+1)}>{this.filler(i)}</t>
                                     <input type="range" min="1" max="100" value="5" className="slider" 
                                         id={(i+1)} 
                                         value={this.value} 
