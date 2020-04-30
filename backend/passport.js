@@ -42,7 +42,6 @@ function useJWT(passport){
 	passport.use('jwtProfessor',
 		new JwtStrategy(opts, 
 			async (jwt_payload, done) => {
-				console.log("jwt");
 				if(jwt_payload.type != "prof") return done(null, false,{ message: 'Does not have access' });
 
 				try{
