@@ -135,8 +135,8 @@ class App extends React.Component {
 					<Route exact path="/professor/settings" component={PSettings} />
 					<Route exact path="/student/grades" component={HomePage} />
 					<Route exact path="/student/settings" component={PSettings} />
-					<Route exact path="/student/grade" component={Grade} />
-					<Route exact path="/student/submit" component={Submit} />
+					<Route exact path="/student/grade/:rubricID" component={Grade} />
+					<Route exact path="/student/submit/:rubricID" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/createassignments" component={ProfessorAssignments} />
 					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />

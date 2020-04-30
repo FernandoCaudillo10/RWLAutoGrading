@@ -1,4 +1,5 @@
 import React  from 'react'; 
+import axios from 'axios';
 import './Submit.scss'
 
 
@@ -8,54 +9,109 @@ class Submit extends React.Component{
         super(props);
        
         this.state = {
-            assignment: "Homework 1", 
-            info: [
-                {q_num: "1", q_promt: "Ugumogi tarine ogiyib. Ri vozug iepeyeni. Wereta reno rasu tiecirob yu. Ziwon migosis aranun lo orimegil yeceten te egigilo emer rada. Yiegu daseni rire der fe reb te veli. Pelodof xiemic per ehani aperar ater tedie kon sotege co! Lakitie eyi pecig aca nep arayenoc etot coluro meruhe: Repa sen himir ri litere! Memi tog siyebos la bic rege rehihop: Olerelun gilim hala upivatat ri nesude hoterep."},
-                {q_num: "2", q_promt: "Ri otatini anereha? Naha cemilu cuga ayipe haleg viras qen cobelies gepip. Sum vogas idiseton tedeson tie odehal me cadi fa padi. Hed yis agav sove terituh rir. Vo ses rureri, iteperot nidip erepe rilo qukope avec, ebi iedare rum. Nome pe dice eneca niy."},
-                {q_num: "3", q_promt: "Elolu idonoro sil sone detal lesol hi: Mar coc ecotec reboha ehi. Yavul mi xa; enat oreneser naran da; re otot tecocur ciy sazalan tefarep ciseq, natadon atiyode gieceta obe ade letab ta, tiles ematoy yihi ocuga idicego pa panariv ber wec imepag."},
-                {q_num: "4", q_promt: "Nicepuj ranisak lo hira opusila acerur cetamuh gel. Anovu ebeh yesot, ha haha soyeya. Locip ses habe? Hovo oliceleg sietodab sat ilodatan xip ogananod? Ruh ru nasekag roy ro remosoc. Heset net natiser giy nomil cepe. Natiten eren jobo vi. Esec gi niyey onegehe lidi led ace nac hafayec. Pa li opudun rosam ederalip yetat iselidon."},
-                {q_num: "5", q_promt: "Lakitie eyi pecig aca nep arayenoc etot coluro meruhe: Repa sen himir ri litere! Memi tog siyebos la bic rege rehihop: Olerelun gilim hala upivatat ri nesude hoterep."},
-                {q_num: "6", q_promt: "Siey ral la favelen are ran nie hitil yisebo fa, net meh nate kabie moti dotusat so riehigop isalo, wit ci ateke tiriri osur rod upe. Binu canin rofusi danamol! Cutu capiric irasade lerer nenoy"},
-
-            ]   
+        
+            todo: "",
+            responses: [
+                        {response: "", qsID: ""},
+                        {response: "", qsID: ""}
+                        ],
+            questions: [{
+                        prompt_id: 2,
+                        rubric_id: 2,
+                        prompt_text: "Good vibes We're bringing only good vibes People walking around talking down on others You can't know yourself without knowing about the other",
+                        question_id: 123,
+                        question_text: "The day before yesterday, Chris was 7 years old. Next year, hell turn 10. Hows this possible?",
+                        min_char: 150
+                        },
+                        {
+                        prompt_id: 2,
+                        rubric_id: 2,
+                        prompt_text: "Good vibes We're bringing only good vibes People walking around talking down on others You can't know yourself without knowing about the other",
+                        question_id: 234,
+                        question_text: "There is this one woman who killed her mother. she was born before her father, and married over 100 women without divorcing any one. Yet, she was considered normal by all of his acquaintances. Why?",
+                        min_char: 150
+                        }]
         }
 
-        this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    handleFormChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
-        console.log(event.target.value);
+
+    countChars(q_ID, minChar, event){
+            var strLength = event.target.value.length
+            var charRemain = minChar - strLength
+            if(charRemain > 0){
+                document.getElementById("charNum" + q_ID).innerHTML = charRemain
+            } else {
+                document.getElementById("charNum" + q_ID).innerHTML = 0
+            }        
+    }
+
+    handleFormChange(q_ID, event) {
+        let p = this.state.responses[q_ID - 1]
+        p.response = event.target.value
+        p.qsID = event.target.name
+        this.setState({p})
       }
 
-      handleSubmit(event) {
+    componentDidMount(){
+    	axios({
+            method: 'get',
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments'
+        }).then(res => {
+    		const questions = res.data;
+    		this.setState({ questions });
+    	})
+    }
+
+    handleSubmit(event) {
         event.preventDefault();
+        console.log(this.state.responses);
+        axios({
+            method: 'post',
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
+            data:(this.state.responses),
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+              'Authorization': 'Bearer ela1kd'
+            }
+          }).then ( res =>{
+            console.log(res)
+          }).catch((error) =>{
+              if(error.response){
+                console.log(error.response.data);
+              } else if (error.request){
+                  console.log(error.request); 
+              }else {
+                  console.log(error.message);
+              }
+          })
     }
 
     tableBody(){
         return (
-            this.table = this.state.info.map((data) => 
+            this.table = this.state.questions.map((data, i) => 
                 <tr>
                     <td>
-                        <b>{data.q_num}) </b>
-                        {data.q_promt}<br/><br/>
-                        <textarea input type='text' placeholder='Respond Here' onChange={this.handleFormChange}/>
+                        <b>{(i+1)}) </b>
+                        {data.prompt_text}<br/><br/>
+                        {data.question_text}<br/><br/>
+                        Char Remaining: <b id={"charNum" + (i+1)}>{data.min_char}</b><br/><br/> 
+                        <textarea input type='text' name={data.question_id} placeholder='Respond Here' 
+                        onKeyUp={this.countChars.bind(this, (i+1), data.min_char)} onChange={this.handleFormChange.bind(this, (i+1))}/>
                     </td>
                 </tr>
-        	)
+            )
         )
     }
 
     render(){
         return (
-
         <div className="Submit">
+            <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
             <form onSubmit={this.handleSubmit}>
-                <div className="title">{this.state.assignment}</div><br/>
-                <div>{this.tableBody()}</div>
+                <div>{this.tableBody()}</div> 
+                <input type='submit' value='Submit' className="SubmitButton"/>
             </form>
-            <input type='submit' value='Submit' className="SubmitButton" />
         </div>
         )
     }
