@@ -21,7 +21,7 @@ class StudentHomePage extends React.Component{
                 professor_email: "",
                 name: "",
             }],  
-            test: [
+            assignments: [
                 {
                     rubric_id: 100,
                     assigned_date: "2020-04-21T07:00:00.000Z ",
@@ -70,9 +70,8 @@ class StudentHomePage extends React.Component{
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.state.studentInfo[0].class_id + '/assignment/dates'
         }).then(res => {
-            const test = res.data;
-            this.setState({ test });
-            console.log(this.state.test)
+            this.setState({ assignments : res.data});
+            console.log(this.state.assignments)
         }).catch((error) =>{
             if(error.response){
               console.log(error.response.data);
@@ -86,7 +85,7 @@ class StudentHomePage extends React.Component{
 
     tableBody(){
         return (
-            this.table = this.state.test.map((data, i) => 
+            this.table = this.state.assignments.map((data, i) => 
                 <tr>
                       <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{data.assigned_date}</i> }</div></td>
                       <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{data.due_date}</Link></td>

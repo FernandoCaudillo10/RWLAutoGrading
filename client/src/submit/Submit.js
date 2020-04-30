@@ -36,7 +36,7 @@ class Submit extends React.Component{
                         question_id: 345,
                         question_text: "There is this one woman who killed her mother. she was born before her father, and married over 100 women without divorcing any one. Yet, she was considered normal by all of his acquaintances. Why?",
                         min_char: 150
-                        }]
+                    }]
         }
         
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -83,7 +83,8 @@ class Submit extends React.Component{
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments'
         }).then(res => {
-            this.setState({ questions : res.data});
+    		const questions = res.data;
+            this.setState({ questions });
     	})
     }
 
