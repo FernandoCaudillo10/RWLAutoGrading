@@ -1,5 +1,6 @@
 import React  from 'react';
 import axios from 'axios';
+import qs from 'qs'; 
 import './Grade.scss'
 
 
@@ -47,10 +48,14 @@ class Grade extends React.Component{
         axios({
             method: 'post',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation/grade/submit',
-            data:(this.state.evaluation),
+            data: qs.stringify({ 
+                evaluation : this.state.evaluation 
+            }),
             headers: {
               'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-              'Authorization': 'Bearer ela1kd'
+              'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+              'email': "Alpha@Omega.com"
+
             }
           }).then ( res =>{
             console.log(res)
@@ -71,11 +76,13 @@ class Grade extends React.Component{
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': 'Bearer ela1kd'
+                'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                'email': "Alpha@Omega.com"
+
             }
         }).then(res => {
     		//const evalInfo = res.data;
-    		this.setState({ evalInfo : res.data});
+    		this.setState({ [this.state.evalInfo]: res.data });
     	}).then ( res =>{
             console.log(res)
           }).catch((error) =>{

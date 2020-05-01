@@ -1,5 +1,6 @@
 import React  from 'react'; 
 import axios from 'axios';
+import qs from 'qs'; 
 import './Submit.scss'
 
 
@@ -63,11 +64,13 @@ class Submit extends React.Component{
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': 'Bearer ela1kd'
+                'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                'email': "Alpha@Omega.com"
+
             }
         }).then(res => {
-    		const questions = res.data;
-            this.setState({ questions });
+    		//const questions = res.data;
+            this.setState({ [this.statequestions]: res.data });
     	})
     }
 
@@ -77,10 +80,13 @@ class Submit extends React.Component{
             axios({
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
-                data:(this.state.responses),
+                data:  qs.stringify({ 
+                    responses: this.state.responses
+                }),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    'Authorization': 'Bearer ela1kd'
+                    'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                    'email': "Alpha@Omega.com"
                 }
             }).then ( res =>{
                 console.log(res)
