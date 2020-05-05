@@ -1,6 +1,7 @@
 import React  from 'react'; 
 import axios from 'axios';
 import './PHomePage.scss'
+import { Link } from 'react-router-dom';
 
 
 class ProfessorHomePage extends React.Component{
@@ -9,12 +10,6 @@ class ProfessorHomePage extends React.Component{
         super(props);
         this.state = {
             information: [
-                {class_id: 1, name: "CST-399"},
-                {class_id: 2, name: "CST-400"},
-                {class_id: 3, name: "CST-499"},
-                {class_id: 4, name: "CST-599"},
-                {class_id: 5, name: "CST-199"}
-
             ]
         }
         
@@ -31,8 +26,6 @@ class ProfessorHomePage extends React.Component{
 			  'Authorization': token,
 			}
 		  }).then ( res =>{
-			console.log(res)
-			
           	this.setState({information: res.data});
 		  }).catch((error) =>{
 			  console.log(error);
@@ -54,7 +47,7 @@ class ProfessorHomePage extends React.Component{
     CreateAssignmentHandler(event){
         //Handler for when you want to create an assignment for a class event.target.name gives you the name of the class
        event.preventDefault(); 
-
+		
     }
 
     ProfessorClasses(){
@@ -68,7 +61,7 @@ class ProfessorHomePage extends React.Component{
                         <input type="submit" value="View/Edit Assignments" ></input>
                     </form>
                     <form onSubmit={this.CreateAssignmentHandler} name={item.name}>
-                        <input type="submit" value="Create Assignment" ></input>
+                        <Link to={`/professor/class/${item.class_id}/assignment/create`}> <input type="submit" value="Create Assignment" ></input> </Link>
                     </form>
                 </div>
                 <hr></hr>
