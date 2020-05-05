@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import './Login.scss'
-
+import {connect} from 'react-redux';
 class Login extends React.Component {
 
     constructor(props){
@@ -44,7 +44,12 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-				console.log(res)
+                console.log(res)
+                const token = res.data.token; 
+                localStorage.setItem('jwtToken', token);
+                localStorage.setItem('typeOfUser', this.state.typeOfUser);
+                this.props.onLogin(token, 'Student');
+                this.props.history.push('/student/home');
 			  }).catch((error) =>{
 				  if(error.response){
 					console.log(error.response.data);
@@ -67,7 +72,12 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-				console.log(res)
+                console.log(res)
+                const token = res.data.token; 
+                localStorage.setItem('jwtToken', token);
+                this.props.onLogin(token, 'Teacher');
+                // window.location.href = '/professor/classes';
+                this.props.history.push('/professor/classes');
 			  }).catch((error) =>{
 				  if(error.response){
 					console.log(error.response.data);
@@ -103,6 +113,7 @@ render(){
                 <input type='submit' value='Log In' className="LoginButton" ></input>
             </form>
 
+
           
 
         </div>
@@ -112,4 +123,22 @@ render(){
 
 }
 }
-export default Login; 
+const mapStatetoProps = state => {
+    return {
+        UserType: state.UserType,
+        token: state.token
+
+    };
+};
+
+const mapDispatchToProps = dispatch =>  {
+    return {
+        onLogin: (token, UserType) => dispatch({type: 'USER_LOGIN', token: token, UserType: UserType})
+    };
+};
+
+
+
+
+// export default Login; 
+export default connect(mapStatetoProps, mapDispatchToProps)(Login);

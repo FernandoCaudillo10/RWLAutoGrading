@@ -2,6 +2,7 @@ import React  from 'react';
 import './Register.scss'
 import axios from 'axios';
 import qs from 'qs';
+import {connect} from 'react-redux';
 class Register extends React.Component{
 
     constructor(props){
@@ -143,7 +144,8 @@ render(){
                 <input type='submit' value='Register' className="RegisterButton"></input>
             </div>
             </form>
-
+            <h1>{this.props.UserType}</h1>
+            <h1>{this.props.token}</h1>
 
         </div>
     )
@@ -155,10 +157,25 @@ render(){
 }
 
 
-export default Register; 
+const mapStatetoProps = state => {
+    return {
+        UserType: state.UserType,
+        token: state.token
+
+    };
+};
+const mapDispatchToProps = dispatch =>  {
+    return {
+        onRegister: (token, UserType) => dispatch({type: 'REGISTER_USER', token: token, UserType: UserType})
+    };
+};
 
 
- /* Might implement later */
-/* <input type='button' value='Student' className="RegisterAlternate"></input>
-<input type='button' value='Teacher' className="RegisterAlternate1"></input>
-*/
+
+// export default Register; 
+
+
+
+
+// export default Login; 
+export default connect(mapStatetoProps, mapDispatchToProps)(Register);
