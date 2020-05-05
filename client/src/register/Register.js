@@ -50,11 +50,17 @@ class Register extends React.Component{
                 
               }).then ( res =>{
                 console.log(res);
+                console.log(res.data.message)
+                if(res.data.message === 'user created successfully'){
+                    this.props.history.push('/');
+                  }
               }).catch((error) =>{
                   if(error.response){
+                      //handles if the user is already created here 
                     console.log(error.response.data);
                   } else if (error.request){
                       console.log(error.request); 
+                      
                   }else {
                       console.log(error.message);
                   }
@@ -74,14 +80,19 @@ class Register extends React.Component{
                 }
                 
               }).then ( res =>{
-                console.log(res);
+                  if(res.data.message === 'user created successfully'){
+                    this.props.history.push('/');
+                  }
               }).catch((error) =>{
                   if(error.response){
                     console.log(error.response.data);
+                    
                   } else if (error.request){
                       console.log(error.request); 
+                      
                   }else {
                       console.log(error.message);
+                    
                   }
               })
 
@@ -132,10 +143,7 @@ render(){
                             <option value="Teacher" name ="typeOfUser">Teacher</option>
                         </select>
                     </div>
-                    <div id="testing">
-                        
-
-                    </div>
+                  
                     
    
                 </div>
@@ -144,8 +152,6 @@ render(){
                 <input type='submit' value='Register' className="RegisterButton"></input>
             </div>
             </form>
-            <h1>{this.props.UserType}</h1>
-            <h1>{this.props.token}</h1>
 
         </div>
     )
@@ -171,11 +177,4 @@ const mapDispatchToProps = dispatch =>  {
 };
 
 
-
-// export default Register; 
-
-
-
-
-// export default Login; 
 export default connect(mapStatetoProps, mapDispatchToProps)(Register);

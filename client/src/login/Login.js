@@ -44,7 +44,6 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-                console.log(res)
                 const token = res.data.token; 
                 localStorage.setItem('jwtToken', token);
                 localStorage.setItem('typeOfUser', this.state.typeOfUser);
@@ -72,11 +71,10 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-                console.log(res)
+          
                 const token = res.data.token; 
                 localStorage.setItem('jwtToken', token);
                 this.props.onLogin(token, 'Teacher');
-                // window.location.href = '/professor/classes';
                 this.props.history.push('/professor/classes');
 			  }).catch((error) =>{
 				  if(error.response){
@@ -140,5 +138,5 @@ const mapDispatchToProps = dispatch =>  {
 
 
 
-// export default Login; 
+
 export default connect(mapStatetoProps, mapDispatchToProps)(Login);
