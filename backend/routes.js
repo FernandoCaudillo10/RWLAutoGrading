@@ -17,7 +17,25 @@ class RoutesHandler{
 		this.professorLogin = this.professorLogin.bind(this);
 	}
 
-	studentGetClassID(request, response) {
+	tokenVerify(request, response){
+		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
+			if(!pUser){
+				passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
+					if(!pUser){
+						return response.status(400).json({error: true, message: "token invalid"});
+					}
+					let {password, ...user} = pUser;
+					return response.status(200).json({error: false, message: "success", user: {...user, type: "professor"}});
+				})(request, response);
+			}
+			else{
+				let {password, ...user} = pUser;
+				return response.status(200).json({error: false, message: "success", user: {...user, type: "student"}});
+			}
+		})(request, response);
+	}
+	
+	studentGetClassInfo(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -392,7 +410,8 @@ class RoutesHandler{
 			let final_due_date = request.body.final_due_date;
 			
 			if(!request.body.assignment) return response.status(400).json({error: "Assignment is missing"});
-			let assignment = JSON.parse(request.body.assignment);
+			
+			let assignment = request.body.assignment; // assignment = {prompts: [{questions: [{question: "", min_char: 0}] , prompt: "" }] }
 			if(!assignment.prompts) return response.status(400).json({error: "No prompts in assignment"});
 			
 			let validPrompt = true;

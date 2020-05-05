@@ -37,8 +37,9 @@ app.post('/api/prof/cred/register', Routes.professorRegister);
 app.post('/api/prof/cred/login', Routes.professorLogin);
 app.put('/api/stud/cred/update', Routes.studentUpdate);
 app.put('/api/prof/cred/update', Routes.professorUpdate);
+app.get('/api/token/verify', Routes.tokenVerify);
 
-app.get('/api/stud/registered/class/info', Routes.studentGetClassID);
+app.get('/api/stud/registered/class/info', Routes.studentGetClassInfo);
 app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRubric);
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
 app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
@@ -50,13 +51,13 @@ app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass)
 
 app.get('/api/prof/class/:classId/assignments', Routes.classAssignments);
 app.post('/api/prof/class/:classId/section/create', Routes.createSection);
-app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment); 
+app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment); //
 app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAssignment); 
 app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
-app.post('/api/prof/class/create', Routes.createClass);
+app.post('/api/prof/class/create', Routes.createClass); //
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
-app.get('/api/prof/classes', Routes.getClasses);
+app.get('/api/prof/classes', Routes.getClasses); //
 app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
 app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);
 app.post('/api/prof/rubric/:rubId/calibrate', Routes.calibrateGrades);

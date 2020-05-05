@@ -2,6 +2,7 @@ import React  from 'react';
 import './Register.scss'
 import axios from 'axios';
 import qs from 'qs';
+import {connect} from 'react-redux';
 class Register extends React.Component{
 
     constructor(props){
@@ -49,11 +50,17 @@ class Register extends React.Component{
                 
               }).then ( res =>{
                 console.log(res);
+                console.log(res.data.message)
+                if(res.data.message === 'user created successfully'){
+                    this.props.history.push('/');
+                  }
               }).catch((error) =>{
                   if(error.response){
+                      //handles if the user is already created here 
                     console.log(error.response.data);
                   } else if (error.request){
                       console.log(error.request); 
+                      
                   }else {
                       console.log(error.message);
                   }
@@ -73,14 +80,19 @@ class Register extends React.Component{
                 }
                 
               }).then ( res =>{
-                console.log(res);
+                  if(res.data.message === 'user created successfully'){
+                    this.props.history.push('/');
+                  }
               }).catch((error) =>{
                   if(error.response){
                     console.log(error.response.data);
+                    
                   } else if (error.request){
                       console.log(error.request); 
+                      
                   }else {
                       console.log(error.message);
+                    
                   }
               })
 
@@ -131,10 +143,7 @@ render(){
                             <option value="Teacher" name ="typeOfUser">Teacher</option>
                         </select>
                     </div>
-                    <div id="testing">
-                        
-
-                    </div>
+                  
                     
    
                 </div>
@@ -143,7 +152,6 @@ render(){
                 <input type='submit' value='Register' className="RegisterButton"></input>
             </div>
             </form>
-
 
         </div>
     )
@@ -155,10 +163,18 @@ render(){
 }
 
 
-export default Register; 
+const mapStatetoProps = state => {
+    return {
+        UserType: state.UserType,
+        token: state.token
+
+    };
+};
+const mapDispatchToProps = dispatch =>  {
+    return {
+        onRegister: (token, UserType) => dispatch({type: 'REGISTER_USER', token: token, UserType: UserType})
+    };
+};
 
 
- /* Might implement later */
-/* <input type='button' value='Student' className="RegisterAlternate"></input>
-<input type='button' value='Teacher' className="RegisterAlternate1"></input>
-*/
+export default connect(mapStatetoProps, mapDispatchToProps)(Register);
