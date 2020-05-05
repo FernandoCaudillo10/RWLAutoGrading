@@ -17,22 +17,67 @@ import StudentHomePage from './StudentHomePage/StudentHomePage';
 import PSettings from './ProfessorSettings/PSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
+import axios from 'axios';
 
 import './App.scss';
-
+// import { useHistory } from "react-router-dom";
 class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			isStudent: true,
 			isMenuHidden: true,
+			email: '',
+			typeOfUser: '',
+			name: '', 
 		};
-
+	
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.menu = this.menu.bind(this);
 		this.menuHidden = this.menuHidden.bind(this);
 		this.menuStudent = this.menuStudent.bind(this);
 		this.menuProfessor = this.menuProfessor.bind(this);
+		this.VerifyUser = this.VerifyUser.bind(this); 
+		this.VerifyUser(); 
+	}
+	VerifyUser(){
+		
+		const token = localStorage.getItem("jwtToken")
+		// localStorage.clear();
+		if(token){
+			axios({
+				method: 'get',
+				url: 'https://rwlautograder.herokuapp.com/api/token/verify',
+				headers: {
+				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+				  'Authorization': token,
+				}
+			  }).then ( res =>{
+				  if(res.data.error === false){	 
+					  this.state.email = res.data.user.email; 
+				  	  this.state.typeOfUser = res.data.user.type;
+					  this.state.name = res.data.user.name;
+					 
+					  if(this.state.typeOfUser === 'professor'){
+						  this.state.isStudent = false; 
+					
+					  }else{
+						this.state.isStudent = true; 
+					  }
+				     
+				  }
+			  }).catch((error) =>{
+				  if(error.response){
+					console.log(error.response.data);
+				  } else if (error.request){
+					  console.log(error.request); 
+				  }else {
+					  console.log(error.message);
+				  }
+			  })
+			
+		}
+
 	}
 
 	toggleMenu(){
@@ -63,11 +108,11 @@ class App extends React.Component {
 		return (
 				<ul className="menuContainer">
 				  <li className="listItemMenu">
-				  		<p>JuanDow@csumb.edu</p>
+				  		<p>{this.state.email}</p>
 				  </li>
 				  <li className="listitemmenu">
 					<Link to="/student/home">
-						<i className="material-icons">home</i>
+						<i className="material-icons">Home</i>
 						<p>Home</p>
 					</Link>
 				  </li>
@@ -90,7 +135,7 @@ class App extends React.Component {
 		return (
 				<ul className="menuContainer">
 				  <li className="listItemMenu">
-				  		<p>JuanDow@csumb.edu</p>
+				  		<p>{this.state.email}</p>
 				  </li>
 				  <li className="listitemmenu">
 					<Link to="/professor">
@@ -117,13 +162,14 @@ class App extends React.Component {
 	render() {
 	  return (
 		<Router>
+			
 			<div>
 				 <div className="header">
 					<div className={this.state.isMenuHidden?"headerContent-hidden":"headerContent"}>
 						{
 							this.state.isMenuHidden ? this.menuHidden() : this.menu()
 						}
-						<h1> Juan Dow </h1>
+						<h1> {this.state.name}</h1>
 					</div>
 					
 				</div> 
@@ -148,5 +194,6 @@ class App extends React.Component {
 	  );
 	}
 }
+
 
 export default App;

@@ -13,7 +13,7 @@ class ProfessorHomePage extends React.Component{
             ]
         }
         
-        
+        const token = localStorage.getItem('jwtToken');
         this.ProfessorClasses = this.ProfessorClasses.bind(this);
         this.ViewandEditHandler = this.ViewandEditHandler.bind(this);
         this.CreateAssignmentHandler = this.CreateAssignmentHandler.bind(this); 
@@ -23,7 +23,7 @@ class ProfessorHomePage extends React.Component{
 			url: 'https://rwlautograder.herokuapp.com/api/prof/classes',
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
+			  'Authorization': token,
 			}
 		  }).then ( res =>{
           	this.setState({information: res.data});
