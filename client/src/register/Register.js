@@ -58,6 +58,8 @@ class Register extends React.Component{
                   if(error.response){
                       //handles if the user is already created here 
                     console.log(error.response.data);
+                    document.getElementById("ErrorMessagesLogin").innerHTML = "";
+                    document.getElementById("ErrorMessagesLogin").append(error.response.data);
                   } else if (error.request){
                       console.log(error.request); 
                       
@@ -97,7 +99,8 @@ class Register extends React.Component{
               })
 
         }else {
-            document.getElementById("testing").append('Please select the type');
+            document.getElementById("ErrorMessagesLogin").innerHTML = "";
+            document.getElementById("ErrorMessagesLogin").append('Please select the type');
         }   
 
       }
@@ -144,9 +147,10 @@ render(){
                         </select>
                     </div>
                   
-                    
-   
                 </div>
+                <div id="ErrorMessagesLogin">
+                       
+                       </div>
 
             <div>
                 <input type='submit' value='Register' className="RegisterButton"></input>
