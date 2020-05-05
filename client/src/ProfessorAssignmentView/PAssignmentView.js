@@ -1,5 +1,8 @@
 import React  from 'react'; 
-import './PAssignmentView.scss'
+import axios from 'axios';
+import qs from 'qs'; 
+import dateFormat from 'dateformat';
+import './PAssignmentView.scss';
 
 class PAssignmentView extends React.Component{
 
@@ -8,28 +11,46 @@ class PAssignmentView extends React.Component{
     
     this.state = {
         assignments: [
-            {assignment_name: "Homework 1", due_date: "1/4/2020", ClassName: "CST-399"},
-            {assignment_name: "Homework 2", due_date: "2/4/2020", ClassName: "CST-400"},
-            {assignment_name: "Homework 3", due_date: "3/4/2020", ClassName: "CST-499"},
-            {assignment_name: "Homework 4", due_date: "4/4/2020", ClassName: "CST-599"},
-            {assignment_name: "Homework 5", due_date: "5/4/2020", ClassName: "CST-199"}
-
         ]
     }
     this.ProfessorAssignmnets = this.ProfessorAssignmnets.bind(this);
+	axios({
+		method: 'get',
+		url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignments`,
+		data: qs.stringify({
+		}),
+		headers: {
+		  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+		  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
+		}
+	  }).then ( res =>{
+		  console.log(res);
+		  this.setState({loading: false, assignments: res.data });
+	  }).catch((error) =>{
+		  this.setState({loading: false});
+		  if(error.response){
+			console.log(error.response.data);
+		  } else if (error.request){
+			  console.log(error.request); 
+		  }else {
+			  console.log(error.message);
+		  }
+	  })
 }
 
 ProfessorAssignmnets(){
     return(
-    this.items = this.state.assignments.map((item, key) =>
+    	this.state.assignments ? this.state.assignments.map((item, key) =>
                 <tr key={item.class_id}>
                     <td>{item.assignment_name}</td>
-                    <td>{item.due_date}</td>
+                    <td>{dateFormat(item.due_date, "dddd, mmmm dS, yyyy, h:MM TT")}</td>
                     <td>{item.ClassName}</td>
                     <td><input type="submit" value="Edit"></input></td>
-                </tr>            
+                </tr>
+        		)
+				: 
+				<div> </div>
             
-        )
     )
     
 }
@@ -56,9 +77,6 @@ render(){
 
         </div>  
     )
-
-
-
 
     }
 }

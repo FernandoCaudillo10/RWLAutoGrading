@@ -4,6 +4,7 @@ const keys = require("./configs/keys");
 const bcrypt = require("bcryptjs");
 const qry = require('./queries');
 const hlp = require('./helpers');
+const dateFormat = require('dateformat');
 
 //TODO: Fix error messages
 class RoutesHandler{
@@ -405,9 +406,17 @@ class RoutesHandler{
 			let cId = request.params.classId;
 			
 			//TODO: Add checking for if dates are before today and all dates are after eachother
-			let assigned_date = request.body.assigned_date;
-			let due_date = request.body.due_date;
-			let final_due_date = request.body.final_due_date;
+			if(request.body.assigned_date &&
+				request.body.due_date &&
+				request.final_due_date &&
+				request.assignment_name){
+				let assigned_date = request.body.assigned_date;
+				let due_date = request.body.due_date;
+				let final_due_date = request.body.final_due_date;
+				let assignment_name = request.body.assignment_name;
+			}else{
+				return response.status(400).json({error: "due dates or assignment name missing/mispelled"});
+			}
 			
 			if(!request.body.assignment) return response.status(400).json({error: "Assignment is missing"});
 			
@@ -426,8 +435,8 @@ class RoutesHandler{
 				});
 			if(!validPrompt) return response.status(400).json({error: "Missing questions or prompt in Prompts"});
 			if(!validQuest) return response.status(400).json({error: "Missing question or min_char in Questions"});
-
-			let resultRubric = await qry.createRubric(assigned_date, due_date, final_due_date, assignment)
+			
+			let resultRubric = await qry.createRubric(+assigned_date / 1000, +due_date / 1000, +final_due_date / 1000, assignment, assignment_name)
 
 			let resultSections = await qry.getClassSections(cId)
 				.catch(err => {

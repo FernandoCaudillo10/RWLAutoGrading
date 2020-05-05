@@ -26,7 +26,7 @@ class PSettings extends React.Component {
 		
 		axios({
 			method: 'post',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/class/create',
+			url: 'http://localhost:8080/api/prof/class/create',
 			data: qs.stringify({
 			  name: this.state.className,
 			}),
