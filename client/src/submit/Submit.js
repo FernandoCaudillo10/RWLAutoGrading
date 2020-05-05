@@ -70,7 +70,7 @@ class Submit extends React.Component{
             }
         }).then(res => {
     		//const questions = res.data;
-            this.setState({ [this.statequestions]: res.data });
+            this.setState({ [this.state.questions]: res.data });
     	})
     }
 
@@ -86,7 +86,6 @@ class Submit extends React.Component{
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
                     'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
-                    'email': "Alpha@Omega.com"
                 }
             }).then ( res =>{
                 console.log(res)
