@@ -192,7 +192,7 @@ class App extends React.Component {
 					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
-					<Route exact path="/student/home/assignment/grade" component={StudentViewGradePage} />
+					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
 				</Switch>
 			</div>
 		</Router>

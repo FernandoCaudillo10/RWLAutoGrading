@@ -14,8 +14,8 @@ class StudentViewGradePage extends React.Component {
 	
 		 axios({
                 method: 'get',
-                url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/grade', 
-                headers: {
+                url: `https://rwlautograder.herokuapp.com/api/stud/class/${this.props.match.params.sectionID}/assignment/grade`,
+				headers: {
                   	'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
                		'Authorization': localStorage.getItem('jwtToken'),
 			    }
@@ -35,11 +35,12 @@ class StudentViewGradePage extends React.Component {
 	
 	renderTableData() {
 		return this.state.grades.map((grade, index) => {
-			const { rubric_id, total } = grade	
+			const { rubric_id, totalgrade, evalgrade } = grade	
 			return (
 				<tr>
 					<td>{rubric_id}</td>
-					<td>{total}</td>
+					<td>{totalgrade}%</td>
+					<td>{evalgrade}%</td>
 				</tr>
 			)
 		})
@@ -51,7 +52,7 @@ render() {
                 <table id="GradeTable">
 					<tbody>
                     	<tr>
-							<th>Class</th>
+							<th>Assignment</th>
                     		<th>Assignment Grade</th>
                     		<th>Evaluation Grade</th>
                     	</tr>
