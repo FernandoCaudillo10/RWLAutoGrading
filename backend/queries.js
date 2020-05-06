@@ -111,7 +111,7 @@ function getAssignRubric(sectionID){
 	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
 }
 function getEvalAssignment(email, rubricID){
-	return pool.query(`SELECT eval_id, prompt.rubric_id, question.question_id, response.response_id FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id WHERE prompt.rubric_id='${rubricID}' ORDER BY question_id ASC`);
+	return pool.query(`SELECT eval_id, prompt.prompt_text, question.question_id, question.question_text, response.response_id, response.response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id WHERE prompt.rubric_id='${rubricID}' ORDER BY question_id ASC`);
 }
 async function submitAssignment(email, assignment){
 	var data = [];
