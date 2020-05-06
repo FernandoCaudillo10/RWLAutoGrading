@@ -77,7 +77,6 @@ class ProfessorAssignments extends React.Component{
 			final_due_date: new Date(this.state.final_due_date),
 			});
 		let assignment = {prompts: this.convertToAssignment()};
-		console.log(this.state);
 		axios({
 			method: 'post',
 			url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignment/create`,
