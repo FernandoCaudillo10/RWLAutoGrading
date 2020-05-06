@@ -408,8 +408,8 @@ class RoutesHandler{
 			//TODO: Add checking for if dates are before today and all dates are after eachother
 			if(request.body.assigned_date &&
 				request.body.due_date &&
-				request.final_due_date &&
-				request.assignment_name){
+				request.body.final_due_date &&
+				request.body.assignment_name){
 				let assigned_date = request.body.assigned_date;
 				let due_date = request.body.due_date;
 				let final_due_date = request.body.final_due_date;
