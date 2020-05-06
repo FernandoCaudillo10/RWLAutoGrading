@@ -56,6 +56,8 @@ function deleteRubric(rub_id){
 async function createRubric(assigned_date, due_date, final_due_date, assignment, ass_name){
 	
 	let result;
+	console.log(assigned_date, due_date, final_due_date, assignment);
+	console.log(typeof assigned_date,typeof due_date,typeof final_due_date,typeof assignment);
 	await pool.query(`INSERT INTO rubric(assigned_date, due_date, final_due_date, name) 
 						VALUES (to_timestamp('${assigned_date}'),to_timestamp('${due_date}'),to_timestamp('${final_due_date}'), '${ass_name}') RETURNING *`)
 			.then((resultRubric) => {
