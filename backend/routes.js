@@ -406,14 +406,21 @@ class RoutesHandler{
 			let cId = request.params.classId;
 			
 			//TODO: Add checking for if dates are before today and all dates are after eachother
+
+			let assigned_date;
+			let due_date;
+			let final_due_date;
+			let assignment_name;
+			
 			if(request.body.assigned_date &&
 				request.body.due_date &&
 				request.body.final_due_date &&
 				request.body.assignment_name){
-				let assigned_date = request.body.assigned_date;
-				let due_date = request.body.due_date;
-				let final_due_date = request.body.final_due_date;
-				let assignment_name = request.body.assignment_name;
+
+				assigned_date = new Date(request.body.assigned_date);
+				due_date = new Date(request.body.due_date);
+				final_due_date = new Date(request.body.final_due_date);
+				assignment_name = new Date(request.body.assignment_name);
 			}else{
 				return response.status(400).json({error: "due dates or assignment name missing/mispelled"});
 			}
