@@ -3,7 +3,6 @@ import axios from 'axios';
 import qs from 'qs'; 
 import './Submit.scss'
 
-
 class Submit extends React.Component{
 
     constructor(props){
@@ -36,7 +35,6 @@ class Submit extends React.Component{
                         min_char: 150
                     }]
         }
-        
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -59,23 +57,22 @@ class Submit extends React.Component{
     }
 
     componentDidMount(){
+        const token = localStorage.getItem("jwtToken")
     	axios({
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
-                'email': "Alpha@Omega.com"
-
+                'Authorization': token,
             }
         }).then(res => {
-    		//const questions = res.data;
             this.setState({ [this.state.questions]: res.data });
     	})
     }
 
     handleSubmit(event) {
         event.preventDefault();
+        const token = localStorage.getItem("jwtToken")
             console.log(this.state.responses);
             axios({
                 method: 'post',
@@ -85,7 +82,7 @@ class Submit extends React.Component{
                 }),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                    'Authorization': token,
                 }
             }).then ( res =>{
                 console.log(res)

@@ -9,12 +9,15 @@ class SSettings extends React.Component {
         super(props);
        
         this.state = {
-			className: "",
+			uclassName: "",
+			rclassName: "",
+			action_url: "",
+			register_url: 'https://rwlautograder.herokuapp.com/api/stud/class/register/',
+			unregister_url: 'https://rwlautograder.herokuapp.com/api/stud/class/unregister/',
         };
         
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
     }
     
       handleFormChange(event) {
@@ -22,17 +25,19 @@ class SSettings extends React.Component {
       }
     
       handleSubmit(event) {
-        event.preventDefault();
-		
+		const token = localStorage.getItem("jwtToken")
+		if(!this.state.rclassName.toString().localCompare("")){
+			this.state.action_url = this.state.register_url
+		} else if (!this.state.uclassName.toString().localCompare("")){
+			this.state.action_url = this.state.unregister_url
+		}
+
 		axios({
 			method: 'post',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/class/create',
-			data: qs.stringify({
-			  name: this.state.className,
-			}),
+			url: this.state.action_url + this.state.className,
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+			  'Authorization': token,
 			}
 		  }).then ( res =>{
 			console.log(res)
@@ -45,19 +50,22 @@ class SSettings extends React.Component {
 				  console.log(error.message);
 			  }
 		  })
-        
       }
 
 	render(){ 
 		return (
 			<div className="Login">
 				<form onSubmit={this.handleSubmit}>
-					<div> Create Class </div>
+					<div> Register for a Class </div>
 					<div>
-						<input className="LoginFields" type='text' placeholder='Class Name' name="email"  onChange={this.handleFormChange}></input>
+						<input className="LoginFields" type='text' placeholder='Class Name' name="rclassName"  onChange={this.handleFormChange}></input>
 					</div>
-
-					<input type='submit' value='Log In' className="LoginButton" ></input>
+					<input type='submit' value='Register' className="LoginButton" onSubmit={this.handleSubmit}></input><br/><br/>
+					<div> Unregister for a Class </div>
+					<div>
+						<input className="LoginFields" type='text' placeholder='Class Name' name="uclassName"  onChange={this.handleFormChange}></input>
+					</div>
+					<input type='submit' value='Unregister' className="LoginButton" onSubmit={this.handleSubmit}></input>
 				</form>
 			  
 

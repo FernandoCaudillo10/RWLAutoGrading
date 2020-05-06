@@ -23,14 +23,14 @@ class StudentHomePage extends React.Component{
             }],  
             assignments: [
                 {
-                    rubric_id: 100,
+                    rubric_id: 1,
                     assigned_date: "2020-04-21T07:00:00.000Z",
                     due_date: "2020-04-28T07:00:00.000Z",
                     final_due_date: "2020-05-01T07:00:00.000Z",
                     section_id: 1 
                 },
                 {
-                    rubric_id: 200,
+                    rubric_id: 2,
                     assigned_date: "2020-04-21T07:00:00.000Z",
                     due_date: "2020-04-28T07:00:00.000Z",
                     final_due_date: "2020-05-01T07:00:00.000Z",
@@ -39,7 +39,6 @@ class StudentHomePage extends React.Component{
             ],
             isHovered: false 
         }
-        
         this.toggleHover = this.toggleHover.bind(this);
     }
 
@@ -48,16 +47,16 @@ class StudentHomePage extends React.Component{
     }
 
     componentDidMount(){
+        const token = localStorage.getItem("jwtToken")
+
     	axios({
             method: 'get',
             url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info',
-            data: {'email': "Alpha@Omega.com"},
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                'Authorization': token,
             }
         }).then(res => {
-    		//const studentInfo = res.data;
             this.setState({ 
                 [this.state.studentInfo]: res.data 
             });
@@ -77,7 +76,7 @@ class StudentHomePage extends React.Component{
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.state.studentInfo[0].class_id + '/assignment/dates',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFscGhhQE9tZWdhLmNvbSIsInR5cGUiOiJzdHVkIiwiaWF0IjoxNTg4MzcyNDczLCJleHAiOjE1OTA3OTE2NzN9.4uxQlgjSieJ-AEKITWQAEJuU1bvinJ4wwc_IhbESJwk",
+                'Authorization': token,
             }
         }).then(res => {
             this.setState({ [this.state.assignments] : res.data});
