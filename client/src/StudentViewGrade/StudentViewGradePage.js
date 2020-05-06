@@ -7,21 +7,21 @@ class StudentViewGradePage extends React.Component {
 		super(props);
 
 		this.state = {
-			className: '',
-			assingGrade: '',
-			evalGrade: '',
+			grades: []
 		};
-	}
+
+		this.renderTableData = this.renderTableData.bind(this);
 	
-	tableBody() {
 		 axios({
                 method: 'get',
-                url: 'https://rwlautograder.herokuapp.com/api/stud/registered/class/info', 
+                url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/grade', 
                 headers: {
-                  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-                }
+                  	'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+               		'Authorization': localStorage.getItem('jwtToken'),
+			    }
               }).then ( res =>{
-                console.log(res)
+				this.setState({grades: res.data});
+				console.log(res)
               }).catch((error) =>{
                   if(error.response){
                     console.log(error.response.data);
@@ -31,19 +31,34 @@ class StudentViewGradePage extends React.Component {
                       console.log(error.message);
                   }
               })
+	}
 	
+	renderTableData() {
+		return this.state.grades.map((grade, index) => {
+			const { rubric_id, total } = grade	
+			return (
+				<tr>
+					<td>{rubric_id}</td>
+					<td>{total}</td>
+				</tr>
+			)
+		})
 	}
 
 render() {
 	return (
             <div className="ViewGradeContainer">
                 <table id="GradeTable">
-                    <tr>
-						<th>Class</th>
-                    	<th>Assignment Grade</th>
-                    	<th>Evaluation Grade</th>
-                    </tr>
-					{this.tableBody()}
+					<tbody>
+                    	<tr>
+							<th>Class</th>
+                    		<th>Assignment Grade</th>
+                    		<th>Evaluation Grade</th>
+                    	</tr>
+					</tbody>
+					<tbody>
+							{this.renderTableData()}
+					</tbody>
                 </table>
             </div>
         )

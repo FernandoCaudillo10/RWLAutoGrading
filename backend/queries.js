@@ -38,7 +38,7 @@ function getAllRubricsBeforeNow(){
 }
 
 function getStudentGrade(email){
-	return pool.query(`SELECT section_rubric.rubric_id, SUM(response_grade)/COUNT(*) AS total FROM takes JOIN section_rubric ON section_rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=section_rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}' GROUP BY section_rubric.rubric_id`);
+	return pool.query(`SELECT section_rubric.rubric_id, SUM(response_grade)/COUNT(*) AS totalGrade, SUM(evaluation_grade)/COUNT(*) AS evalGrade FROM takes JOIN section_rubric ON section_rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=section_rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}' GROUP BY section_rubric.rubric_id ORDER BY section_rubric.rubric_id`);
 }
 function getStudentResponse(rId){
 	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
