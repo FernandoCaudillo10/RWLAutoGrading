@@ -18,12 +18,6 @@ app.use(express.urlencoded()); // to support URL-encoded bodies
 app.use(passport.initialize()); // Passport middleware for login/regist/jwt
 app.use(cors()); // Cors middleware to allow all Cross-origin access
 
-
-app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
-app.use(passport.initialize()); // Passport middleware for login/regist/jwt
-app.use(cors()); // Cors middleware to allow all Cross-origin access
-
 // Passport config
 localPassport.useJWT(passport);
 localPassport.useStudPassport(passport);
