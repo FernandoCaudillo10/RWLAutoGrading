@@ -35,7 +35,7 @@ class Login extends React.Component {
         if(this.state.typeOfUser === "Student"){
 			axios({
 				method: 'post',
-				url: 'http://rwlautograder.herokuapp.com/api/stud/cred/login',
+				url: 'https://rwlautograder.herokuapp.com/api/stud/cred/login',
 				data: qs.stringify({
 				  email: this.state.email,
 				  password: this.state.password
@@ -62,7 +62,7 @@ class Login extends React.Component {
         else if(this.state.typeOfUser === "Teacher"){
 			axios({
 				method: 'post',
-				url: 'http://rwlautograder.herokuapp.com/api/prof/cred/login',
+				url: 'https://rwlautograder.herokuapp.com/api/prof/cred/login',
 				data: qs.stringify({
 				  email: this.state.email,
 				  password: this.state.password
