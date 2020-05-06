@@ -138,8 +138,9 @@ class RoutesHandler{
 					return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-
-			qry.getStudentGrade(pUser.email)
+			
+			let sID = request.params.sectionID;
+			qry.getStudentGrade(pUser.email, sID)
 				.then((result) => {
 					if(result.rowCount === 0)
 						return response.status(400).json({error: "Student email does not have any grades"});

@@ -44,7 +44,7 @@ app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRub
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
 app.get('/api/stud/class/:rubricID/assignment/evaluation', Routes.studentEvaluateAssignment);
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
-app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
+app.get('/api/stud/class/:sectionID/assignment/grade', Routes.studentGetGrade);
 app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
 app.post('/api/stud/class/register/:sectionID', Routes.studentRegisterClass);
 app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass);
