@@ -54,11 +54,11 @@ function deleteRubric(rub_id){
 	return pool.query(`DELETE FROM rubric WHERE rubric_id='${rub_id}'`);
 }
 
-async function createRubric(assigned_date, due_date, final_due_date, assignment){
+async function createRubric(assigned_date, due_date, final_due_date, assignment, ass_name){
 	
 	let result;
-	await pool.query(`INSERT INTO rubric(assigned_date, due_date, final_due_date) 
-						VALUES (to_timestamp('${assigned_date}'),to_timestamp('${due_date}'),to_timestamp('${final_due_date}')) RETURNING *`)
+	await pool.query(`INSERT INTO rubric(assigned_date, due_date, final_due_date, name) 
+						VALUES (to_timestamp('${assigned_date}'),to_timestamp('${due_date}'),to_timestamp('${final_due_date}'), '${ass_name}') RETURNING *`)
 			.then((resultRubric) => {
 					result = resultRubric;
 					assignment.prompts.forEach((prompt) => {createPrompt(resultRubric.rows[0].rubric_id, prompt.prompt, prompt.questions)});
@@ -90,7 +90,7 @@ function getClass(class_id){
 	return pool.query(`SELECT * FROM class WHERE class.class_id='${class_id}'`);
 }
 function getAllClassAssignments(class_id){
-	return pool.query(`SELECT DISTINCT r.* FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
+	return pool.query(`SELECT DISTINCT(r.*) FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
 }
 function getStudClasses(email){
 	return pool.query(`SELECT class.*, section.section_id FROM takes JOIN section ON takes.section_id=section.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}'`);

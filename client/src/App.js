@@ -185,7 +185,7 @@ class App extends React.Component {
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
-					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
+					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
 				</Switch>

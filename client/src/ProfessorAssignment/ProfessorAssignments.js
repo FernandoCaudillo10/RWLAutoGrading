@@ -6,18 +6,19 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
+import dateFormat from 'dateformat';
 
 class ProfessorAssignments extends React.Component{
 
     constructor(props){
         super(props);
-		
         this.state = {
 			prompts : {},
 			psz: 0,
 			assigned_date: Date.now(),
 			due_date: Date.now(),
 			final_due_date: Date.now(),
+			ass_name: "",
 			loading: false,
         };
 
@@ -25,12 +26,12 @@ class ProfessorAssignments extends React.Component{
         this.handleAddPrompt = this.handleAddPrompt.bind(this);
         this.handleSubmitCreate = this.handleSubmitCreate.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this); 
-        this.handleSubmitCancel = this.handleSubmitCancel.bind(this);
 		this.AssignmentView = this.AssignmentView.bind(this);
 		this.convertToAssignment = this.convertToAssignment.bind(this);
 		this.setAssignedDate = this.setAssignedDate.bind(this);
 		this.setDueDate = this.setDueDate.bind(this);
 		this.setFinalDueDate = this.setFinalDueDate.bind(this);
+		this.handleNameChange = this.handleNameChange.bind(this);
     }
 
     handleAddQuestion(event, pId) {
@@ -69,7 +70,12 @@ class ProfessorAssignments extends React.Component{
 
     handleSubmitCreate(event){
         event.preventDefault();
-		this.setState({loading:true});
+		this.setState({
+			loading:true, 
+			due_date: new Date(this.state.due_date),
+			assigned_date: new Date(this.state.assigned_date),
+			final_due_date: new Date(this.state.final_due_date),
+			});
 		let assignment = {prompts: this.convertToAssignment()};
 		axios({
 			method: 'post',
@@ -79,10 +85,11 @@ class ProfessorAssignments extends React.Component{
 				due_date: this.state.due_date,
 				assigned_date: this.state.assigned_date,
 				final_due_date: this.state.final_due_date,
+				assignment_name: this.state.ass_name,
 			}),
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-			  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
+		  	  'Authorization': localStorage.getItem('jwtToken'),
 			}
 		  }).then ( res =>{
 			  this.setState({loading: false});
@@ -97,9 +104,6 @@ class ProfessorAssignments extends React.Component{
 				  console.log(error.message);
 			  }
 		  })
-    }
-    handleSubmitCancel(event){
-        event.preventDefault();
     }
 
 	Question(pId, qId){
@@ -141,11 +145,16 @@ class ProfessorAssignments extends React.Component{
 	setFinalDueDate(date){
 		this.setState({final_due_date: date});
 	}
+	handleNameChange(event){
+		this.setState({ ass_name: event.target.value });
+	}
  
 render(){
     return (
         <div className="professorContainer">
             <h3> Create Assignment</h3>
+			<h4> Assignment Name </h4>
+			<input type="text" value={this.state.ass_name} onChange={this.handleNameChange}/>
 			<div className="datePickerContainer">
 				<div>
 					<h4> Assigned Date </h4>
@@ -204,9 +213,6 @@ render(){
 
         </div>  
     )
-
-
-
 
     }
 }
