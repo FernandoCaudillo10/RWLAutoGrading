@@ -3,6 +3,7 @@ import './Register.scss'
 import axios from 'axios';
 import qs from 'qs';
 import {connect} from 'react-redux';
+
 class Register extends React.Component{
 
     constructor(props){
@@ -33,8 +34,37 @@ class Register extends React.Component{
     
       handleSubmit(event) {
         //   This will handle once you Register
-
         event.preventDefault(); 
+        document.getElementById("ErrorMessagesLogin").innerHTML = "";
+        if(this.state.email !== this.state.emailConfirm){
+            document.getElementById("ErrorMessagesLogin").innerHTML = "";
+            document.getElementById("ErrorMessagesLogin").append("Emails don't match");
+            return;  
+        }
+        if(this.state.password !== this.state.passwordConfirm){
+            document.getElementById("ErrorMessagesLogin").innerHTML = "";
+            document.getElementById("ErrorMessagesLogin").append("Passwords don't match");
+            return;  
+        }
+        var passwordComplexity = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");       
+        var validator = require("email-validator");
+ 
+        if (!validator.validate(this.state.email)){
+            document.getElementById("ErrorMessagesLogin").innerHTML = "";
+            document.getElementById("ErrorMessagesLogin").append("Invalid email");
+            return; 
+        }
+
+        if(!passwordComplexity.test(this.state.password)){
+            document.getElementById("ErrorMessagesLogin").innerHTML = "";
+            document.getElementById("ErrorMessagesLogin").append("Passwords must be at least size 6, at least one uppercase, and one number");
+            return; 
+        }
+
+        
+
+       
+        
         if(this.state.typeOfUser === "Student"){
             axios({
                 method: 'post',
@@ -59,13 +89,8 @@ class Register extends React.Component{
                       //handles if the user is already created here 
                     console.log(error.response.data);
                     document.getElementById("ErrorMessagesLogin").innerHTML = "";
-                    document.getElementById("ErrorMessagesLogin").append(error.response.data);
-                  } else if (error.request){
-                      console.log(error.request); 
-                      
-                  }else {
-                      console.log(error.message);
-                  }
+                    document.getElementById("ErrorMessagesLogin").append("Email already exists");
+                  } 
               })
 
         }else if(this.state.typeOfUser === "Teacher"){
@@ -88,14 +113,10 @@ class Register extends React.Component{
               }).catch((error) =>{
                   if(error.response){
                     console.log(error.response.data);
+                    document.getElementById("ErrorMessagesLogin").innerHTML = "";
+                    document.getElementById("ErrorMessagesLogin").append("Email already exists");
                     
-                  } else if (error.request){
-                      console.log(error.request); 
-                      
-                  }else {
-                      console.log(error.message);
-                    
-                  }
+                  } 
               })
 
         }else {
@@ -103,7 +124,8 @@ class Register extends React.Component{
             document.getElementById("ErrorMessagesLogin").append('Please select the type');
         }   
 
-      }
+      
+    }
 
       handleSelectOption(event){
           this.setState({typeOfUser: event.target.value});

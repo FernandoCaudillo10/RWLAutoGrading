@@ -44,25 +44,20 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-          if(res.data === "Incorrect password" || res.data === "No account under this email"){
-            document.getElementById("ErrorMessagesLogin").innerHTML = "";
-            document.getElementById("ErrorMessagesLogin").append(res.data);
-          }else{
             const token = res.data.token; 
-                localStorage.setItem('jwtToken', token);
-                localStorage.setItem('typeOfUser', this.state.typeOfUser);
-                this.props.onLogin(token, 'Student');
-                this.props.history.push('/student/home');
+            localStorage.setItem('jwtToken', token);
+            localStorage.setItem('typeOfUser', this.state.typeOfUser);
+            this.props.onLogin(token, 'Student');
+            this.props.history.push('/student/home');
 
-          }
 			  }).catch((error) =>{
 				  if(error.response){
-					console.log(error.response.data);
-				  } else if (error.request){
-					  console.log(error.request); 
-				  }else {
-					  console.log(error.message);
+          console.log(error.response.data);
+          document.getElementById("ErrorMessagesLogin1").innerHTML = "";
+          document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
+          console.log(error);
 				  }
+				  
 			  })
 		}
         else if(this.state.typeOfUser === "Teacher"){
@@ -77,25 +72,16 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-          if(res.data === "Incorrect password" || res.data === "No account under this email"){
-            document.getElementById("ErrorMessagesLogin").innerHTML = "";
-            document.getElementById("ErrorMessagesLogin").append(res.data);
-          }else{
-            const token = res.data.token; 
-                localStorage.setItem('jwtToken', token);
-                localStorage.setItem('typeOfUser', this.state.typeOfUser);
-                this.props.onLogin(token, 'Teacher');
-                this.props.history.push('/professor/classes');
-          }
+          const token = res.data.token; 
+          localStorage.setItem('jwtToken', token);
+          localStorage.setItem('typeOfUser', this.state.typeOfUser);
+          this.props.onLogin(token, 'Teacher');
+          this.props.history.push('/professor/classes');
 			  }).catch((error) =>{
 				  if(error.response){
           console.log(error.response.data);
-          document.getElementById("testing").innerHTML = "";
-          document.getElementById("testing").append(error.response.data);
-				  } else if (error.request){
-					  console.log(error.request); 
-				  }else {
-					  console.log(error.message);
+          document.getElementById("ErrorMessagesLogin1").innerHTML = "";
+          document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
 				  }
 			  })
 		}
@@ -123,7 +109,7 @@ render(){
                 <input type='submit' value='Log In' className="LoginButton" ></input>
             </form>
 
-            <div id= "ErrorMessagesLogin">
+            <div id= "ErrorMessagesLogin1">
 
                 </div>        
            
