@@ -65,7 +65,10 @@ class App extends React.Component {
 					  }else{
 						this.state.isStudent = true; 
 					  }
-				     
+				  }
+				  else{
+				      localStorage.removeItem("jwtToken");
+				      localStorage.removeItem("typeOfUser");
 				  }
 			  }).catch((error) =>{
 				  if(error.response){
@@ -186,7 +189,7 @@ class App extends React.Component {
 					<Route exact path="/student/submit/:rubricID" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
-					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
+					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
 				</Switch>

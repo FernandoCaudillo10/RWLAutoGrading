@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8083;
 const db = require('./backend/queries')
 const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
@@ -12,12 +12,6 @@ const cron = require('node-cron');
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
-app.use(passport.initialize()); // Passport middleware for login/regist/jwt
-app.use(cors()); // Cors middleware to allow all Cross-origin access
-
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
@@ -42,7 +36,7 @@ app.get('/api/token/verify', Routes.tokenVerify);
 app.get('/api/stud/registered/class/info', Routes.studentGetClassInfo);
 app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRubric);
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
-app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
+app.get('/api/stud/class/:rubricID/assignment/evaluation', Routes.studentEvaluateAssignment);
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
 app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
 app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
