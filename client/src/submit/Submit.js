@@ -10,30 +10,7 @@ class Submit extends React.Component{
        
         this.state = {
             responses: [],
-            questions: [{
-                        prompt_id: 2,
-                        rubric_id: 2,
-                        prompt_text: "Good vibes We're bringing only good vibes People walking around talking down on others You can't know yourself without knowing about the other",
-                        question_id: 123,
-                        question_text: "The day before yesterday, Chris was 7 years old. Next year, hell turn 10. Hows this possible?",
-                        min_char: 150
-                        },
-                        {
-                        prompt_id: 2,
-                        rubric_id: 2,
-                        prompt_text: "Good vibes We're bringing only good vibes People walking around talking down on others You can't know yourself without knowing about the other",
-                        question_id: 234,
-                        question_text: "There is this one woman who killed her mother. she was born before her father, and married over 100 women without divorcing any one. Yet, she was considered normal by all of his acquaintances. Why?",
-                        min_char: 150
-                        },
-                        {
-                        prompt_id: 2,
-                        rubric_id: 2,
-                        prompt_text: "Good vibes We're bringing only good vibes People walking around talking down on others You can't know yourself without knowing about the other",
-                        question_id: 345,
-                        question_text: "There is this one woman who killed her mother. she was born before her father, and married over 100 women without divorcing any one. Yet, she was considered normal by all of his acquaintances. Why?",
-                        min_char: 150
-                    }]
+            assignment: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -66,19 +43,19 @@ class Submit extends React.Component{
                 'Authorization': token,
             }
         }).then(res => {
-            this.setState({ [this.state.questions]: res.data });
+            this.setState({ questions: res.data });
     	})
     }
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log(this.state.responses)
         const token = localStorage.getItem("jwtToken")
-            console.log(this.state.responses);
             axios({
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
                 data:  qs.stringify({ 
-                    responses: this.state.responses
+                    assignment: this.state.responses
                 }),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',

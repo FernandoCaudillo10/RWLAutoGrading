@@ -73,14 +73,14 @@ class Grade extends React.Component{
         const token = localStorage.getItem("jwtToken")
     	axios({
             method: 'get',
-            url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation',
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignment/evaluation',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
                 'Authorization': token,
             }
         }).then(res => {
     		//const evalInfo = res.data;
-    		this.setState({ [this.state.evalInfo]: res.data });
+    		this.setState({ evalInfo: res.data });
     	}).then ( res =>{
             console.log(res)
           }).catch((error) =>{

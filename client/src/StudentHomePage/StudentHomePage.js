@@ -19,24 +19,9 @@ class StudentHomePage extends React.Component{
             studentInfo: [{
                 class_id: 1,
                 professor_email: "",
-                name: "Alpha Omega",
+                name: "",
             }],  
-            assignments: [
-                {
-                    rubric_id: 1,
-                    assigned_date: "2020-04-21T07:00:00.000Z",
-                    due_date: "2020-04-28T07:00:00.000Z",
-                    final_due_date: "2020-05-01T07:00:00.000Z",
-                    section_id: 1 
-                },
-                {
-                    rubric_id: 2,
-                    assigned_date: "2020-04-21T07:00:00.000Z",
-                    due_date: "2020-04-28T07:00:00.000Z",
-                    final_due_date: "2020-05-01T07:00:00.000Z",
-                    section_id: 1 
-                }
-            ],
+            assignments: [],
             isHovered: false 
         }
         this.toggleHover = this.toggleHover.bind(this);
@@ -46,9 +31,13 @@ class StudentHomePage extends React.Component{
         this.setState(prevState => ({isHovered: !prevState.isHovered}));
     }
 
+    logout(){
+
+    }
+
+
     componentDidMount(){
         const token = localStorage.getItem("jwtToken")
-
     	axios({
             method: 'get',
             url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info',
@@ -58,9 +47,8 @@ class StudentHomePage extends React.Component{
             }
         }).then(res => {
             this.setState({ 
-                [this.state.studentInfo]: res.data 
+                studentInfo: res.data 
             });
-            console.log(this.state.studentInfo)
         }).catch((error) =>{
             if(error.response){
               console.log(error.response.data);
@@ -79,7 +67,9 @@ class StudentHomePage extends React.Component{
                 'Authorization': token,
             }
         }).then(res => {
-            this.setState({ [this.state.assignments] : res.data});
+            this.setState({ 
+                assignments: res.data
+            });
             console.log(this.state.assignments)
         }).catch((error) =>{
             if(error.response){
