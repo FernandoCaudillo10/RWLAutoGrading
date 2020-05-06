@@ -71,7 +71,6 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-          
                 const token = res.data.token; 
                 localStorage.setItem('jwtToken', token);
                 this.props.onLogin(token, 'Teacher');

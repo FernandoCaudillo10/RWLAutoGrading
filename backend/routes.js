@@ -597,9 +597,10 @@ class RoutesHandler{
 		passport.authenticate('professorLogin', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${err}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 			// User matched
 			// Create JWT Payload
@@ -629,9 +630,10 @@ class RoutesHandler{
 		passport.authenticate('professorRegister', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				return response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 
 			request.logIn(pUser, err => {
@@ -649,9 +651,10 @@ class RoutesHandler{
 		passport.authenticate('studentLogin', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${err}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 			// User matched
 			// Create JWT Payload
@@ -681,9 +684,10 @@ class RoutesHandler{
 		passport.authenticate('studentRegister', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				return response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 
 			request.logIn(pUser, err => {
