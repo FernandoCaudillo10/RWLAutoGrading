@@ -187,8 +187,8 @@ class RoutesHandler{
 					return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-
-		qry.getEvalAssignment(pUser.email)
+		let rID = request.params.rubricID;
+		qry.getEvalAssignment(pUser.email, rID)
 			.then((result) => {
 				if(result.rowCount === 0) 
 					return response.status(400).json({error: "No student found under this email"});

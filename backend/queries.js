@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -110,8 +110,8 @@ function takesCheck(email, classID){
 function getAssignRubric(sectionID){
 	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
 }
-function getEvalAssignment(email){
-	return pool.query(`SELECT eval_id, prompt_text, question.question_id, question_text, response.response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+function getEvalAssignment(email, rubricID){
+	return pool.query(`SELECT eval_id, prompt.prompt_text, question.question_id, question.question_text, response.response_id, response.response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id WHERE prompt.rubric_id='${rubricID}' ORDER BY question_id ASC`);
 }
 async function submitAssignment(email, assignment){
 	var data = [];
