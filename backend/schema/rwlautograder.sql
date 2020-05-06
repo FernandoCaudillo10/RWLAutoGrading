@@ -32,7 +32,8 @@ CREATE TABLE "rubric" (
   "rubric_id" SERIAL PRIMARY KEY,
   "assigned_date" timestamptz,
   "due_date" timestamptz,
-  "final_due_date" timestamptz
+  "final_due_date" timestamptz,
+  "name" varchar
 );
 
 CREATE TABLE "section_rubric" (

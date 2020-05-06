@@ -18,22 +18,67 @@ import PSettings from './ProfessorSettings/PSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
+import axios from 'axios';
 
 import './App.scss';
-
+// import { useHistory } from "react-router-dom";
 class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			isStudent: true,
 			isMenuHidden: true,
+			email: '',
+			typeOfUser: '',
+			name: '', 
 		};
-
+	
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.menu = this.menu.bind(this);
 		this.menuHidden = this.menuHidden.bind(this);
 		this.menuStudent = this.menuStudent.bind(this);
 		this.menuProfessor = this.menuProfessor.bind(this);
+		this.VerifyUser = this.VerifyUser.bind(this); 
+		this.VerifyUser(); 
+	}
+	VerifyUser(){
+		
+		const token = localStorage.getItem("jwtToken")
+		// localStorage.clear();
+		if(token){
+			axios({
+				method: 'get',
+				url: 'https://rwlautograder.herokuapp.com/api/token/verify',
+				headers: {
+				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+				  'Authorization': token,
+				}
+			  }).then ( res =>{
+				  if(res.data.error === false){	 
+					  this.state.email = res.data.user.email; 
+				  	  this.state.typeOfUser = res.data.user.type;
+					  this.state.name = res.data.user.name;
+					 
+					  if(this.state.typeOfUser === 'professor'){
+						  this.state.isStudent = false; 
+					
+					  }else{
+						this.state.isStudent = true; 
+					  }
+				     
+				  }
+			  }).catch((error) =>{
+				  if(error.response){
+					console.log(error.response.data);
+				  } else if (error.request){
+					  console.log(error.request); 
+				  }else {
+					  console.log(error.message);
+				  }
+			  })
+			
+		}
+
 	}
 
 	toggleMenu(){
@@ -64,11 +109,11 @@ class App extends React.Component {
 		return (
 				<ul className="menuContainer">
 				  <li className="listItemMenu">
-				  		<p>JuanDow@csumb.edu</p>
+				  		<p>{this.state.email}</p>
 				  </li>
 				  <li className="listitemmenu">
 					<Link to="/student/home">
-						<i className="material-icons">home</i>
+						<i className="material-icons">Home</i>
 						<p>Home</p>
 					</Link>
 				  </li>
@@ -91,7 +136,7 @@ class App extends React.Component {
 		return (
 				<ul className="menuContainer">
 				  <li className="listItemMenu">
-				  		<p>JuanDow@csumb.edu</p>
+				  		<p>{this.state.email}</p>
 				  </li>
 				  <li className="listitemmenu">
 					<Link to="/professor">
@@ -118,20 +163,21 @@ class App extends React.Component {
 	render() {
 	  return (
 		<Router>
+			
 			<div>
 				 <div className="header">
 					<div className={this.state.isMenuHidden?"headerContent-hidden":"headerContent"}>
 						{
 							this.state.isMenuHidden ? this.menuHidden() : this.menu()
 						}
-						<h1> Juan Dow </h1>
+						<h1> {this.state.name}</h1>
 					</div>
 					
 				</div> 
 
 				<Switch>
-					<Route exact path ="/" component={Login} />
-					<Route exact path ="/register" component={Register} />
+					<Route exact path="/" component={Login} />
+					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
 					<Route exact path="/student/grades" component={HomePage} />
@@ -139,8 +185,8 @@ class App extends React.Component {
 					<Route exact path="/student/grade" component={Grade} />
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
-					<Route exact path="/professor/createassignments" component={ProfessorAssignments} />
-					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
+					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
+					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
 					<Route exact path="/student/home/assignment/grade" component={StudentViewGradePage} />
@@ -150,5 +196,6 @@ class App extends React.Component {
 	  );
 	}
 }
+
 
 export default App;

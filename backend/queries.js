@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -38,8 +38,7 @@ function getAllRubricsBeforeNow(){
 }
 
 function getStudentGrade(email){
-	return pool.query(`SELECT rubric.rubric_id, SUM(response_grade)/COUNT(*) AS total FROM takes JOIN rubric ON rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}' GROUP BY rubric.rubric_id`);
-
+	return pool.query(`SELECT section_rubric.rubric_id, SUM(response_grade)/COUNT(*) AS total FROM takes JOIN section_rubric ON section_rubric.section_id=takes.section_id JOIN prompt ON prompt.rubric_id=section_rubric.rubric_id JOIN question ON prompt.prompt_id=question.prompt_id JOIN response ON response.question_id=question.question_id JOIN evaluation ON evaluation.response_id=response.response_id WHERE student_id='${email}' GROUP BY section_rubric.rubric_id`);
 }
 function getStudentResponse(rId){
 	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
@@ -54,11 +53,11 @@ function deleteRubric(rub_id){
 	return pool.query(`DELETE FROM rubric WHERE rubric_id='${rub_id}'`);
 }
 
-async function createRubric(assigned_date, due_date, final_due_date, assignment){
+async function createRubric(assigned_date, due_date, final_due_date, assignment, ass_name){
 	
 	let result;
-	await pool.query(`INSERT INTO rubric(assigned_date, due_date, final_due_date) 
-						VALUES (to_timestamp('${assigned_date}'),to_timestamp('${due_date}'),to_timestamp('${final_due_date}')) RETURNING *`)
+	await pool.query(`INSERT INTO rubric(assigned_date, due_date, final_due_date, name) 
+						VALUES (to_timestamp('${assigned_date}'),to_timestamp('${due_date}'),to_timestamp('${final_due_date}'), '${ass_name}') RETURNING *`)
 			.then((resultRubric) => {
 					result = resultRubric;
 					assignment.prompts.forEach((prompt) => {createPrompt(resultRubric.rows[0].rubric_id, prompt.prompt, prompt.questions)});
@@ -90,7 +89,7 @@ function getClass(class_id){
 	return pool.query(`SELECT * FROM class WHERE class.class_id='${class_id}'`);
 }
 function getAllClassAssignments(class_id){
-	return pool.query(`SELECT DISTINCT r.* FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
+	return pool.query(`SELECT DISTINCT(r.*) FROM section s JOIN section_rubric sr ON s.section_id=sr.section_id JOIN rubric r ON sr.rubric_id=r.rubric_id WHERE s.class_id='${class_id}'`);
 }
 function getStudClasses(email){
 	return pool.query(`SELECT class.*, section.section_id FROM takes JOIN section ON takes.section_id=section.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}'`);
@@ -108,10 +107,10 @@ function takesCheck(email, classID){
 	return pool.query(`SELECT * FROM takes JOIN section ON section.section_id=takes.section_id JOIN class ON class.class_id=section.class_id WHERE student_id='${email}' AND class.class_id='${classID}'`);
 }
 function getAssignRubric(sectionID){
-	return pool.query(`SELECT * FROM rubric WHERE rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`);
+	return pool.query(`SELECT DISTINCT * FROM rubric JOIN section_rubric ON section_rubric.rubric_id=rubric.rubric_id WHERE section_rubric.section_id='${sectionID}' AND rubric.due_date >= NOW()`); 
 }
-function getEvalAssignment(email){
-	return pool.query(`SELECT eval_id, prompt_text, question.question_id, question_text, response.response_id, response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id`);
+function getEvalAssignment(email, rubricID){
+	return pool.query(`SELECT eval_id, prompt.prompt_text, question.question_id, question.question_text, response.response_id, response.response_value FROM evaluation INNER JOIN response ON evaluation.student_email='${email}' AND evaluation.response_id=response.response_id INNER JOIN question ON response.question_id=question.question_id INNER JOIN prompt ON question.prompt_id=prompt.prompt_id WHERE prompt.rubric_id='${rubricID}' ORDER BY question_id ASC`);
 }
 async function submitAssignment(email, assignment){
 	var data = [];

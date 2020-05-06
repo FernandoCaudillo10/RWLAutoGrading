@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8083;
 const db = require('./backend/queries')
 const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
@@ -37,11 +37,12 @@ app.post('/api/prof/cred/register', Routes.professorRegister);
 app.post('/api/prof/cred/login', Routes.professorLogin);
 app.put('/api/stud/cred/update', Routes.studentUpdate);
 app.put('/api/prof/cred/update', Routes.professorUpdate);
+app.get('/api/token/verify', Routes.tokenVerify);
 
 app.get('/api/stud/registered/class/info', Routes.studentGetClassInfo);
 app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRubric);
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
-app.get('/api/stud/class/assignment/evaluation', Routes.studentEvaluateAssignment);
+app.get('/api/stud/class/:rubricID/assignment/evaluation', Routes.studentEvaluateAssignment);
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
 app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
 app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
@@ -50,13 +51,13 @@ app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass)
 
 app.get('/api/prof/class/:classId/assignments', Routes.classAssignments);
 app.post('/api/prof/class/:classId/section/create', Routes.createSection);
-app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment); 
+app.post('/api/prof/class/:classId/assignment/create', Routes.createAssignment); //
 app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAssignment); 
 app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
-app.post('/api/prof/class/create', Routes.createClass);
+app.post('/api/prof/class/create', Routes.createClass); //
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
 app.get('/api/prof/class/:classId', Routes.getClassSections);
-app.get('/api/prof/classes', Routes.getClasses);
+app.get('/api/prof/classes', Routes.getClasses); //
 app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
 app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);
 app.post('/api/prof/rubric/:rubId/calibrate', Routes.calibrateGrades);
