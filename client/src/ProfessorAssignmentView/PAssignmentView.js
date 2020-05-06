@@ -21,7 +21,7 @@ class PAssignmentView extends React.Component{
 		}),
 		headers: {
 		  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		  'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphdmlzaUBnbWFpbC5jb20iLCJ0eXBlIjoicHJvZiIsImlhdCI6MTU4NzcxNTUyMiwiZXhwIjoxNTkwMTM0NzIyfQ.sTG7_BBTurj2pc0QTGuwIDFLRIZpDipx3CHQxocs0Os"
+		  'Authorization': localStorage.getItem('jwtToken'),
 		}
 	  }).then ( res =>{
 		  console.log(res);
@@ -64,6 +64,7 @@ render(){
             <h2 className="h2class">Professor Assignment View</h2>
             <div className="AssignmenViewTable">
             <table>
+			<tbody>
                 <tr>
                     <td>Assignment Name</td>
                     <td>Due Date</td>
@@ -71,6 +72,7 @@ render(){
                     <td></td>
                 </tr>
                  {this.ProfessorAssignmnets()} 
+			</tbody>
             </table>
             </div>
            
