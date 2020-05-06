@@ -64,7 +64,10 @@ class App extends React.Component {
 					  }else{
 						this.state.isStudent = true; 
 					  }
-				     
+				  }
+				  else{
+				      localStorage.removeItem("jwtToken");
+				      localStorage.removeItem("typeOfUser");
 				  }
 			  }).catch((error) =>{
 				  if(error.response){

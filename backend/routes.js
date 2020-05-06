@@ -23,7 +23,7 @@ class RoutesHandler{
 			if(!pUser){
 				passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
 					if(!pUser){
-						return response.status(400).json({error: true, message: "token invalid"});
+						return response.status(200).json({error: true, message: "token invalid"});
 					}
 					let {password, ...user} = pUser;
 					return response.status(200).json({error: false, message: "success", user: {...user, type: "professor"}});
