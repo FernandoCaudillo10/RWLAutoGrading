@@ -47,7 +47,7 @@ class App extends React.Component {
 		if(token){
 			axios({
 				method: 'get',
-				url: 'https://rwlautograder.herokuapp.com/api/token/verify',
+				url: 'http://rwlautograder.herokuapp.com/api/token/verify',
 				headers: {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
 				  'Authorization': token,
