@@ -68,8 +68,9 @@
                     studentInfo: res.data 
                 });
                 this.state.studentInfo.forEach( i => 
-                    this.getTbl(i.class_id)
+                    this.getTbl(i.section_id)
                 )
+                console.log(this.state.studentInfo)
             }).catch((error) =>{
                 if(error.response){
                 console.log(error.response.data);

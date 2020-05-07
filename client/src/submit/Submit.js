@@ -56,7 +56,7 @@ class Submit extends React.Component{
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
                 data:  qs.stringify({ 
-                    assignment: this.state.responses
+                    assignment: {responses: this.state.responses}          
                 }),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -84,7 +84,7 @@ class Submit extends React.Component{
                         <b1>{data.prompt_text}</b1><br/><br/>
                         <b1>{data.question_text}</b1><br/><br/>
                         <b1>Char Remaining: <b id={"charNum" + (i)}>{data.min_char}</b><br/><br/></b1> 
-                        <textarea input type='text' name={'response' + data.question_id} placeholder='Respond Here' 
+                        <textarea input type='text' name={data.question_id} placeholder='Respond Here' 
                         onKeyUp={this.countChars.bind(this, (i), data.min_char)} onChange={this.handleFormChange.bind(this, i)}/>
                     </td>
                 </tr>

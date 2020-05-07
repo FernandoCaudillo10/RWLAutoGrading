@@ -24,7 +24,8 @@ class ProfessorHomePage extends React.Component{
 			  'Authorization': token,
 			}
 		  }).then ( res =>{
-          	this.setState({information: res.data});
+			  this.setState({information: res.data});
+			  console.log(res.data)
 		  }).catch((error) =>{
 			  console.log(error);
 			  if(error.response){
