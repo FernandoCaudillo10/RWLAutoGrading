@@ -50,7 +50,7 @@ app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAss
 app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
 app.post('/api/prof/class/create', Routes.createClass); //
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
-app.get('/api/prof/class/:classId', Routes.getClassSections);
+app.get('/api/prof/class/:classId', Routes.getClassSections); //
 app.get('/api/prof/classes', Routes.getClasses); //
 app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
 app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);

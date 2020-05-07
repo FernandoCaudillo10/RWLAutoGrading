@@ -2,6 +2,7 @@ import React  from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import dateFormat from 'dateformat';
+import { Link } from 'react-router-dom';
 import './PAssignmentView.scss';
 
 class PAssignmentView extends React.Component{
@@ -39,14 +40,28 @@ class PAssignmentView extends React.Component{
 }
 
 ProfessorAssignmnets(){
+	
     return(
     	this.state.assignments ? this.state.assignments.map((item, key) =>
-                <tr key={item.class_id}>
-                    <td>{item.assignment_name}</td>
-                    <td>{dateFormat(item.due_date, "dddd, mmmm dS, yyyy, h:MM TT")}</td>
-                    <td>{item.ClassName}</td>
-                    <td><input type="submit" value="Edit"></input></td>
-                </tr>
+                <div key={item.class_id} className="assignmentBlock">
+                    <div>{item.name}</div>
+                    <div>
+						<div> <strong>Assigned Date</strong> {dateFormat(item.assigned_date, "dddd, mmmm dS, yyyy, h:MM TT")} </div>
+						<div> <strong>Due Date</strong> {dateFormat(item.due_date, "dddd, mmmm dS, yyyy, h:MM TT")} </div>
+						<div> <strong>Final Due Date</strong> {dateFormat(item.final_due_date, "dddd, mmmm dS, yyyy, h:MM TT")} </div>
+					</div>
+                    <div>{item.ClassName}</div>
+                    <div>
+						<div className="assignmentLinks">
+							<Link to={`/professor/class/${item.class_id}/assignments`}> <input type="submit" value="View" ></input> </Link>
+							<Link to={'/'}> <input type="submit" value="Edit"></input> </Link>
+						</div>
+						<div classNAme="assignmentLinks">
+							<Link to={'/'}> <input type="submit" value="Disburse For Peer Grading"></input> </Link>
+							<Link to={'/'}> <input type="submit" value="Submit Evaluations"></input> </Link>
+						</div>
+					</div>
+                </div>
         		)
 				: 
 				<div> </div>
@@ -62,21 +77,14 @@ render(){
     return (
         <div className="professorContainer">
             <h2 className="h2class">Professor Assignment View</h2>
-            <div className="AssignmenViewTable">
-            <table>
-			<tbody>
-                <tr>
-                    <td>Assignment Name</td>
-                    <td>Due Date</td>
-                    <td>Class</td>
-                    <td></td>
-                </tr>
+			<div className="assignmentsContainer">
+                <div className="columnTitles">
+                    <div>Assignment Name</div>
+                    <div>Dates</div>
+					<div>Actions</div>
+                </div>
                  {this.ProfessorAssignmnets()} 
-			</tbody>
-            </table>
-            </div>
-           
-
+			</div>
         </div>  
     )
 

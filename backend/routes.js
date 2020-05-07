@@ -420,7 +420,7 @@ class RoutesHandler{
 				assigned_date = new Date(request.body.assigned_date);
 				due_date = new Date(request.body.due_date);
 				final_due_date = new Date(request.body.final_due_date);
-				assignment_name = new Date(request.body.assignment_name);
+				assignment_name = request.body.assignment_name;
 			}else{
 				return response.status(400).json({error: "due dates or assignment name missing/mispelled"});
 			}
