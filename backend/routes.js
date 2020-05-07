@@ -216,7 +216,7 @@ class RoutesHandler{
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = JSON.parse(request.body.assignment);
+			let assignment = request.body.assignment;
 			let isID = true;
 			let isGrade = true;
 			console.log(assignment);
@@ -253,7 +253,7 @@ class RoutesHandler{
 		if(!request.body.assignment) 
 			return response.status(400).json({error: "Response value missing"});
 
-		let assignment = JSON.parse(request.body.assignment);
+		let assignment = request.body.assignment;
 		let isResValue = true;
 		let isIdValue = true;
 
@@ -341,7 +341,7 @@ class RoutesHandler{
 			let profEval = await qry.createProfEval(pUser.email, rId, grade);
 			if(profEval.rowCount === 0) return response.status(400).json({error: "Server erro"});
 
-			return response.status(400).json(profEval.rows);
+			return response.status(200).json(profEval.rows);
 
 		})(request, response);
 	}
