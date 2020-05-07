@@ -10,7 +10,8 @@ class Submit extends React.Component{
        
         this.state = {
             responses: [],
-            assignment: []
+            assignment: [],
+            questions: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }

@@ -90,11 +90,7 @@ class ProfessorAssignments extends React.Component{
 			}),
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-<<<<<<< HEAD
-			  'Authorization': token,
-=======
 		  	  'Authorization': localStorage.getItem('jwtToken'),
->>>>>>> master
 			}
 		  }).then ( res =>{
 			  this.setState({loading: false});
