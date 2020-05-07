@@ -52,10 +52,10 @@ class Login extends React.Component {
 
 			  }).catch((error) =>{
 				  if(error.response){
-          console.log(error.response.data);
-          document.getElementById("ErrorMessagesLogin1").innerHTML = "";
-          document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
-          console.log(error);
+                    console.log(error.response.data);
+                    document.getElementById("ErrorMessagesLogin1").innerHTML = "";
+                    document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
+                    console.log(error);
 				  }
 				  
 			  })
@@ -72,16 +72,15 @@ class Login extends React.Component {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			  }).then ( res =>{
-          const token = res.data.token; 
-          localStorage.setItem('jwtToken', token);
-          localStorage.setItem('typeOfUser', this.state.typeOfUser);
-          this.props.onLogin(token, 'Teacher');
-          this.props.history.push('/professor/classes');
+                const token = res.data.token; 
+                localStorage.setItem('jwtToken', token);
+                this.props.onLogin(token, 'Teacher');
+                this.props.history.push('/professor/classes');
 			  }).catch((error) =>{
 				  if(error.response){
-          console.log(error.response.data);
-          document.getElementById("ErrorMessagesLogin1").innerHTML = "";
-          document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
+                    console.log(error.response.data);
+                    document.getElementById("ErrorMessagesLogin1").innerHTML = "";
+                    document.getElementById("ErrorMessagesLogin1").append("Incorrect email or password");
 				  }
 			  })
 		}

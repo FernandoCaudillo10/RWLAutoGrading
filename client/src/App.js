@@ -17,6 +17,7 @@ import StudentHomePage from './StudentHomePage/StudentHomePage';
 import PSettings from './ProfessorSettings/PSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
+import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import axios from 'axios';
 
 import './App.scss';
@@ -69,7 +70,10 @@ class App extends React.Component {
 					  }else{
 						this.setState({isStudent : true}); 
 					  }
-				     
+				  }
+				  else{
+				      localStorage.removeItem("jwtToken");
+				      localStorage.removeItem("typeOfUser");
 				  }
 			  }).catch((error) =>{
 				  if(error.response){
@@ -199,9 +203,10 @@ class App extends React.Component {
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
-					<Route exact path="/professor/assignmentsview" component={PAssignmentView} />
+					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
+					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
 				</Switch>
 			</div>
 		</Router>
