@@ -204,14 +204,12 @@ class RoutesHandler{
 	
 	studentSubmitGrade(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
-			console.log("function started");
 			if(pError) return response.status(400).json(`${pError}`);	
 			
 			if(!pUser){
 				if(info) return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-			console.log("user ok");
 		
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
@@ -219,7 +217,7 @@ class RoutesHandler{
 			let assignment = request.body.assignment;
 			let isID = true;
 			let isGrade = true;
-			console.log(assignment);
+
 			await assignment.evaluation.forEach((e) => {
 				if(!e.evaluationID) isID = false;
 				if(!e.grade) isGrade = false;
@@ -229,7 +227,7 @@ class RoutesHandler{
 				return response.status(400).json({error: "Missing responseID"});
 			if(!isGrade) 
 				return response.status(400).json({error: "Missing grade"});
-			console.log("qry started");
+
 			qry.submitEvalGrade(assignment)
 				.then((result) => {
 					return response.status(200).json("Success");
