@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "dateformat": "^3.0.3",
+    "email-validator": "^2.0.4",
     "node-sass": "^4.13.1",
     "qs": "^6.9.3",
     "rc-slider": "^9.2.4",
