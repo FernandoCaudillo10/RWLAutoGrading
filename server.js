@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
-const port = process.env.PORT || 8083;
+const port = process.env.PORT || 8080;
 const db = require('./backend/queries')
 const routes = require('./backend/routes');
 const localPassport = require("./backend/passport");
@@ -38,7 +38,7 @@ app.get('/api/stud/class/:classID/assignment/dates', Routes.studentAssignmentRub
 app.get('/api/stud/class/:rubricID/assignments', Routes.studentGetAssignment);
 app.get('/api/stud/class/:rubricID/assignment/evaluation', Routes.studentEvaluateAssignment);
 app.post('/api/stud/class/assignment/questions/submit', Routes.studentSubmitAssignment);
-app.get('/api/stud/class/assignment/grade', Routes.studentGetGrade);
+app.get('/api/stud/class/:sectionID/assignment/grade', Routes.studentGetGrade);
 app.post('/api/stud/class/assignment/evaluation/grade/submit', Routes.studentSubmitGrade);
 app.post('/api/stud/class/register/:sectionID', Routes.studentRegisterClass);
 app.post('/api/stud/class/unregister/:sectionID', Routes.studentUnregisterClass);
@@ -50,7 +50,7 @@ app.delete('/api/prof/class/:classId/assignment/:rubId/delete', Routes.deleteAss
 app.get('/api/prof/class/:classId/assignment/:rubId', Routes.getAssignment); 
 app.post('/api/prof/class/create', Routes.createClass); //
 app.post('/api/prof/class/:classId/section/:secId/response/:resId/evaluate', Routes.submitProfEval);
-app.get('/api/prof/class/:classId', Routes.getClassSections);
+app.get('/api/prof/class/:classId', Routes.getClassSections); //
 app.get('/api/prof/classes', Routes.getClasses); //
 app.post('/api/prof/rubric/:rubId/students/distribute', Routes.distributeToStudents);
 app.post('/api/prof/rubric/:rubId/distribute', Routes.distributeToProfessor);

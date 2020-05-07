@@ -18,10 +18,11 @@ import PSettings from './ProfessorSettings/PSettings';
 import SSettings from './StudentSettings/SSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
+import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import axios from 'axios';
 
 import './App.scss';
-// import { useHistory } from "react-router-dom";
+
 class App extends React.Component {
 	constructor(props){
 		super(props);
@@ -38,13 +39,18 @@ class App extends React.Component {
 		this.menuHidden = this.menuHidden.bind(this);
 		this.menuStudent = this.menuStudent.bind(this);
 		this.menuProfessor = this.menuProfessor.bind(this);
-		this.VerifyUser = this.VerifyUser.bind(this); 
+		this.VerifyUser = this.VerifyUser.bind(this);
+		this.Logout =  this.Logout.bind(this);  
 		this.VerifyUser(); 
+	}
+
+	Logout(){
+		localStorage.removeItem("jwtToken")
+		localStorage.removeItem("typeOfUser")
 	}
 	VerifyUser(){
 		
 		const token = localStorage.getItem("jwtToken")
-		// localStorage.clear();
 		if(token){
 			axios({
 				method: 'get',
@@ -55,15 +61,15 @@ class App extends React.Component {
 				}
 			  }).then ( res =>{
 				  if(res.data.error === false){	 
-					  this.state.email = res.data.user.email; 
-				  	  this.state.typeOfUser = res.data.user.type;
-					  this.state.name = res.data.user.name;
+					  this.setState({email : res.data.user.email}); 
+					  this.setState({typeOfUser : res.data.user.type});
+					  this.setState({name : res.data.user.name});
 					 
 					  if(this.state.typeOfUser === 'professor'){
-						  this.state.isStudent = false; 
+						  this.setState({isStudent : false});
 					
 					  }else{
-						this.state.isStudent = true; 
+						this.setState({isStudent : true}); 
 					  }
 				  }
 				  else{
@@ -73,11 +79,8 @@ class App extends React.Component {
 			  }).catch((error) =>{
 				  if(error.response){
 					console.log(error.response.data);
-				  } else if (error.request){
-					  console.log(error.request); 
-				  }else {
-					  console.log(error.message);
 				  }
+				  console.log(error);
 			  })
 			
 		}
@@ -132,6 +135,12 @@ class App extends React.Component {
 						<p>Settings</p>
 					</Link>
 				  </li>
+				  <li className="listitemmenu">
+					<Link to="/">
+						<i className=""></i>
+						<p onClick={this.Logout}>Logout</p>
+					</Link>
+				  </li>
 				</ul>
 			);
 	}
@@ -157,6 +166,12 @@ class App extends React.Component {
 					<Link to="/professor/settings">
 						<i className="material-icons">settings</i>
 						<p>Settings</p>
+					</Link>
+				  </li>
+				  <li className="listitemmenu">
+					<Link to="/">
+						<i className=""></i>
+						<p onClick={this.Logout}>Logout</p>
 					</Link>
 				  </li>
 				</ul>
@@ -192,6 +207,7 @@ class App extends React.Component {
 					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
+					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
 				</Switch>
 			</div>
 		</Router>

@@ -138,8 +138,9 @@ class RoutesHandler{
 					return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-
-			qry.getStudentGrade(pUser.email)
+			
+			let sID = request.params.sectionID;
+			qry.getStudentGrade(pUser.email, sID)
 				.then((result) => {
 					if(result.rowCount === 0)
 						return response.status(400).json({error: "Student email does not have any grades"});
@@ -203,22 +204,20 @@ class RoutesHandler{
 	
 	studentSubmitGrade(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
-			console.log("function started");
 			if(pError) return response.status(400).json(`${pError}`);	
 			
 			if(!pUser){
 				if(info) return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-			console.log("user ok");
 		
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = JSON.parse(request.body.assignment);
+			let assignment = request.body.assignment;
 			let isID = true;
 			let isGrade = true;
-			console.log(assignment);
+
 			await assignment.evaluation.forEach((e) => {
 				if(!e.evaluationID) isID = false;
 				if(!e.grade) isGrade = false;
@@ -228,7 +227,7 @@ class RoutesHandler{
 				return response.status(400).json({error: "Missing responseID"});
 			if(!isGrade) 
 				return response.status(400).json({error: "Missing grade"});
-			console.log("qry started");
+
 			qry.submitEvalGrade(assignment)
 				.then((result) => {
 					return response.status(200).json("Success");
@@ -252,7 +251,7 @@ class RoutesHandler{
 		if(!request.body.assignment) 
 			return response.status(400).json({error: "Response value missing"});
 
-		let assignment = JSON.parse(request.body.assignment);
+		let assignment = request.body.assignment;
 		let isResValue = true;
 		let isIdValue = true;
 
@@ -340,7 +339,7 @@ class RoutesHandler{
 			let profEval = await qry.createProfEval(pUser.email, rId, grade);
 			if(profEval.rowCount === 0) return response.status(400).json({error: "Server erro"});
 
-			return response.status(400).json(profEval.rows);
+			return response.status(200).json(profEval.rows);
 
 		})(request, response);
 	}
@@ -406,14 +405,21 @@ class RoutesHandler{
 			let cId = request.params.classId;
 			
 			//TODO: Add checking for if dates are before today and all dates are after eachother
+
+			let assigned_date;
+			let due_date;
+			let final_due_date;
+			let assignment_name;
+			
 			if(request.body.assigned_date &&
 				request.body.due_date &&
-				request.final_due_date &&
-				request.assignment_name){
-				let assigned_date = request.body.assigned_date;
-				let due_date = request.body.due_date;
-				let final_due_date = request.body.final_due_date;
-				let assignment_name = request.body.assignment_name;
+				request.body.final_due_date &&
+				request.body.assignment_name){
+
+				assigned_date = new Date(request.body.assigned_date);
+				due_date = new Date(request.body.due_date);
+				final_due_date = new Date(request.body.final_due_date);
+				assignment_name = request.body.assignment_name;
 			}else{
 				return response.status(400).json({error: "due dates or assignment name missing/mispelled"});
 			}
@@ -597,9 +603,10 @@ class RoutesHandler{
 		passport.authenticate('professorLogin', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${err}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 			// User matched
 			// Create JWT Payload
@@ -629,9 +636,10 @@ class RoutesHandler{
 		passport.authenticate('professorRegister', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				return response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 
 			request.logIn(pUser, err => {
@@ -649,9 +657,10 @@ class RoutesHandler{
 		passport.authenticate('studentLogin', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${err}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 			// User matched
 			// Create JWT Payload
@@ -681,9 +690,10 @@ class RoutesHandler{
 		passport.authenticate('studentRegister', (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
 
-			if (info != undefined) {
-				console.log(info.message);
-				return response.send(info.message);
+			if(!pUser){
+				if(info) 
+					return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
 			}
 
 			request.logIn(pUser, err => {

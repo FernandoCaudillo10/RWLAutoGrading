@@ -73,9 +73,6 @@ class ProfessorAssignments extends React.Component{
         event.preventDefault();
 		this.setState({
 			loading:true, 
-			due_date: new Date(this.state.due_date),
-			assigned_date: new Date(this.state.assigned_date),
-			final_due_date: new Date(this.state.final_due_date),
 			});
 		let assignment = {prompts: this.convertToAssignment()};
 		axios({
@@ -83,9 +80,9 @@ class ProfessorAssignments extends React.Component{
 			url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignment/create`,
 			data: qs.stringify({
 				assignment: assignment,
-				due_date: this.state.due_date,
-				assigned_date: this.state.assigned_date,
-				final_due_date: this.state.final_due_date,
+				due_date: new Date(this.state.due_date),
+				assigned_date: new Date(this.state.assigned_date),
+				final_due_date: new Date(this.state.final_due_date),
 				assignment_name: this.state.ass_name,
 			}),
 			headers: {

@@ -23,8 +23,8 @@ class PSettings extends React.Component {
     
       handleSubmit(event) {
         event.preventDefault();
+		
 		const token = localStorage.getItem("jwtToken")
-
 		axios({
 			method: 'post',
 			url: 'https://rwlautograder.herokuapp.com/api/prof/class/create',
@@ -33,7 +33,7 @@ class PSettings extends React.Component {
 			}),
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-			  'Authorization': token,
+		 	  'Authorization': token,
 			}
 		  }).then ( res =>{
 			console.log(res)
