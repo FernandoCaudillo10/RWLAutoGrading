@@ -130,12 +130,6 @@ class Menu extends React.Component{
 						<p onClick={this.Logout}>Logout</p>
 					</Link>
 				  </li>
-                  <li className="listitemmenu">
-					<Link to="/">
-						<i className=""></i>
-						<p>Teacher</p>
-					</Link>
-				  </li>
 				</ul>
 			);
 	}

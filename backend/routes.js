@@ -204,22 +204,20 @@ class RoutesHandler{
 	
 	studentSubmitGrade(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
-			console.log("function started");
 			if(pError) return response.status(400).json(`${pError}`);	
 			
 			if(!pUser){
 				if(info) return response.status(400).json({error: info});
 				return response.status(400).json({error: "No user under this email"});
 			}
-			console.log("user ok");
 		
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = JSON.parse(request.body.assignment);
+			let assignment = request.body.assignment;
 			let isID = true;
 			let isGrade = true;
-			console.log(assignment);
+
 			await assignment.evaluation.forEach((e) => {
 				if(!e.evaluationID) isID = false;
 				if(!e.grade) isGrade = false;
@@ -229,7 +227,7 @@ class RoutesHandler{
 				return response.status(400).json({error: "Missing responseID"});
 			if(!isGrade) 
 				return response.status(400).json({error: "Missing grade"});
-			console.log("qry started");
+
 			qry.submitEvalGrade(assignment)
 				.then((result) => {
 					return response.status(200).json("Success");
@@ -253,7 +251,7 @@ class RoutesHandler{
 		if(!request.body.assignment) 
 			return response.status(400).json({error: "Response value missing"});
 
-		let assignment = JSON.parse(request.body.assignment);
+		let assignment = request.body.assignment;
 		let isResValue = true;
 		let isIdValue = true;
 
@@ -294,11 +292,10 @@ class RoutesHandler{
 				.then((result) => {	
 					if(result.rowCount === 0) 
 						return response.status(400).json({error: "Student is not enrolled in class"});		
-					let secID = Object.values(result.rows[0]);
-					qry.getAssignRubric(secID[1])
+					qry.getAllClassAssignments(cID)
 						.then((result) => {
 							if(result.rowCount === 0) 
-								return response.status(400).json({error: "No section under this ID"});
+								return response.status(400).json({error: "No  assignment under classID"});
 							return response.status(200).json(result.rows);	
 						})
 						.catch(err => {
@@ -341,7 +338,7 @@ class RoutesHandler{
 			let profEval = await qry.createProfEval(pUser.email, rId, grade);
 			if(profEval.rowCount === 0) return response.status(400).json({error: "Server erro"});
 
-			return response.status(400).json(profEval.rows);
+			return response.status(200).json(profEval.rows);
 
 		})(request, response);
 	}
@@ -421,7 +418,7 @@ class RoutesHandler{
 				assigned_date = new Date(request.body.assigned_date);
 				due_date = new Date(request.body.due_date);
 				final_due_date = new Date(request.body.final_due_date);
-				assignment_name = new Date(request.body.assignment_name);
+				assignment_name = request.body.assignment_name;
 			}else{
 				return response.status(400).json({error: "due dates or assignment name missing/mispelled"});
 			}

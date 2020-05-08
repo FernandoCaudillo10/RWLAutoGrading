@@ -21,25 +21,13 @@ hr{
     font-weight: normal;
 }
 
-
-
-.buttonFloat{
-   margin-left: 60%;
-   margin-top: 0%;
-   margin-bottom: 0%;
-   
-}
-
 input[type="submit"]{
     background-color:#696969;
     color: white;
     border-radius: 2em;
-
+	text-decoration: none;
 }
 .h2class{
-    margin-left: 7%;
-    margin-bottom: 0%;
-    margin-right: 0%;
     font-weight: lighter;
 }
 
@@ -47,4 +35,13 @@ button{
     background-color:#696969;
     color: white;
     border-radius: 2em;
+	text-decoration: none;
+
 }
+.professorClassSecBody{
+	margin: 0 5em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
