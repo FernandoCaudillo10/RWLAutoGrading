@@ -33,10 +33,6 @@ class SGP extends React.Component {
 			this.setState({ 
 				studentInfo: res.data 
 			});
-			console.log(this.state.studentInfo)
-			// this.state.studentInfo.forEach( i => 
-			//    this.getTbl(i.class_id)
-			// 
 		}).catch((error) =>{
 			if(error.response){
 			console.log(error.response.data);
@@ -53,7 +49,7 @@ class SGP extends React.Component {
 			this.table = this.state.studentInfo.map((data, i) => 
 				<div className="SGP">
 					<tr>
-		<td><Link to={{pathname: "/student/home/" + data.section_id + "/assignment/grade"}}>Class: {data.class_id} - Section: {data.section_id}</Link></td>
+					<td><Link to={{pathname: "/student/home/" + data.section_id + "/assignment/grade"}}>Class: {data.class_id} - Section: {data.section_id}</Link></td>
 					</tr>
 				</div>
 			)

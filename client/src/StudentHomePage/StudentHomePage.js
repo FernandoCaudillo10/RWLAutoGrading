@@ -9,7 +9,6 @@
     } from "react-router-dom";
     import './StudentHomePage.scss'
 
-
     class StudentHomePage extends React.Component{
 
         constructor(props){
@@ -40,7 +39,6 @@
                 this.setState({ 
                     assignments: res.data
                 });
-                console.log(this.state.assignments)
             }).catch((error) =>{
                 if(error.response){
                 console.log(error.response.data);
@@ -64,11 +62,9 @@
                 this.setState({ 
                     studentInfo: res.data 
                 });
-                const studentData = this.state.studentInfo
                 this.state.studentInfo.forEach( i => 
                    this.getTbl(i.class_id)
                 )
-                console.log(this.state.studentInfo)
             }).catch((error) =>{
                 if(error.response){
                 console.log(error.response.data);
