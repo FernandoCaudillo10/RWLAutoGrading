@@ -1,0 +1,18 @@
+.SGP{
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+    th, td {
+        padding: 2.5%;
+    }
+    td{
+        background-color:white;
+        border-top:solid .01em; border-bottom:solid .01em;
+    }
+    th{
+        font-size: x-large;
+    }
+}

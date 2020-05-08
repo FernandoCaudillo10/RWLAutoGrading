@@ -12,10 +12,12 @@ import Login from './login/Login';
 import Register from './register/Register'; 
 import ProfessorHomePage from './ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './ProfessorAssignment/ProfessorAssignments';
-import PAssignmentView from './ProfessorAssignmentView/PAssignmentView'
+import PAssignmentView from './ProfessorAssignmentView/PAssignmentView';
 import StudentHomePage from './StudentHomePage/StudentHomePage';
 import PSettings from './ProfessorSettings/PSettings';
+import SSettings from './StudentSettings/SSettings';
 import Grade from './grade/Grade'; 
+import StudentGradesPage from './StudentGradesPage/SGP';
 import Submit from './submit/Submit';
 import Menu from './menu/Menu';
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
@@ -96,10 +98,10 @@ class App extends React.Component {
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
-					<Route exact path="/student/grades" component={HomePage} />
-					<Route exact path="/student/settings" component={PSettings} />
-					<Route exact path="/student/grade" component={Grade} />
-					<Route exact path="/student/submit" component={Submit} />
+					<Route exact path="/student/grades" component={StudentGradesPage} />
+					<Route exact path="/student/settings" component={SSettings} />
+					<Route exact path="/student/grade/:rubricID" component={Grade} />
+					<Route exact path="/student/submit/:rubricID" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
 					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />

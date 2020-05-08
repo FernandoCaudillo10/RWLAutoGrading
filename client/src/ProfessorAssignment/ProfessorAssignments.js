@@ -70,6 +70,7 @@ class ProfessorAssignments extends React.Component{
 	}
 
     handleSubmitCreate(event){
+		const token = localStorage.getItem("jwtToken")
         event.preventDefault();
 		this.setState({
 			loading:true, 
