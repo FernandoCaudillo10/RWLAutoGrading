@@ -105,15 +105,14 @@ class Grade extends React.Component{
     }
     render(){
         return (
-            <Menu>
                 <div className="Grade">
+                    <Menu/>
                     <form onSubmit={this.handleSubmit}>
                         <div className="title">Grade Homework {this.props.location.state.todo}</div><br/>
                         <div>{this.tableBody()}</div>
                         <input type='submit' value='Submit' className="SubmitButton" />
                     </form>
                 </div>
-            </Menu>
         )
     }
 }

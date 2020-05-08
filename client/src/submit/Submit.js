@@ -45,11 +45,25 @@ class Submit extends React.Component{
             }
         }).then(res => {
             this.setState({ questions: res.data });
+            console.log(this.state.questions)
     	})
+    }
+    
+    verifyComplete(){
+        console.log(this.state.questions)
+        this.state.questions.forEach( e => 
+           
+            {if (document.getElementById("charNum" + e.q_ID).innerHTML !== 0){
+                   // console.log("WRITE SHIT")
+                }
+            })
     }
 
     handleSubmit(event) {
         event.preventDefault();
+
+        this.verifyComplete()
+
             axios({
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
@@ -92,15 +106,14 @@ class Submit extends React.Component{
 
     render(){
         return (
-            <Menu>
-                <div className="Submit">
-                    <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>{this.tableBody()}</div> 
-                        <input type='submit' value='Submit' className="SubmitButton"/>
-                    </form>
-                </div>
-            </Menu>
+            <div className="Submit">
+                <Menu/>
+                <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
+                <form onSubmit={this.handleSubmit}>
+                    <div>{this.tableBody()}</div> 
+                    <input type='submit' value='Submit' className="SubmitButton"/>
+                </form>
+            </div>
         )
     }
 }
