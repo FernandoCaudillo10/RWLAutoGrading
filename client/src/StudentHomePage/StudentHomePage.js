@@ -12,7 +12,12 @@
             this.state = { 
                 studentInfo: [],
                 assignments: [],
+                newStudent: false,
             }
+            this.newStudent = this.newStudent.bind(this);
+            this.hidePastDue = this.hidePastDue.bind(this);
+            this.tableCall = this.tableCall.bind(this);
+            this.tableBody = this.tableBody.bind(this);
             this.getTbl = this.getTbl.bind(this);
         }
 
@@ -55,6 +60,7 @@
                    this.getTbl(i.class_id)
                 )
             }).catch((error) =>{
+                this.setState({newStudent: true})
                 if(error.response){
                 console.log(error.response.data);
                 } else if (error.request){
@@ -73,6 +79,31 @@
             }
         }
 
+        newStudent(){
+            if(this.state.newStudent){
+                return(
+                    <div className="greeting">
+                    <h2><Link to={{pathname: '/student/settings/'}}>Click Here To Register For a Class!</Link></h2><br/>
+                    <h3>Have your Section ID Ready!</h3>
+                    </div>
+                )
+            }
+            else{
+                return this.tableCall()
+            }
+        }
+
+        tableCall(){
+            return(
+            <table id="body">
+                <th>Assignment</th>
+                <th>Initial<br/>Due Date</th>
+                <th>Peer Grade <br/>Due Date</th>
+                {this.tableBody()}
+            </table>
+            )
+        }
+  
         tableBody(){
             return (
                 this.table = this.state.assignments.map((data, i) => 
@@ -82,7 +113,6 @@
                         <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.final_due_date)}</Link></td>
                     </tr>
                 )
-                
             )
         }
 
@@ -91,12 +121,7 @@
                 <div>
                     <div><Menu /></div>
                     <div className="Home">
-                        <table id="body">
-                            <th>Assignment</th>
-                            <th>Initial<br/>Due Date</th>
-                            <th>Peer Grade <br/>Due Date</th>
-                            {this.tableBody()}
-                        </table>
+                     <div>{this.newStudent()}</div>
                     </div>  
                 </div> 
             )
