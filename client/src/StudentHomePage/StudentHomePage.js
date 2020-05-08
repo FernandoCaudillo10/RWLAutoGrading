@@ -12,14 +12,8 @@
             this.state = { 
                 studentInfo: [],
                 assignments: [],
-                isHovered: false 
             }
-            this.toggleHover = this.toggleHover.bind(this);
             this.getTbl = this.getTbl.bind(this);
-        }
-
-        toggleHover(){
-            this.setState(prevState => ({isHovered: !prevState.isHovered}));
         }
 
         getTbl(classID){
@@ -78,13 +72,13 @@
                 return ""
             }
         }
-
+        
         tableBody(){
             return (
                 this.table = this.state.assignments.map((data, i) => 
                     <tr>
-                        <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{new Date(data.assigned_date).toLocaleString()}</i> }</div></td>
-            <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.due_date)}</Link></td>
+                        <td><b>Homework {i+1}</b><br/>{<i>{new Date(data.assigned_date).toLocaleString()}</i>}</td>
+                        <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.due_date)}</Link></td>
                         <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.final_due_date)}</Link></td>
                     </tr>
                 )
