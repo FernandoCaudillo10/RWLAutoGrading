@@ -1,6 +1,8 @@
 import React  from 'react'; 
+import axios from 'axios';
+import qs from 'qs'; 
 import './Submit.scss'
-
+import Menu from '../menu/Menu'; 
 
 class Submit extends React.Component{
 
@@ -8,39 +10,80 @@ class Submit extends React.Component{
         super(props);
        
         this.state = {
-            assignment: "Homework 1", 
-            info: [
-                {q_num: "1", q_promt: "Ugumogi tarine ogiyib. Ri vozug iepeyeni. Wereta reno rasu tiecirob yu. Ziwon migosis aranun lo orimegil yeceten te egigilo emer rada. Yiegu daseni rire der fe reb te veli. Pelodof xiemic per ehani aperar ater tedie kon sotege co! Lakitie eyi pecig aca nep arayenoc etot coluro meruhe: Repa sen himir ri litere! Memi tog siyebos la bic rege rehihop: Olerelun gilim hala upivatat ri nesude hoterep."},
-                {q_num: "2", q_promt: "Ri otatini anereha? Naha cemilu cuga ayipe haleg viras qen cobelies gepip. Sum vogas idiseton tedeson tie odehal me cadi fa padi. Hed yis agav sove terituh rir. Vo ses rureri, iteperot nidip erepe rilo qukope avec, ebi iedare rum. Nome pe dice eneca niy."},
-                {q_num: "3", q_promt: "Elolu idonoro sil sone detal lesol hi: Mar coc ecotec reboha ehi. Yavul mi xa; enat oreneser naran da; re otot tecocur ciy sazalan tefarep ciseq, natadon atiyode gieceta obe ade letab ta, tiles ematoy yihi ocuga idicego pa panariv ber wec imepag."},
-                {q_num: "4", q_promt: "Nicepuj ranisak lo hira opusila acerur cetamuh gel. Anovu ebeh yesot, ha haha soyeya. Locip ses habe? Hovo oliceleg sietodab sat ilodatan xip ogananod? Ruh ru nasekag roy ro remosoc. Heset net natiser giy nomil cepe. Natiten eren jobo vi. Esec gi niyey onegehe lidi led ace nac hafayec. Pa li opudun rosam ederalip yetat iselidon."},
-                {q_num: "5", q_promt: "Lakitie eyi pecig aca nep arayenoc etot coluro meruhe: Repa sen himir ri litere! Memi tog siyebos la bic rege rehihop: Olerelun gilim hala upivatat ri nesude hoterep."},
-                {q_num: "6", q_promt: "Siey ral la favelen are ran nie hitil yisebo fa, net meh nate kabie moti dotusat so riehigop isalo, wit ci ateke tiriri osur rod upe. Binu canin rofusi danamol! Cutu capiric irasade lerer nenoy"},
-
-            ]   
+            responses: [],
+            assignment: [],
+            questions: []
         }
-
-        this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    handleFormChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
-        console.log(event.target.value);
-      }
 
-      handleSubmit(event) {
+    countChars(q_ID, minChar, event){
+        event.preventDefault(); 
+            var strLength = event.target.value.length
+            var charRemain = minChar - strLength
+            if(charRemain > 0){
+                document.getElementById("charNum" + q_ID).innerHTML = charRemain
+            } else {
+                document.getElementById("charNum" + q_ID).innerHTML = 0
+            }        
+    }
+
+    handleFormChange(i, event) {
+        event.preventDefault() 
+            let r = this.state.responses
+            r[i] = {response: event.target.value, qsID: event.target.name}
+            this.setState({r})
+    }
+
+    componentDidMount(){
+    	axios({
+            method: 'get',
+            url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': localStorage.getItem("jwtToken"),
+            }
+        }).then(res => {
+            this.setState({ questions: res.data });
+    	})
+    }
+
+    handleSubmit(event) {
         event.preventDefault();
+            axios({
+                method: 'post',
+                url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
+                data:  qs.stringify({ 
+                    assignment: {responses: this.state.responses}          
+                }),
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    'Authorization': localStorage.getItem("jwtToken"),
+                }
+            }).then ( res =>{
+                console.log(res)
+            }).catch((error) =>{
+                if(error.response){
+                    console.log(error.response.data);
+                } else if (error.request){
+                    console.log(error.request); 
+                }else {
+                    console.log(error.message);
+                }
+            })
     }
 
     tableBody(){
         return (
-            this.table = this.state.info.map((data) => 
+            this.table = this.state.questions.map((data, i) => 
                 <tr>
                     <td>
-                        <b>{data.q_num}) </b>
-                        {data.q_promt}<br/><br/>
-                        <textarea input type='text' placeholder='Respond Here' onChange={this.handleFormChange}/>
+                        <b>{(i+1)}) </b>
+                        <b1>{data.prompt_text}</b1><br/><br/>
+                        <b1>{data.question_text}</b1><br/><br/>
+                        <b1>Char Remaining: <b id={"charNum" + (i)}>{data.min_char}</b><br/><br/></b1> 
+                        <textarea input type='text' name={data.question_id} placeholder='Respond Here' 
+                        onKeyUp={this.countChars.bind(this, (i), data.min_char)} onChange={this.handleFormChange.bind(this, i)}/>
                     </td>
                 </tr>
             )
@@ -49,14 +92,15 @@ class Submit extends React.Component{
 
     render(){
         return (
-
-        <div className="Submit">
-            <form onSubmit={this.handleSubmit}>
-                <div className="title">{this.state.assignment}</div><br/>
-                <div>{this.tableBody()}</div>
-            </form>
-            <input type='submit' value='Submit' className="SubmitButton" />
-        </div>
+            <Menu>
+                <div className="Submit">
+                    <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
+                    <form onSubmit={this.handleSubmit}>
+                        <div>{this.tableBody()}</div> 
+                        <input type='submit' value='Submit' className="SubmitButton"/>
+                    </form>
+                </div>
+            </Menu>
         )
     }
 }

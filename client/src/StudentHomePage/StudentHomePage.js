@@ -1,51 +1,112 @@
 import React  from 'react'; 
-import './StudentHomePage.scss'
-import Menu from '../menu/Menu';
+    import axios from 'axios';
+    import {
+        BrowserRouter as Router,
+        Switch,
+        Route,
+        Link,
+        useParams
+    } from "react-router-dom";
+    import './StudentHomePage.scss'
+    import Menu from '../menu/Menu'; 
 
-class StudentHomePage extends React.Component{
+    class StudentHomePage extends React.Component{
 
-    constructor(props){
-        super(props);
-       
-        this.state = {
-            info: [
-                {todo: "Grade", due_date: "2/1 Mon. 11:59 PM", class_name: "CST-399", assignment: "HW1"},
-                {todo: "Submit", due_date: "2/2 Tue. 11:59 PM", class_name: "CST-205", assignment: "HW2"},
-                {todo: "Grade", due_date: "2/3 Wed. 11:59 PM", class_name: "CST-340", assignment: "HW3"},
-                {todo: "Submit", due_date: "2/4 Thur. 11:59 PM", class_name: "CST-380", assignment: "HW4"},
-                {todo: "Grade", due_date: "2/5 Fri. 11:59 PM", class_name: "CST-399", assignment: "HW5"},
-            ]   
+        constructor(props){
+            super(props);
+        
+            this.state = { 
+                studentInfo: [],
+                assignments: [],
+                isHovered: false 
+            }
+            this.toggleHover = this.toggleHover.bind(this);
+            this.getTbl = this.getTbl.bind(this);
+        }
+
+        toggleHover(){
+            this.setState(prevState => ({isHovered: !prevState.isHovered}));
+        }
+
+        getTbl(classID){
+            axios({
+                method: 'get',
+                url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + classID + '/assignment/dates',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    'Authorization': localStorage.getItem("jwtToken"),
+                }
+            }).then(res => {
+                this.setState({ 
+                    assignments: res.data
+                });
+            }).catch((error) =>{
+                if(error.response){
+                console.log(error.response.data);
+                } else if (error.request){
+                    console.log(error.request); 
+                }else {
+                    console.log(error.message);
+                }
+            })
+        }
+
+        componentDidMount(){
+            axios({
+                method: 'get',
+                url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    'Authorization': localStorage.getItem("jwtToken"),
+                }
+            }).then(res => {
+                this.setState({ 
+                    studentInfo: res.data 
+                });
+                this.state.studentInfo.forEach( i => 
+                   this.getTbl(i.class_id)
+                )
+            }).catch((error) =>{
+                if(error.response){
+                console.log(error.response.data);
+                } else if (error.request){
+                    console.log(error.request); 
+                }else {
+                    console.log(error.message);
+                }
+            })               
+        }
+    
+        tableBody(){
+            return (
+                this.table = this.state.assignments.map((data, i) => 
+                    <tr>
+                        <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{new Date(data.assigned_date).toLocaleString()}</i> }</div></td>
+                        <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{new Date(data.due_date).toLocaleString()}</Link></td>
+                        <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{new Date(data.final_due_date).toLocaleString()}</Link></td>
+                    </tr>
+                )
+                
+            )
+        }
+
+        render(){
+            return (
+                <div>
+                <div>
+                     <Menu />
+                </div>
+                <div className="Home">
+                    <table id="body">
+                        <th>Assignment</th>
+                        <th>Initial<br/>Due Date</th>
+                        <th>Peer Grade <br/>Due Date</th>
+                        {this.tableBody()}
+                    </table>
+                </div>   
+                </div>
+            )
         }
     }
 
-    tableBody(){
-        return (
-            this.table = this.state.info.map((data) => 
-                <tr onClick={ function() {window.alert(data.assignment)}}>
-                    <td><b>{data.todo}</b> {data.assignment}</td>
-                    <td>{data.class_name}</td>
-                    <td>{data.due_date}</td>
-                </tr>
-            )
-        )
-    }
-    render(){
-        return (
-            <div>
-                <div>
-                    <Menu />
-                </div>
-            <div className="Home">
-                <table id="StudentTable">
-                    <th>To-Do</th>
-                    <th>Class</th>
-                    <th>Due Date</th>
-                    {this.tableBody()}
-                </table>
-            </div>   
-            </div>
-        )
-    }
-}
-
-export default StudentHomePage; 
+    export default StudentHomePage; 
