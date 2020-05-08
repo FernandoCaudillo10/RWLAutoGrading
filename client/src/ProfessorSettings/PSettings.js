@@ -23,7 +23,6 @@ class PSettings extends React.Component {
 		this.handleCreateClassSubmit = this.handleCreateClassSubmit.bind(this);
 		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handEmailChange = this.handEmailChange.bind(this); 
 		this.handlePasswordChange = this.handlePasswordChange.bind(this); 
 		this.GetUserInfo();
 
@@ -75,42 +74,6 @@ class PSettings extends React.Component {
 
 	}
 
-	handEmailChange(event){
-		event.preventDefault();
-		const token = localStorage.getItem("jwtToken"); 
-		var validator = require("email-validator");
-
-        if (!validator.validate(this.state.emailConfirm)){
-			document.getElementById("ErrorMessagesEmail").innerHTML = "";
-			document.getElementById("SuccessEmailChange").innerHTML = "";
-            document.getElementById("ErrorMessagesEmail").append("Invalid email");
-            return; 
-		}
-
-		axios({
-			method: 'put',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/cred/update',
-			data: qs.stringify({
-				email: this.state.emailConfirm,
-				name: this.state.name
-			}),
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		 	  'Authorization': token,
-			}
-		  }).then ( res =>{
-			document.getElementById("ErrorMessagesEmail").innerHTML = "";
-			document.getElementById("SuccessEmailChange").innerHTML = "";
-            document.getElementById("SuccessEmailChange").append("Sucessfully updated email");
-		  }).catch((error) =>{
-			  if(error.response){
-				console.log(error.response.data);
-				document.getElementById("ErrorMessagesEmail").innerHTML = "";
-            	document.getElementById("ErrorMessagesEmail").append("Error occurred");
-			  } 
-		  })
-
-	}
 
 	handleNameChange(event){
 		event.preventDefault();
@@ -237,29 +200,6 @@ class PSettings extends React.Component {
                 		<input type='submit' value='Save' className="RegisterButton"></input>
             			</div>
 
-					</form>
-
-
-					<hr></hr>
-
-					<form onSubmit={this.handEmailChange}>
-					<h3>Change Email</h3>
-                	<div>
-                    	<input className="RegisterFields" type='text' placeholder= {this.state.email} name="email" onChange={this.handleFormChange} disabled></input>
-                	</div>
-                	<div >
-                    	<input className="RegisterFields" type='text' placeholder='New Email' name="emailConfirm" onChange={this.handleFormChange}></input>
-                	</div>
-					<div id="ErrorMessagesEmail">
-                       
-                       </div>
-					   <div id="SuccessEmailChange">
-                       
-                       </div>
-
-					<div>
-                		<input type='submit' value='Save' className="RegisterButton"></input>
-            		</div>
 					</form>
 
 					<hr></hr>

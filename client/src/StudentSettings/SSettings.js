@@ -22,7 +22,6 @@ class SSettings extends React.Component {
 		this.GetUserInfo = this.GetUserInfo.bind(this); 
 		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handEmailChange = this.handEmailChange.bind(this); 
 		this.handlePasswordChange = this.handlePasswordChange.bind(this); 
 		this.GetUserInfo();
 
@@ -64,43 +63,6 @@ class SSettings extends React.Component {
 			document.getElementById("ErrorMessagesPassword").innerHTML = "";
 			document.getElementById("SucessPasswordChange").innerHTML = "";
 			document.getElementById("SucessPasswordChange").append("Sucessfully updated password");
-		  }).catch((error) =>{
-			  if(error.response){
-				console.log(error.response.data);
-				document.getElementById("ErrorMessagesEmail").innerHTML = "";
-            	document.getElementById("ErrorMessagesEmail").append("Error occurred");
-			  } 
-		  })
-
-	}
-
-	handEmailChange(event){
-		event.preventDefault();
-		const token = localStorage.getItem("jwtToken"); 
-		var validator = require("email-validator");
-
-        if (!validator.validate(this.state.emailConfirm)){
-			document.getElementById("ErrorMessagesEmail").innerHTML = "";
-			document.getElementById("SuccessEmailChange").innerHTML = "";
-            document.getElementById("ErrorMessagesEmail").append("Invalid email");
-            return; 
-		}
-
-		axios({
-			method: 'put',
-			url: 'https://rwlautograder.herokuapp.com/api/stud/cred/update',
-			data: qs.stringify({
-				email: this.state.emailConfirm,
-				name: this.state.name
-			}),
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		 	  'Authorization': token,
-			}
-		  }).then ( res =>{
-			document.getElementById("ErrorMessagesEmail").innerHTML = "";
-			document.getElementById("SuccessEmailChange").innerHTML = "";
-            document.getElementById("SuccessEmailChange").append("Sucessfully updated email");
 		  }).catch((error) =>{
 			  if(error.response){
 				console.log(error.response.data);
@@ -196,29 +158,7 @@ class SSettings extends React.Component {
 
 					</form>
 
-
-					<hr></hr>
-
-					<form onSubmit={this.handEmailChange}>
-					<h3>Change Email</h3>
-                	<div>
-                    	<input className="RegisterFields" type='text' placeholder= {this.state.email} name="email" onChange={this.handleFormChange} disabled></input>
-                	</div>
-                	<div >
-                    	<input className="RegisterFields" type='text' placeholder='New Email' name="emailConfirm" onChange={this.handleFormChange}></input>
-                	</div>
-					<div id="ErrorMessagesEmail">
-                       
-                       </div>
-					   <div id="SuccessEmailChange">
-                       
-                       </div>
-
-					<div>
-                		<input type='submit' value='Save' className="RegisterButton"></input>
-            		</div>
-					</form>
-
+		
 					<hr></hr>
 
 					<form onSubmit={this.handlePasswordChange}>
