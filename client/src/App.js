@@ -18,6 +18,7 @@ import PSettings from './ProfessorSettings/PSettings';
 import SSettings from './StudentSettings/SSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit'; 
+import StudentGradesPage from './StudentGradesPage/SGP';
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import axios from 'axios';
 
@@ -198,7 +199,7 @@ class App extends React.Component {
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
-					<Route exact path="/student/grades" component={HomePage} />
+					<Route exact path="/student/grades" component={StudentGradesPage} />
 					<Route exact path="/student/settings" component={SSettings} />
 					<Route exact path="/student/grade/:rubricID" component={Grade} />
 					<Route exact path="/student/submit/:rubricID" component={Submit} />

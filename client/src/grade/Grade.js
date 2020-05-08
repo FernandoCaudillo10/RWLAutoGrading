@@ -11,30 +11,7 @@ class Grade extends React.Component{
        
         this.state = {
             evaluation: [], 
-            evalInfo:  [{
-                    eval_id: 1,
-                    prompt_text: "LETS judge a book by the cover People take a look at the world and discover That beauty is the word that I think of when I see the different colors of skin And Ill rejoice and sing for them",
-                    question_id: 1,
-                    question_text: "What is the one thing that all wise men, regardless of their religion or politics, agree is between heaven and earth?",
-                    response_id: 1,
-                    response_value: "The US Senate passed a massive, $2 trillion stimulus package late Wednesday night"
-                    },
-                    {
-                    eval_id: 2,
-                    prompt_text: "Dont judge a book by the cover People take a look at the world and discover That beauty is the word that I think of when I see the different colors of skin And Ill rejoice and sing for them",
-                    question_id: 2,
-                    question_text: "What is the one thing that all wise men, regardless of their religion or politics, agree is between heaven and earth?",
-                    response_id: 1,
-                    response_value: "The US Senate passed a massive, $2 trillion stimulus package late Wednesday night"
-                    },
-                    {
-                    eval_id: 8,
-                    prompt_text: "Good vibes Were bringing only good vibes People walking around talking down on others You cant know yourself without knowing about the other",
-                    question_id: 4,
-                    question_text: "There is this one man who killed his mother. He was born before his father, and married over 100 women without divorcing any one. Yet, he was considered normal by all of his acquaintances. Why?",
-                    response_id: 8,
-                    response_value: "In New York, the epicenter of the COVID-19 outbreak in the U.S., Gov"
-                    }],
+            evalInfo:  [],
         }
        
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,8 +21,6 @@ class Grade extends React.Component{
 
     handleSubmit(event) {
         event.preventDefault();   
-        console.log(this.state.evaluation)  
-        const token = localStorage.getItem("jwtToken")
         axios({
             method: 'post',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/evaluation/grade/submit',
@@ -54,7 +29,7 @@ class Grade extends React.Component{
             }),
             headers: {
               'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-              'Authorization': token,
+              'Authorization': localStorage.getItem("jwtToken"),
             }
           }).then ( res =>{
             console.log(res)
@@ -70,16 +45,14 @@ class Grade extends React.Component{
     }
 
     componentDidMount(){
-        const token = localStorage.getItem("jwtToken")
     	axios({
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignment/evaluation',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': token,
+                'Authorization': localStorage.getItem("jwtToken"),
             }
         }).then(res => {
-            //const evalInfo = res.data;
             this.setState({ evalInfo: res.data });
     	}).then ( res =>{
             console.log(res)
@@ -105,7 +78,6 @@ class Grade extends React.Component{
 
         e[i] = {evaluationID: event.target.name, grade: +event.target.value}
         this.setState({e})
-        console.log(e)
     }
 
     tableBody(){

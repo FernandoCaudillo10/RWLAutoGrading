@@ -35,13 +35,12 @@ class Submit extends React.Component{
     }
 
     componentDidMount(){
-        const token = localStorage.getItem("jwtToken")
     	axios({
             method: 'get',
             url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + this.props.location.state.rubricID + '/assignments',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'Authorization': token,
+                'Authorization': localStorage.getItem("jwtToken"),
             }
         }).then(res => {
             this.setState({ questions: res.data });
@@ -50,8 +49,6 @@ class Submit extends React.Component{
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.responses)
-        const token = localStorage.getItem("jwtToken")
             axios({
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
@@ -60,7 +57,7 @@ class Submit extends React.Component{
                 }),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    'Authorization': token,
+                    'Authorization': localStorage.getItem("jwtToken"),
                 }
             }).then ( res =>{
                 console.log(res)

@@ -24,9 +24,6 @@ class SSettings extends React.Component {
 	}
 	handleSubmit(event) {
 		event.preventDefault();
-
-		console.log("SUBMITTING")
-		const token = localStorage.getItem("jwtToken")
 		var action = ""
 		var className = ""
 		if (this.state.rclassName !== "") {
@@ -45,7 +42,7 @@ class SSettings extends React.Component {
 			}),
 			headers: {
 				'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-				'Authorization': token,
+				'Authorization': localStorage.getItem("jwtToken"),
 			}
 		}).then(res => {
 			console.log(res)

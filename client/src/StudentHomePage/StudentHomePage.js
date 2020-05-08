@@ -29,13 +29,12 @@
         }
 
         getTbl(classID){
-            const token = localStorage.getItem("jwtToken")
             axios({
                 method: 'get',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/' + classID + '/assignment/dates',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    'Authorization': token,
+                    'Authorization': localStorage.getItem("jwtToken"),
                 }
             }).then(res => {
                 this.setState({ 
@@ -54,22 +53,19 @@
         }
 
         componentDidMount(){
-
-            const token = localStorage.getItem("jwtToken")
-
             axios({
                 method: 'get',
                 url:'https://rwlautograder.herokuapp.com/api/stud/registered/class/info',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    'Authorization': token,
+                    'Authorization': localStorage.getItem("jwtToken"),
                 }
             }).then(res => {
                 this.setState({ 
                     studentInfo: res.data 
                 });
+                const studentData = this.state.studentInfo
                 this.state.studentInfo.forEach( i => 
-                    //console.log(i.class_id)
                    this.getTbl(i.class_id)
                 )
                 console.log(this.state.studentInfo)
