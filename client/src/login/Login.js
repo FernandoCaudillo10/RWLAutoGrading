@@ -16,8 +16,34 @@ class Login extends React.Component {
         
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSelectOption = this.handleSelectOption.bind(this); 
+        this.handleSelectOption = this.handleSelectOption.bind(this);
+        this.UserLoggedin = this.UserLoggedin.bind(this);
+        this.RedirectRegister = this.RedirectRegister.bind(this); 
+        this.UserLoggedin(); 
+    }
 
+    RedirectRegister(){
+        this.props.history.push('/register');
+    }
+
+    UserLoggedin(){
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const typeOfUser = localStorage.getItem("typeOfUser");
+
+      
+        if(isLoggedIn && typeOfUser){
+            if(isLoggedIn === "true"){
+                if(typeOfUser === "Student"){
+                    this.props.history.push('/student/home');
+                }
+                if(typeOfUser === "Teacher"){
+                    this.props.history.push('/professor/classes');
+                    
+                }
+            }
+        }else{
+            return; 
+        }
     }
     
     handleFormChange(event) {
@@ -47,6 +73,7 @@ class Login extends React.Component {
             const token = res.data.token; 
             localStorage.setItem('jwtToken', token);
             localStorage.setItem('typeOfUser', this.state.typeOfUser);
+            localStorage.setItem('isLoggedIn', true);
             this.props.onLogin(token, 'Student');
             this.props.history.push('/student/home');
 
@@ -74,6 +101,8 @@ class Login extends React.Component {
 			  }).then ( res =>{
                 const token = res.data.token; 
                 localStorage.setItem('jwtToken', token);
+                localStorage.setItem('isLoggedIn', true);
+                localStorage.setItem('typeOfUser', this.state.typeOfUser);
                 this.props.onLogin(token, 'Teacher');
                 this.props.history.push('/professor/classes');
 			  }).catch((error) =>{
@@ -107,6 +136,7 @@ render(){
 
                 <input type='submit' value='Log In' className="LoginButton" ></input>
             </form>
+            <button onClick={this.RedirectRegister} >Don't have an account? Register</button>
 
             <div id= "ErrorMessagesLogin1">
 

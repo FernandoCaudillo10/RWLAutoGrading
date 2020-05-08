@@ -3,6 +3,7 @@ import axios from 'axios';
 import qs from 'qs'; 
 import dateFormat from 'dateformat';
 import './PAssignmentView.scss';
+import Menu from '../menu/Menu'; 
 
 class PAssignmentView extends React.Component{
 
@@ -60,6 +61,10 @@ ProfessorAssignmnets(){
 render(){
 
     return (
+        <div>
+        <div>
+            <Menu />
+        </div>
         <div className="professorContainer">
             <h2 className="h2class">Professor Assignment View</h2>
             <div className="AssignmenViewTable">
@@ -76,7 +81,8 @@ render(){
             </table>
             </div>
            
-
+            
+        </div>
         </div>  
     )
 
