@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
+import Menu from '../menu/Menu'; 
 import './PSettings.scss'
 
 class PSettings extends React.Component {
@@ -51,6 +52,10 @@ class PSettings extends React.Component {
 
 	render(){ 
 		return (
+			<div>
+			<div>
+				<Menu />
+			</div>
 			<div className="Login">
 				<form onSubmit={this.handleSubmit}>
 					<div> Create Class </div>
@@ -62,6 +67,7 @@ class PSettings extends React.Component {
 				</form>
 			  
 
+			</div>
 			</div>
 				
 

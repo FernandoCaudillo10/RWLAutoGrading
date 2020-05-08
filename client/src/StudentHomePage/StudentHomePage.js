@@ -1,7 +1,6 @@
 import React  from 'react'; 
 import './StudentHomePage.scss'
 
-
 class StudentHomePage extends React.Component{
 
     constructor(props){

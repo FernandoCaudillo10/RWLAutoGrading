@@ -2,7 +2,8 @@ import React  from 'react';
 import axios from 'axios';
 import './PHomePage.scss'
 import { Link } from 'react-router-dom';
-
+import Menu from '../menu/Menu';
+// RWLAutoGrading/client/src/menu
 
 class ProfessorHomePage extends React.Component{
 
@@ -25,7 +26,6 @@ class ProfessorHomePage extends React.Component{
 			  'Authorization': token,
 			}
 		  }).then ( res =>{
-			  console.log(res.data);
           	this.setState({information: res.data});
 			this.getClassSections();
 		  }).catch((error) =>{
@@ -76,8 +76,10 @@ class ProfessorHomePage extends React.Component{
 	}
 
     ProfessorClasses(){
+		
         return(
-        	this.state.information.map((item, key) =>
+			
+        this.items = this.state.information.map((item, key) =>
                 <div key={item.class_id}>
 					<div className="professorClassSecBody">
 						<h2 className="h2class">{item.name}</h2>
@@ -105,14 +107,19 @@ class ProfessorHomePage extends React.Component{
     }
  
 	render(){
-
+		
 		return (
+			<div>
+			<div>
+				<Menu />
+			</div>
 			<div className="professorContainer">
 				<h1 className="h1class">Classes</h1>
 				<hr></hr>
 			   {this.ProfessorClasses()}
 
 			</div>  
+			</div>
 		)
 
 
