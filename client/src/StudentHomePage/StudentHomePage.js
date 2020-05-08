@@ -72,7 +72,7 @@
                 return ""
             }
         }
-        
+
         tableBody(){
             return (
                 this.table = this.state.assignments.map((data, i) => 
@@ -88,15 +88,17 @@
 
         render(){
             return (
-                <div className="Home">
-                    <Menu />
-                    <table id="body">
-                        <th>Assignment</th>
-                        <th>Initial<br/>Due Date</th>
-                        <th>Peer Grade <br/>Due Date</th>
-                        {this.tableBody()}
-                    </table>
-                </div>   
+                <div>
+                    <div><Menu /></div>
+                    <div className="Home">
+                        <table id="body">
+                            <th>Assignment</th>
+                            <th>Initial<br/>Due Date</th>
+                            <th>Peer Grade <br/>Due Date</th>
+                            {this.tableBody()}
+                        </table>
+                    </div>  
+                </div> 
             )
         }
     }

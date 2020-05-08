@@ -80,10 +80,12 @@ class SSettings extends React.Component {
 	
 	render() {
 		return (
+			<div>
+			<div><Menu/></div>				
 			<div className="Home">
-				<Menu/>
 				{this.tableBody()}
 			</div> 
+			</div>
 		)
 	}
 }

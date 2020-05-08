@@ -15,6 +15,7 @@ class Submit extends React.Component{
             questions: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.verifyComplete = this.verifyComplete.bind(this);
     }
 
     countChars(q_ID, minChar, event){
@@ -51,6 +52,7 @@ class Submit extends React.Component{
     
     verifyComplete(){
         this.state.questions.map((data, i) => 
+
             {if (document.getElementById("charNum" + i).innerHTML !== 0){
                 document.getElementById("ErrorMessagesSubmit" + i).innerHTML = "";
                 document.getElementById("ErrorMessagesSubmit" + i).append("Please fulfil the character count");
@@ -108,13 +110,15 @@ class Submit extends React.Component{
 
     render(){
         return (
+            <div>
+            <div><Menu/></div>
             <div className="Submit">
-                <Menu/>
                 <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
                 <form onSubmit={this.handleSubmit}>
                     <table id="body">{this.tableBody()}</table>
                     <input type='submit' value='Submit' className="SubmitButton"/>
                 </form>
+            </div>
             </div>
         )
     }

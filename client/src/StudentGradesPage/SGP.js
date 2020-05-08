@@ -54,12 +54,14 @@ class SGP extends React.Component {
 	}
 	render() {
 		return (
+			<div>
+				<div><Menu/></div>
 			<div className="SPG">
-				<Menu/>
 				<table id="body">
 					{this.tableBody()}
 				</table>
 			</div> 
+			</div>
 		)
 	}
 }
