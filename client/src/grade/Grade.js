@@ -2,6 +2,7 @@ import React  from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import './Grade.scss'
+import Menu from '../menu/Menu'; 
 
 
 class Grade extends React.Component{
@@ -104,13 +105,15 @@ class Grade extends React.Component{
     }
     render(){
         return (
-             <div className="Grade">
-            <form onSubmit={this.handleSubmit}>
-                <div className="title">Grade Homework {this.props.location.state.todo}</div><br/>
-                <div>{this.tableBody()}</div>
-                <input type='submit' value='Submit' className="SubmitButton" />
-            </form>
-        </div>
+            <Menu>
+                <div className="Grade">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="title">Grade Homework {this.props.location.state.todo}</div><br/>
+                        <div>{this.tableBody()}</div>
+                        <input type='submit' value='Submit' className="SubmitButton" />
+                    </form>
+                </div>
+            </Menu>
         )
     }
 }

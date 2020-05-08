@@ -8,6 +8,7 @@
         useParams
     } from "react-router-dom";
     import './StudentHomePage.scss'
+    import Menu from '../menu/Menu'; 
 
     class StudentHomePage extends React.Component{
 
@@ -92,6 +93,7 @@
         render(){
             return (
                 <div className="Home">
+                    <Menu />
                     <table id="body">
                         <th>Assignment</th>
                         <th>Initial<br/>Due Date</th>
@@ -99,7 +101,6 @@
                         {this.tableBody()}
                     </table>
                 </div>   
-            
             )
         }
     }

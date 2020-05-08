@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
 import dateFormat from 'dateformat';
+import Menu from '../menu/Menu'; 
 
 class ProfessorAssignments extends React.Component{
 
@@ -149,6 +150,10 @@ class ProfessorAssignments extends React.Component{
  
 render(){
     return (
+		<div>
+		<div>
+			<Menu />
+		</div>
         <div className="professorContainer">
             <h3> Create Assignment</h3>
 			<h4> Assignment Name </h4>
@@ -210,6 +215,8 @@ render(){
 			}
 
         </div>  
+
+		</div>
     )
 
     }

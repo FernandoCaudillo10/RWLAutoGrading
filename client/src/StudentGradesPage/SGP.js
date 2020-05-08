@@ -4,6 +4,7 @@ import qs from 'qs';
 import './SGP.scss'
 import { Link } from 'react-router-dom';
 import StudentHomePage from '../StudentHomePage/StudentHomePage';
+import Menu from '../menu/Menu'; 
 
 class SGP extends React.Component {
 
@@ -58,6 +59,7 @@ class SGP extends React.Component {
 	render() {
 		return (
 			<div className="Home">
+				<Menu/>
 				<table id="body">
 				{this.tableBody()}
 				</table>

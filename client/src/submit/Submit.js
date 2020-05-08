@@ -2,6 +2,7 @@ import React  from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import './Submit.scss'
+import Menu from '../menu/Menu'; 
 
 class Submit extends React.Component{
 
@@ -91,13 +92,15 @@ class Submit extends React.Component{
 
     render(){
         return (
-        <div className="Submit">
-            <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
-            <form onSubmit={this.handleSubmit}>
-                <div>{this.tableBody()}</div> 
-                <input type='submit' value='Submit' className="SubmitButton"/>
-            </form>
-        </div>
+            <Menu>
+                <div className="Submit">
+                    <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
+                    <form onSubmit={this.handleSubmit}>
+                        <div>{this.tableBody()}</div> 
+                        <input type='submit' value='Submit' className="SubmitButton"/>
+                    </form>
+                </div>
+            </Menu>
         )
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import './SSettings.scss'
+import Menu from '../menu/Menu'; 
 
 class SSettings extends React.Component {
 
@@ -78,6 +79,7 @@ class SSettings extends React.Component {
 	render() {
 		return (
 			<div className="Home">
+				<Menu/>
 				{this.tableBody()}
 			</div> 
 		)
