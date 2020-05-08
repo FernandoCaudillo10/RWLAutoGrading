@@ -54,6 +54,7 @@
         }
 
         componentDidMount(){
+
             const token = localStorage.getItem("jwtToken")
 
             axios({
@@ -68,7 +69,8 @@
                     studentInfo: res.data 
                 });
                 this.state.studentInfo.forEach( i => 
-                    this.getTbl(i.section_id)
+                    //console.log(i.class_id)
+                   this.getTbl(i.class_id)
                 )
                 console.log(this.state.studentInfo)
             }).catch((error) =>{
