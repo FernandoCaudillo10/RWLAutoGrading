@@ -24,8 +24,8 @@ CREATE TABLE "student" (
 );
 
 CREATE TABLE "takes" (
-  "student_id" varchar REFERENCES "student" ("email") ON DELETE CASCADE,
-  "section_id" int REFERENCES "section" ("section_id") ON DELETE CASCADE,
+  "student_id" varchar NOT NULL REFERENCES "student" ("email") ON DELETE CASCADE,
+  "section_id" int NOT NULL REFERENCES "section" ("section_id") ON DELETE CASCADE,
   UNIQUE (student_id, section_id)
 );
 
