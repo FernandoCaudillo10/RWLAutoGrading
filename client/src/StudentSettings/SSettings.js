@@ -2,9 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import Menu from '../menu/Menu'; 
-import './PSettings.scss'
 
-class PSettings extends React.Component {
+
+class SSettings extends React.Component {
 
     constructor(props){
         super(props);
@@ -20,7 +20,6 @@ class PSettings extends React.Component {
         };
 		
 		this.GetUserInfo = this.GetUserInfo.bind(this); 
-		this.handleCreateClassSubmit = this.handleCreateClassSubmit.bind(this);
 		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handEmailChange = this.handEmailChange.bind(this); 
@@ -52,7 +51,7 @@ class PSettings extends React.Component {
 
 		axios({
 			method: 'put',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/cred/update',
+			url: 'https://rwlautograder.herokuapp.com/api/stud/cred/update',
 			data: qs.stringify({
 				password: this.state.passwordConfirm,
 				name:this.state.name
@@ -89,7 +88,7 @@ class PSettings extends React.Component {
 
 		axios({
 			method: 'put',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/cred/update',
+			url: 'https://rwlautograder.herokuapp.com/api/stud/cred/update',
 			data: qs.stringify({
 				email: this.state.emailConfirm,
 				name: this.state.name
@@ -119,7 +118,7 @@ class PSettings extends React.Component {
 
 		axios({
 			method: 'put',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/cred/update',
+			url: 'https://rwlautograder.herokuapp.com/api/stud/cred/update',
 			data: qs.stringify({
 				name: this.state.name
 			}),
@@ -168,32 +167,6 @@ class PSettings extends React.Component {
 		
       }
     
-      handleCreateClassSubmit(event) {
-        event.preventDefault();
-		
-		const token = localStorage.getItem("jwtToken")
-		axios({
-			method: 'post',
-			url: 'https://rwlautograder.herokuapp.com/api/prof/class/create',
-			data: qs.stringify({
-			  name: this.state.className,
-			}),
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		 	  'Authorization': token,
-			}
-		  }).then ( res =>{
-			this.props.history.push('/professor/classes');
-			
-		  }).catch((error) =>{
-			  if(error.response){
-				document.getElementById("ErrorMessagesLogin").innerHTML = "";
-            	document.getElementById("ErrorMessagesLogin").append("Error occurred");
-				console.log(error.response.data);
-			  }
-		  })
-        
-      }
 
 	render(){ 
 		return (
@@ -204,22 +177,6 @@ class PSettings extends React.Component {
 			
 			<div className="professorContainer Login">
 
-			<div className="Login">
-				<form onSubmit={this.handleCreateClassSubmit}>
-				<h3>Create a Class</h3>
-					<div>
-						<input className="LoginFields" type='text' placeholder='Class Name' name="className"  onChange={this.handleFormChange} ></input>
-					</div>
-					<div id="ErrorMessagesLogin">
-                       
-                       </div>
-
-					<input type='submit' value='Create' className="LoginButton" ></input>
-				</form>
-
-				</div>
-
-				<hr></hr>
 
 				<form onSubmit={this.handleNameChange}>
 				<h3>Change Name</h3>
@@ -292,4 +249,4 @@ class PSettings extends React.Component {
 
 	}
 }
-export default PSettings;
+export default SSettings;

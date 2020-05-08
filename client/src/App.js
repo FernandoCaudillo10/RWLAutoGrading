@@ -17,9 +17,11 @@ import StudentHomePage from './StudentHomePage/StudentHomePage';
 import PSettings from './ProfessorSettings/PSettings';
 import Grade from './grade/Grade'; 
 import Submit from './submit/Submit';
+import SSettings from './StudentSettings/SSettings';
 import Menu from './menu/Menu';
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import axios from 'axios';
+
 
 import './App.scss';
 
@@ -97,7 +99,7 @@ class App extends React.Component {
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
 					<Route exact path="/student/grades" component={HomePage} />
-					<Route exact path="/student/settings" component={PSettings} />
+					<Route exact path="/student/settings" component={SSettings} />
 					<Route exact path="/student/grade" component={Grade} />
 					<Route exact path="/student/submit" component={Submit} />
 					<Route exact path="/student" component={HomePage} />

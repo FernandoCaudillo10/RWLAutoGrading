@@ -1,5 +1,6 @@
 import React  from 'react'; 
 import './StudentHomePage.scss'
+import Menu from '../menu/Menu';
 
 class StudentHomePage extends React.Component{
 
@@ -30,6 +31,10 @@ class StudentHomePage extends React.Component{
     }
     render(){
         return (
+            <div>
+                <div>
+                    <Menu />
+                </div>
             <div className="Home">
                 <table id="StudentTable">
                     <th>To-Do</th>
@@ -38,6 +43,7 @@ class StudentHomePage extends React.Component{
                     {this.tableBody()}
                 </table>
             </div>   
+            </div>
         )
     }
 }
