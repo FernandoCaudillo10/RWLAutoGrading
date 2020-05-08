@@ -32,7 +32,7 @@
                 }
             }).then(res => {
                 this.setState({ 
-                    assignments: res.data
+                    assignments: this.state.assignments.concat(res.data)
                 });
             }).catch((error) =>{
                 if(error.response){
@@ -55,7 +55,7 @@
                 }
             }).then(res => {
                 this.setState({ 
-                    studentInfo: res.data 
+                    studentInfo: res.data
                 });
                 this.state.studentInfo.forEach( i => 
                    this.getTbl(i.class_id)
@@ -71,13 +71,21 @@
             })               
         }
     
+        hidePastDue(date){
+            if(new Date().getTime() < new Date(date).getTime()){
+                return new Date(date).toLocaleString() 
+            } else {
+                return ""
+            }
+        }
+
         tableBody(){
             return (
                 this.table = this.state.assignments.map((data, i) => 
                     <tr>
                         <td><div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}><b>Homework {i+1}</b><br/>{this.state.isHovered ? "" : <i>{new Date(data.assigned_date).toLocaleString()}</i> }</div></td>
-                        <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{new Date(data.due_date).toLocaleString()}</Link></td>
-                        <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{new Date(data.final_due_date).toLocaleString()}</Link></td>
+            <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.due_date)}</Link></td>
+                        <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.final_due_date)}</Link></td>
                     </tr>
                 )
                 

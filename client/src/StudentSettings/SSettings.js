@@ -57,15 +57,17 @@ class SSettings extends React.Component {
 			}
 		})
 	}
+	
 	tableBody(){
 		return (
 			<div className="Login">
 				<form onSubmit={this.handleSubmit}>
+					<br/>
 					<div> Register for a Class </div>
 					<div>
 						<input className="LoginFields" type='text' placeholder='Class Name' name="rclassName" onChange={this.handleFormChange}></input>
 					</div>
-					<input type='submit' value='Register' className="LoginButton"></input><br /><br />
+					<input type='submit' value='Register' className="LoginButton"></input><br/><br/>
 					<div> Unregister for a Class </div>
 					<div>
 						<input className="LoginFields" type='text' placeholder='Class Name' name="uclassName" onChange={this.handleFormChange}></input>
