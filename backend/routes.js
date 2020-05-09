@@ -163,6 +163,8 @@ class RoutesHandler{
 			let rID = request.params.rubricID;
 			qry.getAssignment(rID)
 				.then((result) => {
+					if(result.rowCount === 0) 
+						return response.status(400).json({error: "No assignment under this ID"});
 					return response.status(200).json(result.rows);
 				})
 				.catch(err => {
