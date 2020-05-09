@@ -19,11 +19,9 @@ class SSettings extends React.Component {
 			
         };
 		
-		this.GetUserInfo = this.GetUserInfo.bind(this); 
-		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handlePasswordChange = this.handlePasswordChange.bind(this); 
-		this.GetUserInfo();
+		
 
 	}
 
@@ -102,56 +100,17 @@ class SSettings extends React.Component {
 
 	}
 	
-	GetUserInfo(){
-		const token = localStorage.getItem("jwtToken");
-		axios({
-			method: 'get',
-			url: 'https://rwlautograder.herokuapp.com/api/token/verify',
-			data: qs.stringify({
-			}),
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		 	  'Authorization': token,
-			}
-		  }).then ( res =>{ 
-			if(res.statusText ==="OK"){
-				this.setState({name: res.data.user.name, email: res.data.user.email })
-			}
-		  }).catch((error) =>{
-			  if(error.response){
-				console.log(error.response.data);
-			  }
-		  })
-	}
-    
-      handleFormChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
-		
-      }
-    
-
-	render(){ 
+	tableBody(){
 		return (
-			<div>
-			<div>
-				<Menu />
-			</div>
-			
-			<div className="professorContainer Login">
-
-
-				<form onSubmit={this.handleNameChange}>
-				<h3>Change Name</h3>
-            		<div >
-                    	<input className="RegisterFields" type='text' placeholder= {this.state.name} name="name" onChange={this.handleFormChange} ></input>
-                	</div>
-					<div id="ErrorMessagesName">
-                       
-                       </div>
-					   <div id="SuccessNameChange">
-                       
-                       </div>
-
+			<div className="Login">
+				<form onSubmit={this.handleSubmit}>
+					<br/>
+					<div> Register for a Class </div>
+					<div>
+						<input className="LoginFields" type='text' placeholder='Class Name' name="rclassName" onChange={this.handleFormChange}></input>
+					</div>
+					<input type='submit' value='Register' className="LoginButton"></input><br/><br/>
+					<div> Unregister for a Class </div>
 					<div>
                 		<input type='submit' value='Save' className="RegisterButton"></input>
             			</div>
@@ -182,11 +141,21 @@ class SSettings extends React.Component {
             		</form>
 				</div>
 			
-			</div>
+			// </div>
 				
 
 		)
-
+	}
+	
+	render() {
+		return (
+			<div>
+			<div><Menu/></div>				
+			<div className="Home">
+				{this.tableBody()}
+			</div> 
+			</div>
+		)
 	}
 }
 export default SSettings;

@@ -15,6 +15,7 @@ class Submit extends React.Component{
             questions: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.verifyComplete = this.verifyComplete.bind(this);
     }
 
     countChars(q_ID, minChar, event){
@@ -45,11 +46,26 @@ class Submit extends React.Component{
             }
         }).then(res => {
             this.setState({ questions: res.data });
+            console.log(this.state.questions)
     	})
+    }
+    
+    verifyComplete(){
+        this.state.questions.map((data, i) => 
+
+            {if (document.getElementById("charNum" + i).innerHTML !== 0){
+                document.getElementById("ErrorMessagesSubmit" + i).innerHTML = "";
+                document.getElementById("ErrorMessagesSubmit" + i).append("Please fulfil the character count");
+                }
+            }
+        )
     }
 
     handleSubmit(event) {
         event.preventDefault();
+
+        this.verifyComplete()
+
             axios({
                 method: 'post',
                 url: 'https://rwlautograder.herokuapp.com/api/stud/class/assignment/questions/submit',
@@ -84,6 +100,8 @@ class Submit extends React.Component{
                         <b1>Char Remaining: <b id={"charNum" + (i)}>{data.min_char}</b><br/><br/></b1> 
                         <textarea input type='text' name={data.question_id} placeholder='Respond Here' 
                         onKeyUp={this.countChars.bind(this, (i), data.min_char)} onChange={this.handleFormChange.bind(this, i)}/>
+                        <div id={"ErrorMessagesSubmit" + i}></div>
+
                     </td>
                 </tr>
             )
@@ -92,15 +110,16 @@ class Submit extends React.Component{
 
     render(){
         return (
-            <Menu>
-                <div className="Submit">
-                    <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>{this.tableBody()}</div> 
-                        <input type='submit' value='Submit' className="SubmitButton"/>
-                    </form>
-                </div>
-            </Menu>
+            <div>
+            <div><Menu/></div>
+            <div className="Submit">
+                <div className="title">Complete Homework {this.props.location.state.todo}</div><br/>
+                <form onSubmit={this.handleSubmit}>
+                    <table id="body">{this.tableBody()}</table>
+                    <input type='submit' value='Submit' className="SubmitButton"/>
+                </form>
+            </div>
+            </div>
         )
     }
 }

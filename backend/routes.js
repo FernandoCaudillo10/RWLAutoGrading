@@ -310,7 +310,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	submitProfEval(request, response){
+	getResponsesForGrading(request, response){
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -320,11 +320,24 @@ class RoutesHandler{
 				return response.status(400).json({error: "No user under this email"});
 			}
 
-			let cId = request.params.classId;
+			let sId = request.params.sectionId;
 			
-			let resultClass = await qry.getClass(cId); 
-			if(resultClass.rowCount === 0) return response.status(400).json({error: "No class under this id"});
-			//TODO: Verify professor can access this class
+			let profEval = await qry.getProfEval(sId);
+
+			return response.status(200).json(profEval.rows);
+
+		})(request, response);
+	}
+
+	submitProfEval(request, response){
+		passport.authenticate('jwtProfessor', {session: false},
+			async (pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);
+
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
 
 			let rId = request.params.resId;
 			
@@ -336,7 +349,7 @@ class RoutesHandler{
 			
 			
 			let profEval = await qry.createProfEval(pUser.email, rId, grade);
-			if(profEval.rowCount === 0) return response.status(400).json({error: "Server erro"});
+			if(profEval.rowCount === 0) return response.status(400).json({error: "Server error"});
 
 			return response.status(200).json(profEval.rows);
 
