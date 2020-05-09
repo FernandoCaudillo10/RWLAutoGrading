@@ -25,7 +25,6 @@ class Register extends React.Component{
         this.handleSelectOption = this.handleSelectOption.bind(this); 
 
     }
-
     handleFormChange(event) {
        
         this.setState({ [event.target.name]: event.target.value });

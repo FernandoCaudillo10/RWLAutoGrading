@@ -292,11 +292,10 @@ class RoutesHandler{
 				.then((result) => {	
 					if(result.rowCount === 0) 
 						return response.status(400).json({error: "Student is not enrolled in class"});		
-					let secID = Object.values(result.rows[0]);
-					qry.getAssignRubric(secID[1])
+					qry.getAllClassAssignments(cID)
 						.then((result) => {
 							if(result.rowCount === 0) 
-								return response.status(400).json({error: "No section under this ID"});
+								return response.status(400).json({error: "No  assignment under classID"});
 							return response.status(200).json(result.rows);	
 						})
 						.catch(err => {
