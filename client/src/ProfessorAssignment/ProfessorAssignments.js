@@ -71,7 +71,13 @@ class ProfessorAssignments extends React.Component{
 
     handleSubmitCreate(event){
 		const token = localStorage.getItem("jwtToken")
-        event.preventDefault();
+		event.preventDefault();
+		if(this.state.ass_name === ""){
+			console.log("here")
+			document.getElementById("ErrorMessagesCreateAssignment").innerHTML = "";
+            document.getElementById("ErrorMessagesCreateAssignment").append("Please give the assignment a name");
+			return; 
+		}
 		this.setState({
 			loading:true, 
 			});
@@ -97,10 +103,11 @@ class ProfessorAssignments extends React.Component{
 			  this.setState({loading: false});
 			  if(error.response){
 				console.log(error.response.data);
-			  } else if (error.request){
-				  console.log(error.request); 
-			  }else {
-				  console.log(error.message);
+				console.log(error.response.data.error)
+					document.getElementById("ErrorMessagesCreateAssignment").innerHTML = "";
+					document.getElementById("ErrorMessagesCreateAssignment").append("Please add at least 1 prompt and 1 question");
+					return; 
+				
 			  }
 		  })
     }
@@ -110,7 +117,7 @@ class ProfessorAssignments extends React.Component{
 			<div key={"q" + qId} className="questionDiv">
 				<h4>Question {+qId + 1} </h4>
 				<textarea placeholder="Enter text here..."  className="TextBox" name={pId + "q" + qId} onChange={(e) => this.handleFormChange(e, pId, qId)}></textarea>
-            	<h5>Minimum Characters Required: </h5> 
+            	<h5>Minimum Characters Required: 1</h5> 
 			</div>
 		);
 	}
@@ -146,6 +153,7 @@ class ProfessorAssignments extends React.Component{
 	}
 	handleNameChange(event){
 		this.setState({ ass_name: event.target.value });
+		console.log(this.state.ass_name);
 	}
  
 render(){
@@ -210,9 +218,14 @@ render(){
 				<div className="CreateandCancel" >
 					<form onSubmit={this.handleSubmitCreate}>
 						<input type="submit" value="Create" name="create"/>
-					</form>
+					</form> 			
 				</div>
+			
 			}
+			<div id= "ErrorMessagesCreateAssignment">
+		
+
+			</div>  
 
         </div>  
 
