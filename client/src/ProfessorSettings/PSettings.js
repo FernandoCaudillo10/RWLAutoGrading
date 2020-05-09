@@ -77,9 +77,8 @@ class PSettings extends React.Component {
 
 	handleNameChange(event){
 		event.preventDefault();
-
 		const token = localStorage.getItem("jwtToken");
-
+		
 		axios({
 			method: 'put',
 			url: 'https://rwlautograder.herokuapp.com/api/prof/cred/update',
