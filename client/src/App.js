@@ -20,6 +20,7 @@ import Grade from './grade/Grade';
 import StudentGradesPage from './StudentGradesPage/SGP';
 import Submit from './submit/Submit';
 import Menu from './menu/Menu';
+import PSingleAssignmentView from './PSingleAssignmentView/ProfessorViewAssignment'; 
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import axios from 'axios';
 
@@ -92,9 +93,9 @@ class App extends React.Component {
 		<Router>
 			<div>
 				
-				
 				<Switch>
 					<Route exact path="/menu" component={Menu}  />
+					<Route exact path="/professor/:classId/singleassignmentview/" component = {PSingleAssignmentView} />
 					<Route exact path="/" component={Login}  />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
