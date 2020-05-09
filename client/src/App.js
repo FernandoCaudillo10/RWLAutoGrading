@@ -21,6 +21,7 @@ import StudentGradesPage from './StudentGradesPage/SGP';
 import Submit from './submit/Submit';
 import Menu from './menu/Menu';
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
+import StudViewClass from './StudentViewClass/StudViewClass';
 import axios from 'axios';
 
 import './App.scss';
@@ -108,6 +109,7 @@ class App extends React.Component {
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
 					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
+					<Route exact path="/student/home/classes" component={StudViewClass} />
 				</Switch>
 			</div>
 		</Router>
