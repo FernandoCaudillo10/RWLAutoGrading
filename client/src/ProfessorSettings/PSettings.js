@@ -62,7 +62,6 @@ class PSettings extends React.Component {
 					<div>
 						<input className="LoginFields" type='text' placeholder='Class Name' name="className"  onChange={this.handleFormChange}></input>
 					</div>
-
 					<input type='submit' value='Log In' className="LoginButton" ></input>
 				</form>
 			  
