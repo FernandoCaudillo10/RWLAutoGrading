@@ -15,16 +15,84 @@ class SSettings extends React.Component {
             password: '',
             emailConfirm: '',
 			passwordConfirm: '',
-			name: ''
+			name: '', 
+			uclassName: "",
+			rclassName: "",
+			register_url: 'https://rwlautograder.herokuapp.com/api/stud/class/register/',
+			unregister_url: 'https://rwlautograder.herokuapp.com/api/stud/class/unregister/',
 			
         };
 		
 		this.GetUserInfo = this.GetUserInfo.bind(this); 
-		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handlePasswordChange = this.handlePasswordChange.bind(this); 
-		this.GetUserInfo();
+		this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		this.handleFormChange = this.handleFormChange.bind(this); 
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.GetUserInfo(); 
+		
 
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+		var action = ""
+		var className = ""
+		if (this.state.rclassName !== "") {
+			action = this.state.register_url
+			className = this.state.rclassName
+		} else if (this.state.uclassName !== "") {
+			action = this.state.unregister_url
+			className = this.state.uclassName
+		}
+		console.log(action + className)
+		axios({
+			method: 'post',
+			url: action + className,
+			data: qs.stringify({
+				sectionID: className
+			}),
+			headers: {
+				'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+				'Authorization': localStorage.getItem("jwtToken"),
+			}
+		}).then(res => {
+			console.log(res)
+		}).catch((error) => {
+			if (error.response) {
+				console.log(error.response.data);
+			} else if (error.request) {
+				console.log(error.request);
+			} else {
+				console.log(error.message);
+			}
+		})
+	}
+
+	handleFormChange(event) {
+		this.setState({ [event.target.name]: event.target.value });
+		
+      }
+
+	GetUserInfo(){
+		const token = localStorage.getItem("jwtToken");
+		axios({
+			method: 'get',
+			url: 'https://rwlautograder.herokuapp.com/api/token/verify',
+			data: qs.stringify({
+			}),
+			headers: {
+			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+		 	  'Authorization': token,
+			}
+		  }).then ( res =>{ 
+			if(res.statusText ==="OK"){
+				this.setState({name: res.data.user.name, email: res.data.user.email })
+			}
+		  }).catch((error) =>{
+			  if(error.response){
+				console.log(error.response.data);
+			  }
+		  })
 	}
 
 	handlePasswordChange(event){
@@ -75,7 +143,6 @@ class SSettings extends React.Component {
 
 	handleNameChange(event){
 		event.preventDefault();
-
 		const token = localStorage.getItem("jwtToken");
 
 		axios({
@@ -89,6 +156,7 @@ class SSettings extends React.Component {
 		 	  'Authorization': token,
 			}
 		  }).then ( res =>{
+			  console.log(res);
 			document.getElementById("SuccessNameChange").innerHTML = "";
             document.getElementById("SuccessNameChange").append("Sucessfully updated name");
 			
@@ -99,49 +167,27 @@ class SSettings extends React.Component {
             	document.getElementById("ErrorMessagesName").append("Error occurred");
 			  } 
 		  })
-
 	}
 	
-	GetUserInfo(){
-		const token = localStorage.getItem("jwtToken");
-		axios({
-			method: 'get',
-			url: 'https://rwlautograder.herokuapp.com/api/token/verify',
-			data: qs.stringify({
-			}),
-			headers: {
-			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-		 	  'Authorization': token,
-			}
-		  }).then ( res =>{ 
-			if(res.statusText ==="OK"){
-				this.setState({name: res.data.user.name, email: res.data.user.email })
-			}
-		  }).catch((error) =>{
-			  if(error.response){
-				console.log(error.response.data);
-			  }
-		  })
-	}
-    
-      handleFormChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
-		
-      }
-    
-
-	render(){ 
+	tableBody(){
 		return (
-			<div>
-			<div>
-				<Menu />
-			</div>
-			
-			<div className="professorContainer Login">
+			<div className="Login">
+				<form onSubmit={this.handleSubmit}>
+					<br/>
+					<div> Register for a Class </div>
+					<div>
+						<input className="LoginFields" type='text' placeholder='Class Name' name="rclassName" onChange={this.handleFormChange}></input>
+					</div>
+					<input type='submit' value='Register' className="LoginButton"></input><br/><br/>
+					<div> Unregister for a Class </div>
+					<div>
+                		<input type='submit' value='Save' className="RegisterButton"></input>
+            			</div>
 
-
-				<form onSubmit={this.handleNameChange}>
-				<h3>Change Name</h3>
+					</form>
+					<hr></hr>
+					<form onSubmit={this.handleNameChange}>
+						<h3>Change Name</h3>
             		<div >
                     	<input className="RegisterFields" type='text' placeholder= {this.state.name} name="name" onChange={this.handleFormChange} ></input>
                 	</div>
@@ -182,11 +228,21 @@ class SSettings extends React.Component {
             		</form>
 				</div>
 			
-			</div>
+			// </div>
 				
 
 		)
-
+	}
+	
+	render() {
+		return (
+			<div>
+			<div><Menu/></div>				
+			<div className="Home">
+				{this.tableBody()}
+			</div> 
+			</div>
+		)
 	}
 }
 export default SSettings;
