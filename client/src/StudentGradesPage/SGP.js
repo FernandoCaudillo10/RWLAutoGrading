@@ -55,8 +55,10 @@ class SGP extends React.Component {
 	render() {
 		return (
 			<div>
-				<div><Menu/></div>
-			<div className="SPG">
+			<div>
+				<Menu/>
+			</div>
+			<div className="Home">
 				<table id="body">
 					{this.tableBody()}
 				</table>
