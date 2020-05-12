@@ -7,7 +7,7 @@
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "count-lines": "git ls-files server.js backend/* client/src/* | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n"
+    "count-lines": "git ls-files server.js backend/ client/src/*.js client/src/*/*.js | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n"
   },
   "repository": {
     "type": "git",

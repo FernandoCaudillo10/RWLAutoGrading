@@ -9,6 +9,14 @@ const pool = new Pool({
 	ssl:true,
 })
 
+function getProfEval(rubricID, email){
+	return pool.query(`SELECT e.eval_id, p.prompt_text, q.question_id, q.question_text, r.response_id, r.response_value FROM prof_eval e 
+						JOIN response r ON e.professor_email='${email}' AND e.response_id=r.response_id 
+						JOIN question q ON r.question_id=q.question_id 
+						JOIN prompt p ON q.prompt_id=p.prompt_id 
+						WHERE p.rubric_id='${rubricID}' AND e.response_grade=null`);
+}
+
 function getStudentsRespondedToRubric(rubric_id){
 	return pool.query(`SELECT DISTINCT(rs.student_email) FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id JOIN response rs ON rs.question_id=q.question_id WHERE r.rubric_id='${rubric_id}';`); 
 }
@@ -44,7 +52,10 @@ function getStudentResponse(rId){
 	return pool.query(`SELECT * FROM response WHERE response_id='${rId}'`);
 }
 function createProfEval(email, resId, grade) {
-	return pool.query(`INSERT INTO prof_eval(professor_email, response_id, response_grade) VALUES ('${email}','${resId}', '${grade}') RETURNING *`);
+	if(grade)
+		return pool.query(`INSERT INTO prof_eval(professor_email, response_id, response_grade) VALUES ('${email}','${resId}', '${grade}') RETURNING *`);
+	else
+		return pool.query(`INSERT INTO prof_eval(professor_email, response_id) VALUES ('${email}','${resId}') RETURNING *`);
 }
 function getAssignment(rub_id){
 	return pool.query(`SELECT DISTINCT p.*, q.* FROM rubric r JOIN prompt p ON r.rubric_id=p.rubric_id JOIN question q ON p.prompt_id=q.prompt_id WHERE r.rubric_id='${rub_id}'`);
@@ -255,4 +266,5 @@ module.exports = {
 	createEvaluation,
 	getAllStudResponseGrades,
 	getAllClasses,
+	getProfEval,
 }

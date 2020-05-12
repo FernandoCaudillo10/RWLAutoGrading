@@ -105,7 +105,8 @@ class Grade extends React.Component{
     }
     render(){
         return (
-            <Menu>
+            <div>
+                <div><Menu/></div>
                 <div className="Grade">
                     <form onSubmit={this.handleSubmit}>
                         <div className="title">Grade Homework {this.props.location.state.todo}</div><br/>
@@ -113,7 +114,7 @@ class Grade extends React.Component{
                         <input type='submit' value='Submit' className="SubmitButton" />
                     </form>
                 </div>
-            </Menu>
+            </div>
         )
     }
 }
