@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import RangeSlider from '../RangeSlider/RangeSlider';
 import './StudEval.scss';
 
 class StudEvalPage extends React.Component {
@@ -7,12 +8,37 @@ class StudEvalPage extends React.Component {
 	super(props);
 	
 	this.state = {
-		data: {},		
+		Ddata: [
+    {
+        "eval_id": 1,
+        "prompt_text": "judge a book by the cover",
+        "question_id": 1,
+        "question_text": "he was considered normal by all of his acquaintances. Why?",
+        "response_id": 1,
+        "response_value": "The US Senate has good taste."
+    },
+    {
+        "eval_id": 2,
+        "prompt_text": "judge a book by the cover",
+        "question_id": 2,
+        "question_text": "all of his acquaintances. Why?",
+        "response_id": 2,
+        "response_value": "The US has good taste."
+    },
+    {
+        "eval_id": 3,
+        "prompt_text": "Good vibes Were bringing only good vibes People",
+        "question_id": 3,
+        "question_text": "considered normal Why?",
+        "response_id": 3,
+        "response_value": "Congress, tho"
+    }],	
+		data: {},	
 	}
 
 	this.renderData = this.renderData.bind(this);
 	this.recreateData = this.recreateData.bind(this);
-
+/*
 		axios({
                 method: 'get',
                 url: `https://rwlautograder.herokuapp.com/api/stud/class/${this.props.match.params.rubricID}/assignment/evaluation`,
@@ -30,7 +56,8 @@ class StudEvalPage extends React.Component {
                   }else {
                       console.log(error.message);
                   }
-              })
+              })*/
+		this.recreateData(this.state.Ddata);
 	}
 
 	recreateData(data) {
@@ -58,42 +85,65 @@ class StudEvalPage extends React.Component {
 			}
 		})
 
-		this.setState({data: r_data});
-		console.log("hello");
-		console.log(this.state.data);
+		this.state.data = r_data;
 	}
 	
 	renderData() {
 		let assign = this.state.data;
-		/* 
-		return this.state.evaluations.map((evaluation, index) => {
-            const { eval_id, prompt_text, question_id, question_text, response_id, response_value } = evaluation
+		let pageObj;
+		let jsxArr = [];
+		
+		Object.entries(assign).forEach((arr) => {
+			let prompt = arr[0];
+			jsxArr.push(<div id="prompt">
+							<text><b>{prompt}</b></text>
+						</div>)
+			pageObj = arr[1].map((elem, idx) => {
+				let qs = elem[0].question;
+				let res = elem[0].response;
 			
-			return (
-                <tr>
-                    <div>
-						<text>{question_text}</text><br></br>
-						<text>{response_value}</text>
-					</div>
-					<br></br>
-                </tr>
-            )
-        })		*/
+				return (
+						<div>
+							<div className="assignInfo">
+								<text> {qs} </text><br></br>
+								<text id="response"> {res} </text><br></br>
+							</div>
+							<div className="sliderContainer"> 
+								<div className="sliderText">
+									<b>Clarity:</b>
+								</div> 
+								<RangeSlider />
+							</div>
+							<div className="sliderContainer"> 
+								<div className="sliderText">
+									<b>Grammar:</b>
+								</div> 
+								<RangeSlider />
+							</div>
+							<div className="sliderContainer"> 
+								<div className="sliderText">
+									<b>Response:</b>
+								</div> 
+								<RangeSlider />
+							</div>
+						</div>
+				)
+			});
+			jsxArr.push(pageObj);
+		});
+	
+		return jsxArr;
 	}
 
 render(){
-  	let title = "Professor Student Evalution";
+  	let title = "Professor Student Evaluation";
 
 	return (
-            <div className="StudGradeContainer">
-                <table id="GradeTable">
-                    <tbody>
-                        <tr>
-						HELLo!!!
-                         // {this.renderData()} 
-                        </tr>
-                    </tbody>
-                </table>
+            <div className="StudEvalContainer">
+                <div id="StudentEvalContainer">
+					<h1 id="title"> {title} </h1>
+                    {this.renderData()} 
+                </div>
             </div>
         )
 }
