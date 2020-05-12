@@ -31,5 +31,9 @@ table, th, td {
 }
 .assignmentLinks{
 	display: flex;
-	justify-content: flex-end;
+	flex-direction: column;
+}
+.assLinkCont{
+	display: flex;
+	flex-direction: row;
 }

@@ -129,10 +129,9 @@ class ProfessorAssignments extends React.Component{
 	AssignmentView(){
 		return (
             <form onSubmit={this.handleAddQuestion}>
-				{ Object.keys(this.state.prompts).map( (pId) => { if(pId !== 'psz') return this.Prompt(pId) } ) }
+				{ Object.keys(this.state.prompts).map( (pId) => { if(pId !== 'psz') return this.Prompt(pId) } ) } 
                 <input type="button" onClick={this.handleAddPrompt} value="Add Prompt" className="AddPrompt"/>
             </form>
-			
 		);
 	}
 	setAssignedDate(date){

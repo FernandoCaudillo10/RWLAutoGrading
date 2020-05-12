@@ -52,14 +52,15 @@ ProfessorAssignmnets(){
 						<div> <strong>Final Due Date</strong> {dateFormat(item.final_due_date, "dddd, mmmm dS, yyyy, h:MM TT")} </div>
 					</div>
                     <div>{item.ClassName}</div>
-                    <div>
+                    <div className="assLinkCont">
 						<div className="assignmentLinks">
-							<Link to={`/professor/class/${item.class_id}/assignments`}> <input type="submit" value="View" ></input> </Link>
-							<Link to={'/'}> <input type="submit" value="Edit"></input> </Link>
+							<Link to={`/professor/assignment/${item.rubric_id}/view`}> <input type="submit" value="View" ></input> </Link>
+							<Link to={`/professor/assignment/${item.rubric_id}/edit`}> <input type="submit" value="Edit"></input> </Link>
 						</div>
-						<div classNAme="assignmentLinks">
-							<Link to={'/'}> <input type="submit" value="Disburse For Peer Grading"></input> </Link>
-							<Link to={'/'}> <input type="submit" value="Submit Evaluations"></input> </Link>
+						<div className="assignmentLinks">
+							<Link to={`/professor/assignment/${item.rubric_id}/distStud`}> <input type="submit" value="Disburse To Students"></input> </Link>
+							<Link to={`/professor/assignment/${item.rubric_id}/distProf`}> <input type="submit" value="Disburse To Myself"></input> </Link>
+							<Link to={`/professor/assignment/${item.rubric_id}/evaluate`}> <input type="submit" value="Submit Evaluations"></input> </Link>
 						</div>
 					</div>
                 </div>
