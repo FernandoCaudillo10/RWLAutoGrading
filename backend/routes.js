@@ -49,8 +49,6 @@ class RoutesHandler{
 
 			qry.getStudClasses(pUser.email)
 				.then((result) => {
-					if(result.rowCount === 0)
-						return response.status(400).json({error: "Student not registered for any classes"});
 					return response.status(200).json(result.rows);
 				})
 				.catch(err => {
@@ -142,8 +140,6 @@ class RoutesHandler{
 			let sID = request.params.sectionID;
 			qry.getStudentGrade(pUser.email, sID)
 				.then((result) => {
-					if(result.rowCount === 0)
-						return response.status(400).json({error: "Student email does not have any grades"});
 					return response.status(200).json(result.rows);
 				})
 				.catch(err => {
@@ -191,8 +187,6 @@ class RoutesHandler{
 		let rID = request.params.rubricID;
 		qry.getEvalAssignment(pUser.email, rID)
 			.then((result) => {
-				if(result.rowCount === 0) 
-					return response.status(400).json({error: "No student found under this email"});
 				return response.status(200).json(result.rows);		
 			})
 			.catch(err => {
@@ -294,8 +288,6 @@ class RoutesHandler{
 						return response.status(400).json({error: "Student is not enrolled in class"});		
 					qry.getAllClassAssignments(cID)
 						.then((result) => {
-							if(result.rowCount === 0) 
-								return response.status(400).json({error: "No  assignment under classID"});
 							return response.status(200).json(result.rows);	
 						})
 						.catch(err => {
@@ -349,7 +341,6 @@ class RoutesHandler{
 			
 			
 			let profEval = await qry.createProfEval(pUser.email, rId, grade);
-			if(profEval.rowCount === 0) return response.status(400).json({error: "Server error"});
 
 			return response.status(200).json(profEval.rows);
 
