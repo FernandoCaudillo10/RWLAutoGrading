@@ -142,26 +142,26 @@ render(){
 
             <form onSubmit={this.handleSubmit}>
             <div >
-                    <input className="RegisterFields" type='text' placeholder='Name' name="nameofuser" onChange={this.handleFormChange}></input>
+                    <input className="RegisterFields" type='text' placeholder='Name' name="nameofuser" onChange={this.handleFormChange} required ></input>
                 </div>
 
                 <div>
-                    <input className="RegisterFields" type='text' placeholder='Email' name="email" onChange={this.handleFormChange}></input>
+                    <input className="RegisterFields" type='text' placeholder='Email' name="email" onChange={this.handleFormChange} required></input>
                 </div>
                 <div >
-                    <input className="RegisterFields" type='text' placeholder='Confirm Email' name="emailConfirm" onChange={this.handleFormChange}></input>
+                    <input className="RegisterFields" type='text' placeholder='Confirm Email' name="emailConfirm" onChange={this.handleFormChange} required></input>
                 </div>
 
                 <div >
-                    <input className="RegisterFields" type='password' placeholder='Password' name="password" onChange={this.handleFormChange}></input>
+                    <input className="RegisterFields" type='password' placeholder='Password' name="password" onChange={this.handleFormChange} required></input>
                 </div>
                 <div >
-                    <input className="RegisterFields" type='password' placeholder='Confirm Password' name="passwordConfirm" onChange={this.handleFormChange}></input>
+                    <input className="RegisterFields" type='password' placeholder='Confirm Password' name="passwordConfirm" onChange={this.handleFormChange} required></input>
                 </div>
                 <div>
                     <div className="TypeofUser">
                         
-                        <select value={this.state.typeOfUser} onChange={this.handleSelectOption}>
+                        <select value={this.state.typeOfUser} onChange={this.handleSelectOption} required>
                             <option value="" name ="typeOfUser"></option>
                             <option value="Student" name ="typeOfUser">Student</option>
                             <option value="Teacher" name ="typeOfUser">Teacher</option>

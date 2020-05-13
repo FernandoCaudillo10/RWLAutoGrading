@@ -18,6 +18,8 @@ import PSettings from './ProfessorSettings/PSettings';
 import StudEvalPage from './StudentEvalPage/StudEvalPage'; 
 import Submit from './submit/Submit';
 import SSettings from './StudentSettings/SSettings' 
+import Menu from './menu/Menu';
+import PSingleAssignmentView from './PSingleAssignmentView/ProfessorViewAssignment'; 
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import StudViewClass from './StudentViewClass/StudViewClass';
 import axios from 'axios';
@@ -197,6 +199,11 @@ class App extends React.Component {
 
 				<Switch>
 					<Route exact path="/" component={Login} />
+				
+				<Switch>
+					<Route exact path="/menu" component={Menu}  />
+					<Route exact path="/professor/:classId/singleassignmentview/" component = {PSingleAssignmentView} />
+					<Route exact path="/" component={Login}  />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
