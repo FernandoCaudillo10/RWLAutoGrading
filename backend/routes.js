@@ -218,7 +218,7 @@ class RoutesHandler{
 			});
 
 			if(!isID)
-				return response.status(400).json({error: "Missing responseID"});
+				return response.status(400).json({error: "Missing evaluationID"});
 			if(!isGrade) 
 				return response.status(400).json({error: "Missing grade"});
 
