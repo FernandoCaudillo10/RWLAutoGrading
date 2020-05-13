@@ -9,23 +9,6 @@ class StudEvalPage extends React.Component {
 	super(props);
 	
 	this.state = {
-		Ddata: [
-    {
-        "eval_id": 1,
-        "prompt_text": "judge a book by the cover",
-        "question_id": 1,
-        "question_text": "he was considered normal by all of his acquaintances. Why?",
-        "response_id": 1,
-        "response_value": "The US Senate has good taste."
-    },
-    {
-        "eval_id": 3,
-        "prompt_text": "Good vibes Were bringing only good vibes People",
-        "question_id": 3,
-        "question_text": "considered normal Why?",
-        "response_id": 3,
-        "response_value": "Congress, tho"
-    }],	
 		data: {},
 		evalData: null,
 	}
@@ -33,7 +16,7 @@ class StudEvalPage extends React.Component {
 	this.renderData = this.renderData.bind(this);
 	this.recreateData = this.recreateData.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
-/*
+
 		axios({
                 method: 'get',
                 url: `https://rwlautograder.herokuapp.com/api/stud/class/${this.props.match.params.rubricID}/assignment/evaluation`,
@@ -51,8 +34,7 @@ class StudEvalPage extends React.Component {
                   }else {
                       console.log(error.message);
                   }
-              })*/
-		this.recreateData(this.state.Ddata);
+              })
 	}
 	
 	postEvaluation = (eArr) => {
