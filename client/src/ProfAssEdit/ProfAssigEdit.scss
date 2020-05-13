@@ -1,0 +1,39 @@
+table {
+    border-collapse: collapse;
+    width:100%
+
+}
+
+table, th, td {
+  // border: 1px solid black;
+  padding: 15px;
+  text-align: left;
+}
+
+.AssignmenViewTable{
+    margin-left: 10%;
+    margin-top: 3%;
+}
+.assignmentsContainer{
+	display: flex;
+	flex-direction: column;
+}
+.columnTitles{
+	display: flex;
+	justify-content: space-between;
+	margin-right: 20%;
+	margin-left: 5%;
+}
+.assignmentBlock{
+	display: flex;
+	justify-content: space-evenly;
+	margin: 1.5em 0 0 0;
+}
+.assignmentLinks{
+	display: flex;
+	flex-direction: column;
+}
+.assLinkCont{
+	display: flex;
+	flex-direction: row;
+}

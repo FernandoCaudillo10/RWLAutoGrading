@@ -22,6 +22,8 @@ import Submit from './submit/Submit';
 import Menu from './menu/Menu';
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import StudViewClass from './StudentViewClass/StudViewClass';
+import ProfAssigView from './ProfAssView/ProfAssigView';
+import ProfAssigEdit from './ProfAssEdit/ProfAssigEdit';
 import axios from 'axios';
 
 
@@ -107,6 +109,8 @@ class App extends React.Component {
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
 					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
+					<Route exact path="/professor/class/:classId/assignment/:rubricId/view" component={ProfAssigView} />
+					<Route exact path="/professor/class/:classId/assignment/:rubricId/edit" component={ProfAssigEdit} />
 					<Route exact path="/professor" component={HomePage} />
 					<Route exact path="/student/home" component={StudentHomePage} />
 					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
