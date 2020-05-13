@@ -5,6 +5,8 @@ import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 import './PAssignmentView.scss';
 import Menu from '../menu/Menu'; 
+import PSingleAssignmentView from '../PSingleAssignmentView/ProfessorViewAssignment'; 
+
 
 class PAssignmentView extends React.Component{
 
@@ -13,9 +15,14 @@ class PAssignmentView extends React.Component{
     
     this.state = {
         assignments: [
-        ]
+		],
+		singleAssignmentInfo: [
+
+		]
+		
     }
-    this.ProfessorAssignmnets = this.ProfessorAssignmnets.bind(this);
+	this.ProfessorAssignmnets = this.ProfessorAssignmnets.bind(this);
+	this.ViewAssignment = this.ViewAssignment.bind(this); 
 	axios({
 		method: 'get',
 		url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignments`,
@@ -26,7 +33,6 @@ class PAssignmentView extends React.Component{
 		  'Authorization': localStorage.getItem('jwtToken'),
 		}
 	  }).then ( res =>{
-		  console.log(res);
 		  this.setState({loading: false, assignments: res.data });
 	  }).catch((error) =>{
 		  this.setState({loading: false});
@@ -40,10 +46,39 @@ class PAssignmentView extends React.Component{
 	  })
 }
 
+ViewAssignment(event){
+	event.preventDefault();
+	const rubric_id = event.target.name;
+	axios({
+		method: 'get',
+		url: `https://rwlautograder.herokuapp.com/api/prof/class/${this.props.match.params.classId}/assignment/${rubric_id}`,
+		data: qs.stringify({
+		}),
+		headers: {
+		  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+		  'Authorization': localStorage.getItem('jwtToken'),
+		}
+	  }).then ( res =>{
+		  this.setState({ singleAssignmentInfo: res.data});
+		this.props.history.push({
+			pathname:"/professor/${this.props.match.params.classId}/singleassignmentview/",
+			state:{
+				info: this.state.singleAssignmentInfo,
+			 }
+		   });
+		
+	  }).catch((error) =>{
+		  if(error.response){
+			console.log(error.response.data);
+		  }
+	  })
+	
+}
+
 ProfessorAssignmnets(){
 	
     return(
-    	this.state.assignments ? this.state.assignments.map((item, key) =>
+		this.state.assignments ? this.state.assignments.map((item, key) =>
                 <div key={item.class_id} className="assignmentBlock">
                     <div>{item.name}</div>
                     <div>
@@ -54,10 +89,15 @@ ProfessorAssignmnets(){
                     <div>{item.ClassName}</div>
                     <div>
 						<div className="assignmentLinks">
-							<Link to={`/professor/class/${item.class_id}/assignments`}> <input type="submit" value="View" ></input> </Link>
+						{/* <Link to={`/professor/class/${item.class_id}/assignments`}> <input type="submit" value="View" ></input> </Link> */}
+							{/* <Link to={`/professor/:classId/singleassignmentview/`}> <input type="submit" value="View" ></input> </Link>
+							 */}
+							 <button name={item.rubric_id} onClick={this.ViewAssignment}>View</button>
 							<Link to={'/'}> <input type="submit" value="Edit"></input> </Link>
+
 						</div>
-						<div classNAme="assignmentLinks">
+						
+						<div className="assignmentLinks">
 							<Link to={'/'}> <input type="submit" value="Disburse For Peer Grading"></input> </Link>
 							<Link to={'/'}> <input type="submit" value="Submit Evaluations"></input> </Link>
 						</div>
@@ -65,7 +105,9 @@ ProfessorAssignmnets(){
                 </div>
         		)
 				: 
+				
 				<div> </div>
+				
             
     )
     
@@ -89,9 +131,9 @@ render(){
 					<div>Actions</div>
                 </div>
                  {this.ProfessorAssignmnets()} 
+
             </div>
            
-            
         </div>
         </div>  
     )
