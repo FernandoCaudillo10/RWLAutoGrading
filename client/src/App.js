@@ -199,8 +199,6 @@ class App extends React.Component {
 
 				<Switch>
 					<Route exact path="/" component={Login} />
-				
-				<Switch>
 					<Route exact path="/menu" component={Menu}  />
 					<Route exact path="/professor/:classId/singleassignmentview/" component = {PSingleAssignmentView} />
 					<Route exact path="/" component={Login}  />

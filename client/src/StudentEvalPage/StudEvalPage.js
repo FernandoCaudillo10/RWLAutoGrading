@@ -179,7 +179,7 @@ class StudEvalPage extends React.Component {
     }
 
 	render(){
-  		let title = "Professor Student Evaluation";
+  		let title = "Peer Student Evaluation";
 
 		return (
             <div className="StudEvalContainer">
