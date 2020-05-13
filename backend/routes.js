@@ -312,9 +312,9 @@ class RoutesHandler{
 				return response.status(400).json({error: "No user under this email"});
 			}
 
-			let sId = request.params.sectionId;
+			let rId = request.params.rubId;
 			
-			let profEval = await qry.getProfEval(sId);
+			let profEval = await qry.getProfEval(rId);
 
 			return response.status(200).json(profEval.rows);
 
