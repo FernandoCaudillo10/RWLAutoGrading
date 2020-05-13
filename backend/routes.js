@@ -213,7 +213,7 @@ class RoutesHandler{
 			let isGrade = true;
 
 			await assignment.evaluation.forEach((e) => {
-				if(!e.evaluationID) isID = false;
+				if(!e.evaluation_id) isID = false;
 				if(!e.grade) isGrade = false;
 			});
 
