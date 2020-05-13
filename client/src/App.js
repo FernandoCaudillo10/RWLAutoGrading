@@ -12,12 +12,12 @@ import Login from './login/Login';
 import Register from './register/Register'; 
 import ProfessorHomePage from './ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './ProfessorAssignment/ProfessorAssignments';
-import PAssignmentView from './ProfessorAssignmentView/PAssignmentView'
+import PAssignmentView from './ProfessorAssignmentView/PAssignmentView';
 import StudentHomePage from './StudentHomePage/StudentHomePage';
 import PSettings from './ProfessorSettings/PSettings';
 import StudEvalPage from './StudentEvalPage/StudEvalPage'; 
 import Submit from './submit/Submit';
-import SSettings from './StudentSettings/SSettings' 
+import SSettings from './StudentSettings/SSettings';
 import Menu from './menu/Menu';
 import PSingleAssignmentView from './PSingleAssignmentView/ProfessorViewAssignment'; 
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
@@ -205,7 +205,6 @@ class App extends React.Component {
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
-					<Route exact path="/student/grades" component={HomePage} />
 					<Route exact path="/student/settings" component={SSettings} />
 					<Route exact path="/student/class/:rubricID/assignment/evaluation" component={StudEvalPage} />
 					<Route exact path="/student/submit" component={Submit} />
