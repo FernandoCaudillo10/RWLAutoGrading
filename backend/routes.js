@@ -213,12 +213,12 @@ class RoutesHandler{
 			let isGrade = true;
 
 			await assignment.evaluation.forEach((e) => {
-				if(!e.evaluationID) isID = false;
+				if(!e.evaluation_id) isID = false;
 				if(!e.grade) isGrade = false;
 			});
 
 			if(!isID)
-				return response.status(400).json({error: "Missing responseID"});
+				return response.status(400).json({error: "Missing evaluationID"});
 			if(!isGrade) 
 				return response.status(400).json({error: "Missing grade"});
 

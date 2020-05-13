@@ -5,6 +5,8 @@ import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 import './PAssignmentView.scss';
 import Menu from '../menu/Menu'; 
+import PSingleAssignmentView from '../PSingleAssignmentView/ProfessorViewAssignment'; 
+
 
 class PAssignmentView extends React.Component{
 
@@ -15,6 +17,7 @@ class PAssignmentView extends React.Component{
 			assignments: [
 			]
 		}
+
 		this.ProfessorAssignmnets = this.ProfessorAssignmnets.bind(this);
 		this.distStud = this.distStud.bind(this);
 		this.distProf = this.distProf.bind(this);

@@ -20,10 +20,12 @@ import Grade from './grade/Grade';
 import StudentGradesPage from './StudentGradesPage/SGP';
 import Submit from './submit/Submit';
 import Menu from './menu/Menu';
+import PSingleAssignmentView from './PSingleAssignmentView/ProfessorViewAssignment'; 
 import StudentViewGradePage from './StudentViewGrade/StudentViewGradePage';
 import StudViewClass from './StudentViewClass/StudViewClass';
 import ProfAssigView from './ProfAssView/ProfAssigView';
 import ProfAssigEdit from './ProfAssEdit/ProfAssigEdit';
+import StudentEvalPage from './StudentEvalPage/StudEvalPage';
 import axios from 'axios';
 
 
@@ -95,16 +97,14 @@ class App extends React.Component {
 		<Router>
 			<div>
 				
-				
 				<Switch>
 					<Route exact path="/menu" component={Menu}  />
+					<Route exact path="/professor/:classId/singleassignmentview/" component = {PSingleAssignmentView} />
 					<Route exact path="/" component={Login}  />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/professor/classes" component={ProfessorHomePage} />
 					<Route exact path="/professor/settings" component={PSettings} />
-					<Route exact path="/student/grades" component={StudentGradesPage} />
 					<Route exact path="/student/settings" component={SSettings} />
-					<Route exact path="/student/grade/:rubricID" component={Grade} />
 					<Route exact path="/student/submit/:rubricID" component={Submit} />
 					<Route exact path="/student" component={HomePage} />
 					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
@@ -115,6 +115,7 @@ class App extends React.Component {
 					<Route exact path="/student/home" component={StudentHomePage} />
 					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
 					<Route exact path="/student/home/classes" component={StudViewClass} />
+					<Route exact path="/student/class/:rubricID/assignment/evaluation" component={StudentEvalPage} />
 				</Switch>
 			</div>
 		</Router>

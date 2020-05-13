@@ -137,7 +137,7 @@ async function submitAssignment(email, assignment){
 }
 async function submitEvalGrade(assignment){
 	let result = await assignment.evaluation.forEach((eval) => {
-		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluationID}' RETURNING *`);
+		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluation_id}' RETURNING *`);
 	});
 	return result;
 }
