@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import RangeSlider from '../RangeSlider/RangeSlider';
+import Menu from '../menu/Menu'; 
 import './StudEval.scss';
 
 class StudEvalPage extends React.Component {
@@ -167,6 +168,7 @@ class StudEvalPage extends React.Component {
 
 		return (
             <div className="StudEvalContainer">
+				<Menu/>
                 <div id="StudentEvalContainer">
 					<h1 id="title"> {title} </h1>
                     {this.renderData()} 
