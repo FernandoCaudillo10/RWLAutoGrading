@@ -78,7 +78,7 @@ class PAssignmentView extends React.Component{
 			method: 'post',
 			url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${rubId}/distribute`,
 			data: qs.stringify({
-				studAmntToGrade: this.state.studDistAmount,
+				studAmntToGrade: this.state.profDistAmount,
 			}),
 			headers: {                                 
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
