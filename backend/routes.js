@@ -208,7 +208,7 @@ class RoutesHandler{
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = JSON.parse(request.body.assignment);
+			let assignment = (typeof request.body.assignment === 'string' ? JSON.parse(request.body.assignment) : request.body.assignment);
 			let isID = true;
 			let isGrade = true;
 			
@@ -245,7 +245,7 @@ class RoutesHandler{
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = JSON.parse(request.body.assignment);
+			let assignment = (typeof request.body.assignment === 'string' ? JSON.parse(request.body.assignment) : request.body.assignment);
 			let isID = true;
 			let isGrade = true;
 			
@@ -282,7 +282,7 @@ class RoutesHandler{
 		if(!request.body.assignment) 
 			return response.status(400).json({error: "Response value missing"});
 
-		let assignment = JSON.parse(request.body.assignment);
+		let assignment = (typeof request.body.assignment === 'string' ? JSON.parse(request.body.assignment) : request.body.assignment);
 		let isResValue = true;
 		let isIdValue = true;
 
