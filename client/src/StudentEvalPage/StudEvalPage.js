@@ -167,8 +167,8 @@ class StudEvalPage extends React.Component {
   		let title = "Peer Student Evaluation";
 
 		return (
+			<div><Menu />
             <div className="StudEvalContainer">
-				<Menu/>
                 <div id="StudentEvalContainer">
 					<h1 id="title"> {title} </h1>
                     {this.renderData()} 
@@ -177,6 +177,7 @@ class StudEvalPage extends React.Component {
 					<button onClick={this.handleSubmit}>Submit</button>	
 				</div>	
             </div>
+			</div>
         )
 }
 }

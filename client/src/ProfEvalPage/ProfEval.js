@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import ProfSlider from '../ProfSlider/RangeSlider';
+import Menu from '../menu/Menu';
 import './ProfEval.scss';
 
 class ProfEval extends React.Component {
@@ -164,6 +165,7 @@ class ProfEval extends React.Component {
   		let title = "Professor Student Evaluation";
 
 		return (
+			<div><Menu />
             <div className="StudEvalContainer">
                 <div id="StudentEvalContainer">
 					<h1 id="title"> {title} </h1>
@@ -173,6 +175,7 @@ class ProfEval extends React.Component {
 					<button onClick={this.handleSubmit}>Submit</button>	
 				</div>	
             </div>
+			</div>
         )
 }
 }
