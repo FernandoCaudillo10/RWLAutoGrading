@@ -1,5 +1,6 @@
 import React  from 'react';
 import axios from 'axios';
+import Menu from '../menu/Menu';
 import './StudentViewGrade.scss';
 
 class StudentViewGradePage extends React.Component {
@@ -48,7 +49,8 @@ class StudentViewGradePage extends React.Component {
 
 render() {
 	return (
-            <div className="ViewGradeContainer">
+			<div> <Menu />
+            	<div className="ViewGradeContainer">
                 <table id="GradeTable">
 					<tbody>
                     	<tr>
@@ -61,7 +63,8 @@ render() {
 							{this.renderTableData()}
 					</tbody>
                 </table>
-            </div>
+            	</div>
+			</div>
         )
 	}
 }
