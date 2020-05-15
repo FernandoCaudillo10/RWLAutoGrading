@@ -34,7 +34,7 @@ class ProfEval extends React.Component {
                   }else {
                       console.log(error.message);
                   }
-              })
+            }).finally(() => { this.forceUpdate() })
 	}
 		
 	postEvaluation = (eArr) => {
@@ -58,7 +58,7 @@ class ProfEval extends React.Component {
                 }else {
                     console.log(error.message);
                 }
-            })
+            }).finally(() => { this.forceUpdate() })
 	}
 
 	recreateData(data) {
