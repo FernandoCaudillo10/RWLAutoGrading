@@ -2,7 +2,7 @@ const {Pool} = require('pg')
 const bcrypt = require("bcryptjs");
 
 //protocol://DBusername:DBpassword@localhost:5432/DBname
-var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://postgres:postgres@localhost:5432/rwlDB';
+var connString = (process.env.PORT)? process.env.DATABASE_URL : 'postgresql://me:password@localhost:5432/api';
 
 const pool = new Pool({
 	connectionString: connString,
@@ -10,11 +10,7 @@ const pool = new Pool({
 })
 
 function getProfEval(rubricID, email){
-	return pool.query(`SELECT e.eval_id, p.prompt_text, q.question_id, q.question_text, r.response_id, r.response_value FROM prof_eval e 
-						JOIN response r ON e.professor_email='${email}' AND e.response_id=r.response_id 
-						JOIN question q ON r.question_id=q.question_id 
-						JOIN prompt p ON q.prompt_id=p.prompt_id 
-						WHERE p.rubric_id='${rubricID}' AND e.response_grade=null`);
+	return pool.query(`SELECT e.eval_id, p.prompt_text, q.question_id, q.question_text, r.response_id, r.response_value FROM prof_eval e JOIN response r ON e.response_id=r.response_id JOIN question q ON r.question_id=q.question_id JOIN prompt p ON q.prompt_id=p.prompt_id WHERE professor_email='${email}' AND p.rubric_id='${rubricID}'`);
 }
 
 function getStudentsRespondedToRubric(rubric_id){
@@ -138,6 +134,12 @@ async function submitAssignment(email, assignment){
 async function submitEvalGrade(assignment){
 	let result = await assignment.evaluation.forEach((eval) => {
 		return pool.query(`UPDATE evaluation SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluation_id}' RETURNING *`);
+	});
+	return result;
+}
+async function submitProfEval(assignment){
+	let result = await assignment.evaluation.forEach((eval) => {
+		return pool.query(`UPDATE prof_eval SET response_grade='${eval.grade}' WHERE eval_id='${eval.evaluation_id}' RETURNING *`);
 	});
 	return result;
 }
@@ -267,4 +269,5 @@ module.exports = {
 	getAllStudResponseGrades,
 	getAllClasses,
 	getProfEval,
+	submitProfEval,
 }
