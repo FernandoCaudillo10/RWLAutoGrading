@@ -152,7 +152,7 @@ class PAssignmentView extends React.Component{
 									<input type="submit" value="Disburse To Myself" onClick={() =>   { this.distProf(item.rubric_id)}}></input>
 									<input type="text" value={this.state.prof_dist_amount} onChange={this.profDistAmount}/>
 								</div>
-								<input type="submit" value="Submit Evaluations" onClick={() => { this.submitEval(item.rubric_id)}}></input>
+								<Link to={`/professor/class/${item.rubric_id}/student/evaluation`}> <input type="submit" value="Submit Evaluations"></input> </Link>
 							</div>
 						</div>
 					</div>

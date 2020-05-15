@@ -110,7 +110,7 @@ import React  from 'react';
                     <tr>
                         <td><b>Homework {i+1}</b><br/>{<i>{new Date(data.assigned_date).toLocaleString()}</i>}</td>
                         <td><Link to={{pathname: '/student/submit/' + (i+1) , state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.due_date)}</Link></td>
-                        <td><Link to={{pathname: '/student/grade/' + (i+1), state: {todo: (i+1), rubricID: data.rubric_id}}}>{this.hidePastDue(data.final_due_date)}</Link></td>
+                        <td><Link to={`/student/class/${data.rubric_id}/assignment/evaluation`}>{this.hidePastDue(data.final_due_date)}</Link></td>
                     </tr>
                 )
             )
@@ -121,8 +121,9 @@ import React  from 'react';
                 <div>
                     <div><Menu /></div>
                     <div className="Home">
-                     <div>{this.newStudent()}</div>
+                    <div>{this.newStudent()}</div>
                     </div>  
+					<Link to={`/student/home/classes`}> <input type="submit" value="View Registered Classes"></input> </Link>
                 </div> 
             )
         }
