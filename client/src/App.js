@@ -27,6 +27,7 @@ import ProfAssigView from './ProfAssView/ProfAssigView';
 import ProfAssigEdit from './ProfAssEdit/ProfAssigEdit';
 import StudentEvalPage from './StudentEvalPage/StudEvalPage';
 import ProfEval from './ProfEvalPage/ProfEval';
+import recalGrades from './recalGrades/recalGrades';
 import axios from 'axios';
 
 
@@ -118,6 +119,7 @@ class App extends React.Component {
 					<Route exact path="/student/home/classes" component={StudViewClass} />
 					<Route exact path="/student/class/:rubricID/assignment/evaluation" component={StudentEvalPage} />
 					<Route exact path="/professor/class/:rubricID/student/evaluation" component={ProfEval} />
+					<Route exact path="/professor/class/:rubricID/evaluation/grades" component={recalGrades} />
 				</Switch>
 			</div>
 		</Router>
