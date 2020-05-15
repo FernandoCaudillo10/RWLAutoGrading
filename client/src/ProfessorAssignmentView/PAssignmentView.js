@@ -22,6 +22,8 @@ class PAssignmentView extends React.Component{
 		this.distStud = this.distStud.bind(this);
 		this.distProf = this.distProf.bind(this);
 		this.submitEval = this.submitEval.bind(this);
+		this.studDistAmount = this.studDistAmount.bind(this);
+		this.profDistAmount = this.profDistAmount.bind(this);
 		let cId = this.props.match.params.classId;
 
 		axios({
@@ -52,6 +54,9 @@ class PAssignmentView extends React.Component{
 		axios({
 			method: 'post',
 			url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${rubId}/students/distribute`,
+			data: qs.stringify({
+				dist_amount: this.state.studDistAmount,
+			}),
 			headers: {
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
 		  	  'Authorization': localStorage.getItem('jwtToken'),
@@ -72,6 +77,9 @@ class PAssignmentView extends React.Component{
 		axios({
 			method: 'post',
 			url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${rubId}/distribute`,
+			data: qs.stringify({
+				studAmntToGrade: this.state.studDistAmount,
+			}),
 			headers: {                                 
 			  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
 		  	  'Authorization': localStorage.getItem('jwtToken'),
@@ -110,6 +118,13 @@ class PAssignmentView extends React.Component{
 		 });
 	}
 
+	studDistAmount(event){
+		this.setState({studDistAmount: event.target.value});
+	}
+	profDistAmount(event){
+		this.setState({profDistAmount: event.target.value});
+	}
+
 	ProfessorAssignmnets(){
 		let cId = this.props.match.params.classId;
 		
@@ -129,8 +144,14 @@ class PAssignmentView extends React.Component{
 								<Link to={`/professor/class/${cId}/assignment/${item.rubric_id}/edit`}> <input type="submit" value="Edit"></input> </Link>
 							</div>
 							<div className="assignmentLinks">
-							  <input type="submit" value="Disburse To Students" onClick={() =>   { this.distStud(item.rubric_id)}}></input>
-								<input type="submit" value="Disburse To Myself" onClick={() =>   { this.distProf(item.rubric_id)}}></input>
+								<div>
+							  		<input type="submit" value="Disburse To Students" onClick={() =>   { this.distStud(item.rubric_id)}}></input>
+									<input type="text" value={this.state.stud_dist_amount} onChange={this.studDistAmount}/>
+								</div>
+								<div>
+									<input type="submit" value="Disburse To Myself" onClick={() =>   { this.distProf(item.rubric_id)}}></input>
+									<input type="text" value={this.state.prof_dist_amount} onChange={this.profDistAmount}/>
+								</div>
 								<input type="submit" value="Submit Evaluations" onClick={() => { this.submitEval(item.rubric_id)}}></input>
 							</div>
 						</div>
