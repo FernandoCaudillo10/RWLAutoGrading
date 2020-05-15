@@ -36,7 +36,7 @@ class StudEvalPage extends React.Component {
                   }else {
                       console.log(error.message);
                   }
-              })
+            }).finally(() => { this.forceUpdate() })
 	}
 	
 	postEvaluation = (eArr) => {
