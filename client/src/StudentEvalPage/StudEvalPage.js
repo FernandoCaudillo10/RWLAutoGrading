@@ -59,7 +59,8 @@ class StudEvalPage extends React.Component {
                 }else {
                     console.log(error.message);
                 }
-            })
+            }).finally(() => { this.forceUpdate() })
+
 	}
 
 	recreateData(data) {
@@ -90,7 +91,6 @@ class StudEvalPage extends React.Component {
 		})
 
 		this.state.data = r_data;
-		console.log(this.state.data);
 	}
 	
 	renderData() {
