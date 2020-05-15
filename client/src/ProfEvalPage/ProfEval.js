@@ -19,13 +19,13 @@ class ProfEval extends React.Component {
 
 		axios({
                 method: 'get',
-                url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${this.props.match.params.rubricID}/responses',
+                url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${this.props.match.params.rubricID}/responses`,
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
                     'Authorization': localStorage.getItem('jwtToken'),
                 }
               }).then ( res => {
-                {this.recreateData(res.data);}
+                {this.recreateData(res.data)}
               }).catch((error) =>{
                   if(error.response){
                     console.log(error.response.data);
@@ -36,7 +36,7 @@ class ProfEval extends React.Component {
                   }
               })
 	}
-}	
+		
 	postEvaluation = (eArr) => {
 		axios({
                 method: 'post',
