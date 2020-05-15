@@ -9,24 +9,6 @@ class ProfEval extends React.Component {
 	super(props);
 	
 	this.state = {
-	Ddata: [
-    {
-        "eval_id": 1,
-        "prompt_text": "Dont judge a book by the cover People",
-        "question_id": 1,
-        "question_text": "What is the one thing that all wise",
-        "response_id": 1,
-        "response_value": "The US Senate passed a massive."
-    },
-    {
-        "eval_id": 2,
-        "prompt_text": "Dont judge a book by the cover People",
-        "question_id": 2,
-        "question_text": "Think of words ending in -GRY. Angry and hungry are?",
-        "response_id": 2,
-        "response_value": "This is likely just the beginning as America faces."
-    }
-],
 		data: {},
 		evalData: null,
 	}
@@ -34,7 +16,7 @@ class ProfEval extends React.Component {
 	this.renderData = this.renderData.bind(this);
 	this.recreateData = this.recreateData.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
-/*
+
 		axios({
                 method: 'get',
                 url: `https://rwlautograder.herokuapp.com/api/prof/rubric/${this.props.match.params.rubricID}/responses',
@@ -54,8 +36,6 @@ class ProfEval extends React.Component {
                   }
               })
 	}
-*/
-	this.recreateData(this.state.Ddata);
 }	
 	postEvaluation = (eArr) => {
 		axios({
