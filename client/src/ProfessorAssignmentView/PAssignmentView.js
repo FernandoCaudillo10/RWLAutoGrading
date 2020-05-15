@@ -153,6 +153,7 @@ class PAssignmentView extends React.Component{
 									<input type="text" value={this.state.prof_dist_amount} onChange={this.profDistAmount}/>
 								</div>
 								<Link to={`/professor/class/${item.rubric_id}/student/evaluation`}> <input type="submit" value="Submit Evaluations"></input> </Link>
+								<Link to={`/professor/class/${item.rubric_id}/evaluation/grades`}> <input type="submit" value="Racalibrated Grades"></input> </Link>
 							</div>
 						</div>
 					</div>

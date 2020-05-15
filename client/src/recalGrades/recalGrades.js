@@ -31,7 +31,9 @@ class recalGrades extends React.Component {
                   }else {
                       console.log(error.message);
                   }
-              })
+              }).finally(() => {
+				this.forceUpdate()	  
+			  })
     }
 
   renderTableData() {
@@ -53,12 +55,13 @@ render() {
 	let title = 'Student Recalibrated Grades';
 
     return (
+			<div><Menu />
             <div className="ViewClassContainer">
-				<Menu />
 				<h1 id="title">{title}</h1>
 				<div id="classes">
             		{this.renderTableData()}
             	</div>
+			</div>
 			</div>
         )
     }
