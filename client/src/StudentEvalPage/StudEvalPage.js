@@ -25,6 +25,7 @@ class StudEvalPage extends React.Component {
                     'Authorization': localStorage.getItem('jwtToken'),
                 }
               }).then ( res => {
+				console.log(res);
                 {this.recreateData(res.data);}
               }).catch((error) =>{
                   if(error.response){
@@ -89,6 +90,7 @@ class StudEvalPage extends React.Component {
 		})
 
 		this.state.data = r_data;
+		console.log(this.state.data);
 	}
 	
 	renderData() {
