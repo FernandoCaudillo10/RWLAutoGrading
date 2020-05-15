@@ -196,6 +196,43 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
+	profSubmitEval(request, response) {
+		passport.authenticate('jwtProfessor', {session: false}, async(pError, pUser, info) => {
+			if(pError) return response.status(400).json(`${pError}`);	
+			
+			if(!pUser){
+				if(info) return response.status(400).json({error: info});
+				return response.status(400).json({error: "No user under this email"});
+			}
+		
+			if(!request.body.assignment)
+				return response.status(400).json({error: "Evaluation missing"});
+
+			let assignment = JSON.parse(request.body.assignment);
+			let isID = true;
+			let isGrade = true;
+			
+			await assignment.evaluation.forEach((e) => {
+				if(!e.evaluation_id) isID = false;
+				if(!e.grade) isGrade = false;
+			});
+
+			if(!isID)
+				return response.status(400).json({error: "Missing evaluationID"});
+			if(!isGrade) 
+				return response.status(400).json({error: "Missing grade"});
+
+			qry.submitProfEval(assignment)
+				.then((result) => {
+					return response.status(200).json("Success");
+				})
+				.catch(err => {
+					console.log(`Student Grade Evaluation -> ${err}`);	
+					return response.status(400).json("Error inserting grade");
+				});
+		})(request, response);
+	}
+
 	studentSubmitGrade(request, response) {
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);	
@@ -208,10 +245,10 @@ class RoutesHandler{
 			if(!request.body.assignment)
 				return response.status(400).json({error: "Evaluation missing"});
 
-			let assignment = request.body.assignment;
+			let assignment = JSON.parse(request.body.assignment);
 			let isID = true;
 			let isGrade = true;
-
+			
 			await assignment.evaluation.forEach((e) => {
 				if(!e.evaluation_id) isID = false;
 				if(!e.grade) isGrade = false;
@@ -245,7 +282,7 @@ class RoutesHandler{
 		if(!request.body.assignment) 
 			return response.status(400).json({error: "Response value missing"});
 
-		let assignment = request.body.assignment;
+		let assignment = JSON.parse(request.body.assignment);
 		let isResValue = true;
 		let isIdValue = true;
 
@@ -314,7 +351,7 @@ class RoutesHandler{
 
 			let rId = request.params.rubId;
 			
-			let profEval = await qry.getProfEval(rId);
+			let profEval = await qry.getProfEval(rId, pUser.email);
 
 			return response.status(200).json(profEval.rows);
 
