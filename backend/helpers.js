@@ -101,7 +101,7 @@ async function distributeRubricProfessor(prof_email, rubricId, studentAmount){
 	let entries = Object.entries(studentAvgGrade);
 	let sortedByGrade = quickSort(entries, 0, entries.length - 1);
 	
-	let bucketSize = Math.floor(sortedByGrade.length / studentAmount);
+	let bucketSize = Math.floor(sortedByGrade.length / (studentAmount * 1.0));
 	
 	console.log(bucketSize);
 	let studentsBeingGraded = [];
