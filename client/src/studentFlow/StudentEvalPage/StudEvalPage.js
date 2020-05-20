@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import RangeSlider from '../RangeSlider/RangeSlider';
-import Menu from '../menu/Menu'; 
+import Menu from '../../menu/Menu'; 
 import './StudEval.scss';
 
 class StudEvalPage extends React.Component {
