@@ -1,6 +1,6 @@
 import React  from 'react';
 import axios from 'axios';
-import Menu from '../menu/Menu';
+import Menu from '../../menu/Menu';
 import './StudentViewGrade.scss';
 
 class StudentViewGradePage extends React.Component {

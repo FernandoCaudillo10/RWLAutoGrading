@@ -2,7 +2,7 @@ import React  from 'react';
     import axios from 'axios';
     import {Link} from "react-router-dom";
     import './StudentHomePage.scss'
-    import Menu from '../menu/Menu'; 
+    import Menu from '../../menu/Menu'; 
 
     class StudentHomePage extends React.Component{
 
