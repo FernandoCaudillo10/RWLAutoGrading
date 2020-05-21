@@ -7,7 +7,7 @@ import {
 	Link,
 } from 'react-router-dom';
 
-import ProfessorHomePage from './professorflow/ProfessorHomePage/PHomePage';
+import ProfessorHomePage from './professorFlow/ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './professorFlow/ProfessorAssignment/ProfessorAssignments';
 import PAssignmentView from './professorFlow/ProfessorAssignmentView/PAssignmentView';
 import PSettings from './professorFlow/ProfessorSettings/PSettings';

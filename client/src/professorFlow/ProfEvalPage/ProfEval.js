@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import ProfSlider from '../ProfSlider/RangeSlider';
-import Menu from '../menu/Menu';
+import Menu from '../../menu/Menu';
 import './ProfEval.scss';
 
 class ProfEval extends React.Component {

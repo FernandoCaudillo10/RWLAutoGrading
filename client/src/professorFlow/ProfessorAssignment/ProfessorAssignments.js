@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
 import dateFormat from 'dateformat';
-import Menu from '../menu/Menu'; 
+import Menu from '../../menu/Menu'; 
 
 class ProfessorAssignments extends React.Component{
 

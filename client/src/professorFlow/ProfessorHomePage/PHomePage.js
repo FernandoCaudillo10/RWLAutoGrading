@@ -2,7 +2,7 @@ import React  from 'react';
 import axios from 'axios';
 import './PHomePage.scss'
 import { Link } from 'react-router-dom';
-import Menu from '../menu/Menu';
+import Menu from '../../menu/Menu';
 // RWLAutoGrading/client/src/menu
 
 class ProfessorHomePage extends React.Component{

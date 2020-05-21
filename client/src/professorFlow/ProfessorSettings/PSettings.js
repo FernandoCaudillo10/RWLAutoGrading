@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
-import Menu from '../menu/Menu'; 
+import Menu from '../../menu/Menu'; 
 import './PSettings.scss'
 
 class PSettings extends React.Component {

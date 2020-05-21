@@ -4,7 +4,7 @@ import qs from 'qs';
 import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 import './ProfAssigView.scss';
-import Menu from '../menu/Menu'; 
+import Menu from '../../menu/Menu'; 
 
 class ProfAssigView extends React.Component{
 
