@@ -1,7 +1,7 @@
 import React  from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
-import Menu from '../menu/Menu';
+import Menu from '../../menu/Menu';
 import './recalGrades.scss';
 
 class recalGrades extends React.Component {
