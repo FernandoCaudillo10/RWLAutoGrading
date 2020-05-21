@@ -1,23 +1,19 @@
-import React  from 'react'; 
+import React from 'react';
 
-class ProfessorSection extends React.Component{
-    constructor(props){
-        super(props);
-     
-    }
+class ProfessorSection extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-render(){
-
+  render() {
     return (
-        <div>
-            <h2>props.name</h2>
-           
+      <div>
+        <h2>props.name</h2>
 
-        </div>  
-    )
-    }
+
+      </div>
+    );
+  }
 }
 
-export default ProfessorSection; 
-
-
+export default ProfessorSection;
