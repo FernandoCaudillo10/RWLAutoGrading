@@ -133,7 +133,7 @@ class ProfessorAssignments extends React.Component{
         </h4>
         <textarea placeholder="Enter text here..." className="TextBox promptTextBox" name={`p${pId}`} onChange={(e) => this.handleFormChange(e, pId)} />
         { this.state.prompts[pId] ? Object.keys(this.state.prompts[pId].questions).map((qId) => { if (qId !== 'qsz' && qId !== 'prompt') return this.Question(pId, qId); }) : <div /> }
-        <input type="button" onClick={(e) => this.handleAddQuestion(e, pId)} value="Add Question" className="AddQuestion" />
+        <input type="submit" onClick={(e) => this.handleAddQuestion(e, pId)} value="Add Question" className="AddQuestion" />
       </div>
     );
   }
@@ -142,7 +142,7 @@ class ProfessorAssignments extends React.Component{
     return (
       <form onSubmit={this.handleAddQuestion}>
         { Object.keys(this.state.prompts).map((pId) => { if (pId !== 'psz') return this.Prompt(pId); }) }
-        <input type="button" onClick={this.handleAddPrompt} value="Add Prompt" className="AddPrompt" />
+        <input type="submit" onClick={this.handleAddPrompt} value="Add Prompt" className="AddPrompt" />
       </form>
     );
   }

@@ -7,11 +7,12 @@ import {
   Link,
 } from 'react-router-dom';
 
+import axios from 'axios';
 import ProfessorHomePage from './professorFlow/ProfessorHomePage/PHomePage';
 import ProfessorAssignments from './professorFlow/ProfessorAssignment/ProfessorAssignments';
 import PAssignmentView from './professorFlow/ProfessorAssignmentView/PAssignmentView';
 import PSettings from './professorFlow/ProfessorSettings/PSettings';
-import PSingleAssignmentView from './professorFlow/PSingleAssignmentView/ProfessorViewAssignment'; 
+import PSingleAssignmentView from './professorFlow/PSingleAssignmentView/ProfessorViewAssignment';
 import ProfAssigView from './professorFlow/ProfAssView/ProfAssigView';
 import ProfAssigEdit from './professorFlow/ProfAssEdit/ProfAssigEdit';
 import ProfEval from './professorFlow/ProfEvalPage/ProfEval';
@@ -26,11 +27,9 @@ import StudentEvalPage from './studentFlow/StudentEvalPage/StudEvalPage';
 
 
 import Menu from './menu/Menu';
-import axios from 'axios';
 import HomePage from './home/HomePage';
-import Login from './login/Login'; 
-import Register from './register/Register'; 
-
+import Login from './login/Login';
+import Register from './register/Register';
 
 
 import './App.scss';
@@ -90,35 +89,35 @@ class App extends React.Component {
 
   render() {
 	  return (
-		<Router>
-			<div>
-				
-				<Switch>
-					<Route exact path="/menu" component={Menu}  />
-					<Route exact path="/" component={Login}  />
-					<Route exact path="/register" component={Register} />
-					
-					<Route exact path="/professor/classes" component={ProfessorHomePage} />
-					<Route exact path="/professor/settings" component={PSettings} />
-					<Route exact path="/professor/:classId/singleassignmentview/" component = {PSingleAssignmentView} />
-					<Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
-					<Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
-					<Route exact path="/professor/class/:classId/assignment/:rubricId/view" component={ProfAssigView} />
-					<Route exact path="/professor/class/:classId/assignment/:rubricId/edit" component={ProfAssigEdit} />
-					<Route exact path="/professor" component={HomePage} />
-					<Route exact path="/professor/class/:rubricID/student/evaluation" component={ProfEval} />
-					<Route exact path="/professor/class/:rubricID/evaluation/grades" component={recalGrades} />
-					
-					<Route exact path="/student/settings" component={SSettings} />
-					<Route exact path="/student/submit/:rubricID" component={Submit} />
-					<Route exact path="/student" component={HomePage} />
-					<Route exact path="/student/home" component={StudentHomePage} />
-					<Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
-					<Route exact path="/student/home/classes" component={StudViewClass} />
-					<Route exact path="/student/class/:rubricID/assignment/evaluation" component={StudentEvalPage} />
-				</Switch>
-			</div>
-		</Router>
+  <Router>
+    <div>
+
+      <Switch>
+        <Route exact path="/menu" component={Menu} />
+        <Route exact path="/" component={Login} />
+        <Route exact path="/register" component={Register} />
+
+        <Route exact path="/professor/classes" component={ProfessorHomePage} />
+        <Route exact path="/professor/settings" component={PSettings} />
+        <Route exact path="/professor/:classId/singleassignmentview/" component={PSingleAssignmentView} />
+        <Route exact path="/professor/class/:classId/assignment/create" component={ProfessorAssignments} />
+        <Route exact path="/professor/class/:classId/assignments" component={PAssignmentView} />
+        <Route exact path="/professor/class/:classId/assignment/:rubricId/view" component={ProfAssigView} />
+        <Route exact path="/professor/class/:classId/assignment/:rubricId/edit" component={ProfAssigEdit} />
+        <Route exact path="/professor" component={HomePage} />
+        <Route exact path="/professor/class/:rubricID/student/evaluation" component={ProfEval} />
+        <Route exact path="/professor/class/:rubricID/evaluation/grades" component={recalGrades} />
+
+        <Route exact path="/student/settings" component={SSettings} />
+        <Route exact path="/student/submit/:rubricID" component={Submit} />
+        <Route exact path="/student" component={HomePage} />
+        <Route exact path="/student/home" component={StudentHomePage} />
+        <Route exact path="/student/home/:sectionID/assignment/grade" component={StudentViewGradePage} />
+        <Route exact path="/student/home/classes" component={StudViewClass} />
+        <Route exact path="/student/class/:rubricID/assignment/evaluation" component={StudentEvalPage} />
+      </Switch>
+    </div>
+  </Router>
 	  );
   }
 }
