@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs'; 
 import './Submit.scss'
-import Menu from '../../menu/Menu'; 
+import Menu from '../../menu/Menu';
+import PropTypes from 'prop-types';
 
 class Submit extends React.Component {
   constructor(props) {
