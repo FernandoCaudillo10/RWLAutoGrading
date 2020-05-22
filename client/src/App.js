@@ -1,10 +1,10 @@
 import React from 'react';
 
 import {
-	BrowserRouter as Router,
-	Route,
-	Switch,
-	Link,
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
 } from 'react-router-dom';
 
 import ProfessorHomePage from './professorFlow/ProfessorHomePage/PHomePage';
@@ -36,67 +36,59 @@ import Register from './register/Register';
 import './App.scss';
 
 class App extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			email: '',
-			typeOfUser: '',
-			name: '', 
-			isLoggedIn: false
-		};
-	
-		this.VerifyUser = this.VerifyUser.bind(this); 
-		this.VerifyUser(); 
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      typeOfUser: '',
+      name: '',
+      isLoggedIn: false,
+    };
 
-	
-	}
+    this.VerifyUser = this.VerifyUser.bind(this);
+    this.VerifyUser();
+  }
 
-	VerifyUser(){
- 
-		const token = localStorage.getItem("jwtToken");
+  VerifyUser() {
+    const token = localStorage.getItem('jwtToken');
 
-		if(token){
-			axios({
-				method: 'get',
-				url: 'https://rwlautograder.herokuapp.com/api/token/verify',
-				headers: {
+    if (token) {
+      axios({
+        method: 'get',
+        url: 'https://rwlautograder.herokuapp.com/api/token/verify',
+        headers: {
 				  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-				  'Authorization': token,
-				}
-			  }).then ( res =>{
-				  
-				  if(res.data.error === false){	
+				  Authorization: token,
+        },
+			  }).then((res) => {
+				  if (res.data.error === false) {
+					  this.setState({
+            email: res.data.user.email, typeOfUser: res.data.user.type, name: res.data.user.name, isLoggedIn: true,
+          });
 
-					  this.setState({email : res.data.user.email, typeOfUser : res.data.user.type, name : res.data.user.name, isLoggedIn: true}); 
-
-					  if(this.state.typeOfUser === 'professor'){
-						  this.setState({isStudent : false});
-
+					  if (this.state.typeOfUser === 'professor') {
+						  this.setState({ isStudent: false });
 					  }
-					  if(this.state.typeOfUser === 'student'){
-						this.setState({isStudent : true});
-						
+					  if (this.state.typeOfUser === 'student') {
+            this.setState({ isStudent: true });
 					  }
-				  }else{
-				      localStorage.removeItem("jwtToken");
-					  localStorage.removeItem("typeOfUser");
-					  localStorage.setItem("isLoggedIn", false);
-					  this.setState({isLoggedIn: false}); 
+				  } else {
+				      localStorage.removeItem('jwtToken');
+					  localStorage.removeItem('typeOfUser');
+					  localStorage.setItem('isLoggedIn', false);
+					  this.setState({ isLoggedIn: false });
 				  }
-			  }).catch((error) =>{
-				  if(error.response){
-					console.log(error.response.data);
+			  }).catch((error) => {
+				  if (error.response) {
+          console.log(error.response.data);
 				  }
 				  console.log(error);
-			  })
-			
-		}
-
-	}
+			  });
+    }
+  }
 
 
-	render() {
-		
+  render() {
 	  return (
 		<Router>
 			<div>
@@ -128,7 +120,7 @@ class App extends React.Component {
 			</div>
 		</Router>
 	  );
-	}
+  }
 }
 
 
