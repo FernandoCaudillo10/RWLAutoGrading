@@ -1,10 +1,16 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 import {
-  BrowserRouter as Router,
   Link,
 } from 'react-router-dom';
 
 class Menu extends React.Component {
+  static Logout() {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('typeOfUser');
+    localStorage.setItem('isLoggedIn', false);
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +24,6 @@ class Menu extends React.Component {
     this.menuStudent = this.menuStudent.bind(this);
     this.menuProfessor = this.menuProfessor.bind(this);
     this.userType = this.userType.bind(this);
-    this.Logout = this.Logout.bind(this);
   }
 
   userType() {
@@ -33,41 +38,37 @@ class Menu extends React.Component {
     }
   }
 
-  Logout() {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('typeOfUser');
-    localStorage.setItem('isLoggedIn', false);
-  }
-
   toggleMenu() {
-    this.setState({
-      isMenuHidden: !this.state.isMenuHidden,
+    this.setState((ps) => {
+      const { isMenuHidden } = ps;
+      return {
+        isMenuHidden: !isMenuHidden,
+      };
     });
   }
 
   menuHidden() {
     return (
-      <i className="material-icons" onClick={this.toggleMenu}>menu</i>
+      <button type="button" onClick={this.toggleMenu} className="clearButton"><i className="material-icons">menu</i></button>
     );
   }
 
   menu() {
+    const { isStudent } = this.state;
     return (
       <nav>
-        {
-					this.state.isStudent ? this.menuStudent() : this.menuProfessor()
-				}
-        <div className="closeMenu" onClick={this.toggleMenu} />
-
+        { isStudent ? this.menuStudent() : this.menuProfessor() }
+        <button className="closeMenu" onClick={this.toggleMenu} aria-label="Close Menu" type="button" />
       </nav>
     );
   }
 
   menuStudent() {
+    const { email } = this.state;
     return (
       <ul className="menuContainer">
         <li className="listItemMenu">
-          <p>{this.state.email}</p>
+          <p>{email}</p>
         </li>
         <li className="listitemmenu">
           <Link to="/student/home">
@@ -89,8 +90,7 @@ class Menu extends React.Component {
         </li>
         <li className="listitemmenu">
           <Link to="/">
-            <i className="" />
-            <p onClick={this.Logout}>Logout</p>
+            <button type="button" onClick={Menu.Logout}>Logout</button>
           </Link>
         </li>
       </ul>
@@ -98,12 +98,11 @@ class Menu extends React.Component {
   }
 
   menuProfessor() {
+    const { email } = this.state;
     return (
-
-
       <ul className="menuContainer">
         <li className="listItemMenu">
-          <p>{this.state.email}</p>
+          <p>{email}</p>
         </li>
         <li className="listitemmenu">
           <Link to="/professor/classes">
@@ -125,8 +124,7 @@ class Menu extends React.Component {
         </li>
         <li className="listitemmenu">
           <Link to="/">
-            <i className="" />
-            <p onClick={this.Logout}>Logout</p>
+            <button type="button" onClick={Menu.Logout}>Logout</button>
           </Link>
         </li>
       </ul>
@@ -135,21 +133,24 @@ class Menu extends React.Component {
 
 
   render() {
+    const { isMenuHidden } = this.state;
+    // const { name } = this.props;
     return (
       <div className="header">
         {this.userType()}
-        <div className={this.state.isMenuHidden ? 'headerContent-hidden' : 'headerContent'}>
-          {
-                   this.state.isMenuHidden ? this.menuHidden() : this.menu()
-               }
+        <div className={isMenuHidden ? 'headerContent-hidden' : 'headerContent'}>
+          { isMenuHidden ? this.menuHidden() : this.menu() }
           <h1>
-            {' '}
-            {this.props.name}
+            {/* {name} */}
           </h1>
         </div>
       </div>
     );
   }
 }
+
+// Menu.propTypes = {
+//   name: PropTypes.string.isRequired,
+// };
 
 export default Menu;
