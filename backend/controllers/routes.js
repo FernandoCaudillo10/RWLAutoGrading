@@ -1,9 +1,9 @@
-const passport = require('passport');
+const passport = require('../middleware/passport');
 const jwt = require("jsonwebtoken");
 const keys = require("./configs/keys");
 const bcrypt = require("bcryptjs");
-const qry = require('./queries');
-const hlp = require('./helpers');
+const qry = require('../models/*');
+const hlp = require('../helpers');
 const dateFormat = require('dateformat');
 
 //TODO: Fix error messages
@@ -36,7 +36,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	studentGetClassInfo(request, response) {
+	studentGetClassInfo(request, response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -59,7 +59,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentUnregisterClass(request, response) {
+	studentUnregisterClass(request, response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -82,7 +82,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentRegisterClass(request,response) {
+	studentRegisterClass(request,response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -105,28 +105,28 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	distributeToStudents(request,response) {
+	distributeToStudents(request,response) { //ok
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
 			hlp.distributeRubricStudents(request.body.dist_amount, request.params.rubId);
 			return response.status(200).send();
 		})(request, response);
 	}
 
-	distributeToProfessor(request,response) {
+	distributeToProfessor(request,response) { //ok
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
 			hlp.distributeRubricProfessor(pUser.email, request.params.rubId, request.body.studAmntToGrade);
 			return response.status(200).send();
 		})(request, response);
 	}
 
-	calibrateGrades(request,response) {
+	calibrateGrades(request,response) { //ok
 		passport.authenticate('jwtProfessor', {session: false}, async(pError,pUser, info) => {
 			return response.status(200).json(await hlp.calibrateGrades(request.params.rubId));
 		})(request, response);
 	}
 
 
-	studentGetGrade(request,response) {
+	studentGetGrade(request,response) {//ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -149,7 +149,7 @@ class RoutesHandler{
 			})(request, response);
 		}
 
-	studentGetAssignment(request, response) {
+	studentGetAssignment(request, response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -174,7 +174,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentEvaluateAssignment(request, response){
+	studentEvaluateAssignment(request, response){ //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -196,7 +196,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	profSubmitEval(request, response) {
+	profSubmitEval(request, response) { //ok
 		passport.authenticate('jwtProfessor', {session: false}, async(pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);	
 			
@@ -233,7 +233,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentSubmitGrade(request, response) {
+	studentSubmitGrade(request, response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);	
 			
@@ -270,7 +270,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentSubmitAssignment(request, response){
+	studentSubmitAssignment(request, response){//ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);	
 			
@@ -307,7 +307,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	studentAssignmentRubric(request, response) {
+	studentAssignmentRubric(request, response) { //ok
 		passport.authenticate('jwtStudent', {session: false}, async(pError,pUser, info) => {
 			if(pError) 
 				return response.status(400).json(`${pError}`);	
@@ -339,7 +339,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	getResponsesForGrading(request, response){
+	getResponsesForGrading(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -384,7 +384,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	getAssignment(request, response){
+	getAssignment(request, response){//ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -407,7 +407,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	deleteAssignment(request, response){
+	deleteAssignment(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -431,7 +431,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	createAssignment(request, response){
+	createAssignment(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -502,7 +502,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	classAssignments(request, response){
+	classAssignments(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -533,7 +533,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 	
-	createClass(request, response){
+	createClass(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -563,7 +563,7 @@ class RoutesHandler{
 
 		})(request, response);
 	}
-	getClasses(request, response){
+	getClasses(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -585,7 +585,7 @@ class RoutesHandler{
 		})(request, response);
 	}
 
-	getClassSections(request, response){
+	getClassSections(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
@@ -609,7 +609,7 @@ class RoutesHandler{
 
 		})(request, response);
 	}
-	createSection(request, response){
+	createSection(request, response){ //ok
 		passport.authenticate('jwtProfessor', {session: false},
 			async (pError, pUser, info) => {
 			if(pError) return response.status(400).json(`${pError}`);
